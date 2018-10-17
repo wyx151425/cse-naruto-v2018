@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Naruto</title>
+    <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/ajaxfileupload.js}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btn-upload").click(function () {
+                $.ajaxFileUpload({
+                    url: "api/files/import/bom/cse",
+                    secureuri: false,
+                    fileElementId: "file",
+                    dataType: "json",
+                    success: function (data) {
+                        successCallback(data);
+                    },
+                    error: function () {
+
+                    }
+                });
+            });
+        });
+
+        function successCallback(data) {
+            var statusCode = data.statusCode;
+            console.log(statusCode);
+        }
+    </script>
+</head>
+<body>
+基础数据管理系统
+<input id="file" name="file" type="file"/>
+<button id="btn-upload" type="button">导入</button>
+</body>
+</html>

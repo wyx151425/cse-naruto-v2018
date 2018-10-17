@@ -1,0 +1,21 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20Mb
+      max-request-size: 20Mb
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@10.10.20.103:1521:DMSDB
+    username: dms
+    password: Cse@dms01
+  jpa:
+    database: Oracle
+    show-sql: true
+    hibernate:
+      ddl-auto: update
