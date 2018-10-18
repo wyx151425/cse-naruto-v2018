@@ -1,0 +1,569 @@
+@charset "utf-8";
+
+/* 应用的全局css */
+html {
+    height: 100%;
+    background: #f1f2f3;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 320px !important;
+}
+
+body, input, select, textarea, button, p {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+}
+
+body {
+    color: #000;
+    font-size: 16px;
+    font-family: "Microsoft Yahei", "微软雅黑", "Hiragino Sans GB", "WenQuanYi Micro Hei", "宋体", "sans-serif";
+}
+
+a:link, a:hover, a:active, a:visited {
+    text-decoration: none;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+main.container {
+    min-height: 800px;
+}
+
+.form-login {
+    width: 430px;
+    padding: 32px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 0 5px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    height: 52px;
+    line-height: 52px;
+    color: #888;
+    font-size: 15px;
+    padding: 0 12px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    color: #000;
+    border-color: #337ab7;
+}
+
+.form-horizontal {
+
+}
+
+.form-horizontal .form-control {
+    float: left;
+    width: 232px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 8px;
+    font-size: 14px;
+    color: #888;
+    border: 1px solid #bbb;
+    box-sizing: content-box;
+}
+
+.form-horizontal .form-label {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    color: #000;
+    font-size: 15px;
+    margin-right: 10px;
+}
+
+.form-control:focus {
+    color: #000;
+    border-color: #337ab7;
+}
+
+.form-radio {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.form-horizontal .form-radio {
+    float: left;
+    margin-top: 10px;
+}
+
+.form-checkbox {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.form-radio + .form-label, .form-checkbox + .form-label {
+    margin-right: 12px;
+}
+
+.form-horizontal .form-checkbox {
+    float: left;
+    margin-top: 10px;
+}
+
+.form-inline {
+
+}
+
+.form-inline .form-group {
+    position: relative;
+}
+
+.form-inline .form-control {
+    padding-left: 51px;
+}
+
+.form-inline .form-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    text-align: center;
+}
+
+.form-inline .form-label .icon {
+    top: 2px;
+    left: 1px;
+    color: #888;
+    font-size: 18px;
+}
+
+.form-inline .form-control:focus + .form-label .icon {
+    color: #337ab7;
+}
+
+.form-inline .form-action {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    text-align: center;
+}
+
+.form-inline .form-action + .form-control {
+    padding-right: 51px;
+}
+
+.form-inline .form-action .icon {
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+    font-size: 17px;
+}
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
+    border-top: 0;
+}
+
+.table > tbody + tbody {
+    border-top: 2px solid #ddd;
+}
+
+.table > tbody > tr > td {
+    font-size: 15px;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.table-bordered > tbody > tr > td, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > td, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border: 1px solid #ddd;
+}
+
+.table-bordered > thead > tr > td, .table-bordered > thead > tr > th {
+    border-bottom-width: 2px;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #f5f5f5;
+}
+
+.col-1-of-10 {
+    width: 10%;
+}
+
+.col-2-of-10 {
+    width: 20%;
+}
+
+.col-3-of-10 {
+    width: 30%;
+}
+
+.col-4-of-10 {
+    width: 40%;
+}
+
+.btn {
+    width: 96px;
+    height: 36px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #337ab7;
+    border-radius: 2px;
+}
+
+.btn:hover {
+    background-color: #286090;
+}
+
+.btn:active {
+    background-color: #204d74;
+}
+
+.btn:disabled {
+    background-color: #7ba9d0;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.panel {
+    width: 1200px;
+    min-height: 800px;
+    padding: 40px;
+    overflow: hidden;
+    margin-bottom: 60px;
+    border: 1px solid #dedfe0;
+    background-color: #fff;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.link {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.link:hover, .link:active {
+    color: #23527c;
+    text-decoration: underline;
+}
+
+.pull-right {
+    float: right;
+}
+
+/* 分页控件 */
+.pagination {
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 2px;
+}
+
+.pagination > li {
+    display: inline;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+    margin-left: 0;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+    z-index: 2;
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+/* header部分 */
+.header {
+    width: 100%;
+    height: 65px;
+    margin-bottom: 40px;
+}
+
+.header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 64px;
+    background-color: #fff;
+    border-bottom: 1px solid #dedfe0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.header .container {
+    height: 64px;
+}
+
+.logo {
+    display: block;
+    float: left;
+    width: 110px;
+    height: 53px;
+    margin-top: 3px;
+    margin-left: -2px;
+}
+
+/* footer部分 */
+.footer {
+    width: 100%;
+    height: 64px;
+    line-height: 64px;
+    background-color: #e1e2e3;
+    text-align: center;
+    font-size: 16px;
+    border-top: 1px solid #ccc;
+}
+
+/* 模态框 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9000;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.modal-dialog {
+    width: 460px;
+    margin: 120px auto 0;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .2), 0 0 5px rgba(0, 0, 0, .2);
+}
+
+.modal-header {
+    position: relative;
+    text-align: center;
+    padding: 16px;
+    border-bottom: solid 1px #dedfe0;
+}
+
+.modal-title {
+    line-height: 1;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.modal-close {
+    display: block;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.modal-content {
+    padding: 30px;
+    overflow: hidden;
+}
+
+.modal-footer {
+    text-align: right;
+    padding: 16px;
+    border-top: solid 1px #dedfe0;
+}
+
+/* 加载模糊 */
+.mask {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.mask-prompt {
+    margin: auto;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Response框 */
+.popover-space {
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    right: 16px;
+    width: 320px;
+    height: auto;
+}
+
+.popover {
+    width: 100%;
+    height: 54px;
+    line-height: 54px;
+    color: #fff;
+    font-size: 14px;
+    margin: 16px 0;
+    padding: 0 16px;
+    border-radius: 2px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.success {
+    color: #fff;
+    background-color: #67c23a;
+}
+
+.error {
+    color: #fff;
+    background-color: #f56c6c;
+}
+
+.prompt {
+    color: #fff;
+    background-color: #409eff;
+}
+
+/* Vue相关CSS */
+[v-cloak] {
+    display: none !important;
+}
+
+/* icon部分 */
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('../fonts/glyphicons-halflings-regular.eot');
+    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.icon {
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings', serif;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-user:before {
+    content: "\e008";
+}
+
+.icon-ok:before {
+    content: "\e013";
+}
+
+.icon-remove:before {
+    content: "\e014";
+}
+
+.icon-lock:before {
+    content: "\e033";
+}
+
+.icon-remove-sign:before {
+    content: "\e083";
+}
+
+.icon-eye-open:before {
+    content: "\e105";
+}
+
+.icon-phone:before {
+    content: "\e145";
+}

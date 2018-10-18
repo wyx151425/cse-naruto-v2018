@@ -40,7 +40,7 @@ public class NarutoApplicationTests {
         User user = new User();
         user.setObjectId(Generator.getObjectId());
         user.setStatus(Constant.UserStatus.COMMON);
-        LocalDateTime dateTime = LocalDateTime.now().withNano(0);
+        LocalDateTime dateTime = LocalDateTime.now();
         user.setCreateAt(dateTime);
         user.setUpdateAt(dateTime);
         return user;
@@ -70,7 +70,7 @@ public class NarutoApplicationTests {
     @Test
     public void addUser() {
         User user = createUser();
-        user.setUsername("wyx151425");
+        user.setCode("CSE0101");
         user.setPassword("151425");
         user.setName("王振琦");
         user.setRoles("ROLE_USER,");

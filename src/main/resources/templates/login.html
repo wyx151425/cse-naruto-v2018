@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>基础数据管理系统</title>
+    <link rel="shortcut icon" href="images/CSE.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="css/naruto.css"/>
+    <link rel="stylesheet" href="css/login.css"/>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="head">
+        <img class="logo" src="images/CSE.png" alt=""/>
+        <div class="brand">
+            <p class="company">中国船舶重工集团柴油机有限公司</p>
+            <p class="system">基础数据管理系统</p>
+        </div>
+    </div>
+    <form class="form-login form-inline" action="">
+        <div class="form-group">
+            <label class="form-action">
+                <span class="icon icon-remove-sign" @click="removeCode"></span>
+            </label>
+            <input class="form-control" type="text" placeholder="您的CSE工号" v-model="user.code"/>
+            <label class="form-label">
+                <span class="icon icon-user"></span>
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="form-action">
+                <span class="icon icon-eye-open" @click="typeExchange"></span>
+            </label>
+            <input class="form-control" :type="type" placeholder="6-32位密码, 区分大小写" v-model="user.password"/>
+            <label class="form-label">
+                <span class="icon icon-lock"></span>
+            </label>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-block" type="button" @click="login" :disabled="signing">{{action}}</button>
+        </div>
+    </form>
+</main>
+<div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
+    <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/naruto.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

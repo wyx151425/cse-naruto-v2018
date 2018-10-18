@@ -1,0 +1,102 @@
+.panel {
+    padding: 80px 130px 80px;
+}
+
+.form-group {
+    width: 350px;
+    display: inline-block;
+    margin-left: 48px;
+    margin-right: 68px;
+    margin-bottom: 12px;
+}
+
+.form-label {
+    float: left;
+    text-align: right;
+    width: 120px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.form-text {
+    float: right;
+    width: 216px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    padding-left: 6px;
+    border-bottom: 1px solid #000;
+}
+
+.form-input {
+    float: right;
+    width: 216px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    padding-left: 6px;
+    border-bottom: 1px solid #000;
+}
+
+.form-input:focus {
+    border-bottom: 1px solid #337ab7;
+}
+
+.form-select {
+    float: right;
+    width: 220px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    border-bottom: 1px solid #000;
+}
+
+.form-select:focus {
+    border-bottom: 1px solid #337ab7;
+}
+
+.area-group {
+    margin-top: 12px;
+    width: 472px;
+}
+
+.form-area {
+    float: right;
+    width: 320px;
+    min-width: 320px;
+    max-width: 320px;
+    height: 106px;
+    min-height: 106px;
+    max-height: 106px;
+    line-height: 28px;
+    font: 400 15px Arial;
+    padding: 10px;
+    border: 1px solid #000;
+}
+
+.form-area:focus {
+    border: 1px solid #337ab7;
+}
+
+.btn {
+    float: right;
+    width: 120px;
+    height: 40px;
+    margin-top: 30px;
+    margin-right: 72px;
+}
+
+.item {
+    width: 940px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.line {
+    width: 820px;
+    height: 1px;
+    margin: 0 68px 24px 48px;
+    background-color: #dedfe0;
+}

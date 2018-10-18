@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>基础数据管理系统</title>
+    <link rel="shortcut icon" href="images/CSE.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="css/naruto.css"/>
+    <link rel="stylesheet" href="css/material-edit.css"/>
+</head>
+<body>
+<header class="header">
+    <div class="header-fixed">
+        <div class="container">
+            <img class="logo" src="images/CSE.png" alt=""/>
+        </div>
+    </div>
+</header>
+<main id="main" class="container">
+    <div class="panel">
+        <div>
+            <div class="form-group">
+                <label class="form-label">物料编码：</label>
+                <p class="form-text">{{material.code}}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">公司号：</label>
+                <p class="form-text">{{material.companyNo}}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">物料名称：</label>
+                <p class="form-text">{{material.name}}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">物料简称：</label>
+                <p class="form-text">{{material.shortName}}</p>
+            </div>
+        </div>
+        <div class="item">
+            <p class="line"></p>
+            <div>
+                <div class="form-group">
+                    <label class="form-label">规格：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.specification"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">型号：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.model"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">图号：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.drawingNo"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">普通分类：</label>
+                    <select class="form-select" v-model="material.generalSort">
+                        <option disabled selected>请选择</option>
+                        <option value="G001">G001 - 原料</option>
+                        <option value="G002">G002 - 毛胚件</option>
+                        <option value="G003">G003 - 加工大件</option>
+                        <option value="G004">G004 - 加工小件</option>
+                        <option value="G005">G005 - 焊接结构大件</option>
+                        <option value="G006">G006 - 焊接结构中小件</option>
+                        <option value="G007">G007 - 电器件</option>
+                        <option value="G008">G008 - 总成功能件</option>
+                        <option value="G009">G009 - 仪器仪表</option>
+                        <option value="G0010">G0010 - 管路/走台部件</option>
+                        <option value="G0011">G0011 - 阀类部件</option>
+                        <option value="G0012">G0012 - 工具工装件</option>
+                        <option value="G0013">G0013 - 标准件</option>
+                        <option value="G0014">G0014 - 消耗品</option>
+                        <option value="G0015">G0015 - 柴油机备品备件</option>
+                        <option value="G0016">G0016 - 系统润滑油</option>
+                        <option value="G0017">G0017 - 工装材料</option>
+                        <option value="G0018">G0018 - 自制半成品</option>
+                        <option value="G0019">G0019 - 设备备品备件</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">库存单位：</label>
+                    <select class="form-select" v-model="material.inventoryUnit">
+                        <option disabled selected>请选择</option>
+                        <option value="020">020 - mm</option>
+                        <option value="021">021 - um</option>
+                        <option value="022">022 - bar</option>
+                        <option value="023">023 - Mpa</option>
+                        <option value="024">024 - Kpa</option>
+                        <option value="003">003 - 包</option>
+                        <option value="KG">KG - 千克</option>
+                        <option value="T">T - 吨</option>
+                        <option value="FT">FT - 英尺</option>
+                        <option value="G">G - 克</option>
+                        <option value="IN">IN - 英寸</option>
+                        <option value="KM">KM - 公里</option>
+                        <option value="L">L - 公升</option>
+                        <option value="LB">LB - 磅</option>
+                        <option value="M">M - 米</option>
+                        <option value="M2">M2 - 平方米</option>
+                        <option value="M3">M3 - 立方米</option>
+                        <option value="MG">MG - Milligramme</option>
+                        <option value="ML">ML - 毫升</option>
+                        <option value="025">025 - 个</option>
+                        <option value="OZ">OZ - 盎司</option>
+                        <option value="PIC">PIC - 张</option>
+                        <option value="QT">QT - Quintal</option>
+                        <option value="SEC">SEC - 秒</option>
+                        <option value="UN">UN - 根</option>
+                        <option value="001">001 - 付</option>
+                        <option value="002">002 - 件</option>
+                        <option value="004">004 - 卷</option>
+                        <option value="005">005 - 双</option>
+                        <option value="006">006 - 台</option>
+                        <option value="007">007 - 块</option>
+                        <option value="008">008 - 套</option>
+                        <option value="009">009 - 把</option>
+                        <option value="010">010 - 支</option>
+                        <option value="011">011 - 本</option>
+                        <option value="012">012 - 条</option>
+                        <option value="013">013 - 桶</option>
+                        <option value="014">014 - 片</option>
+                        <option value="015">015 - 瓶</option>
+                        <option value="016">016 - 盒</option>
+                        <option value="017">017 - 箱</option>
+                        <option value="018">018 - 节</option>
+                        <option value="019">019 - 袋</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">采购自制标记：</label>
+                    <select class="form-select" v-model="material.sourceMark">
+                        <option disabled selected>请选择</option>
+                        <option value="M">M</option>
+                        <option value="P">P</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">责任公司：</label>
+                    <select class="form-select" v-model="material.respCompany" @change="respDeptSelect">
+                        <option disabled selected>请选择</option>
+                        <option value="中国船柴">中国船柴</option>
+                        <option value="宜昌基地">宜昌基地</option>
+                        <option value="青岛基地">青岛基地</option>
+                        <option value="大连基地">大连基地</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">责任部门：</label>
+                    <select class="form-select" v-model="material.respDept">
+                        <option disabled selected>请选择</option>
+                        <option v-for="dept in department" :value="dept.code">{{dept.code}} - {{dept.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">关键件标记：</label>
+                    <select class="form-select" v-model="material.keyPartMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">关键件大类：</label>
+                    <select class="form-select" v-model="material.keyPartSort">
+                        <option disabled selected>请选择</option>
+                        <option value="Y1">Y1</option>
+                        <option value="Y2">Y2</option>
+                        <option value="Y3">Y3</option>
+                        <option value="Y4">Y4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">虚拟件标记：</label>
+                    <select class="form-select" v-model="material.virtualPartMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">合批标记：</label>
+                    <select class="form-select" v-model="material.qualifiedMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group area-group">
+                    <label class="form-label">具体描述：</label>
+                    <textarea class="form-area" v-model="material.description"></textarea>
+                </div>
+            </div>
+            <button class="btn" type="button" @click="technologyCenterSave" :disabled="saving">{{action}}</button>
+        </div>
+        <div class="item">
+            <p class="line"></p>
+            <div>
+                <div class="form-group">
+                    <label class="form-label">质检标记：</label>
+                    <select class="form-select" v-model="material.inspectMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">批次标记：</label>
+                    <select class="form-select" v-model="material.batchMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" type="button" @click="qualifiedEnvironmentSave" :disabled="saving">{{action}}</button>
+        </div>
+        <div class="item">
+            <p class="line"></p>
+            <div>
+                <div class="form-group">
+                    <label class="form-label">采购分类：</label>
+                    <select class="form-select" v-model="material.purchaseSort">
+                        <option disabled selected>请选择</option>
+                        <option value="P001">P001 - 曲轴</option>
+                        <option value="P002">P002 - 增压器</option>
+                        <option value="P003">P003 - 锻件毛坯（缸盖、活塞头、活塞杆、连杆、十字头销）</option>
+                        <option value="P004">P004 - 钢板</option>
+                        <option value="P005">P005 - 型材</option>
+                        <option value="P006">P006 - 主启动阀</option>
+                        <option value="P007">P007 - 缸盖起动阀</option>
+                        <option value="P008">P008 - 高压油管</option>
+                        <option value="P009">P009 - 盘车机</option>
+                        <option value="P010">P010 - 辅助风机</option>
+                        <option value="P011">P011 - 应急操纵台</option>
+                        <option value="P012">P012 - 排气阀工作台</option>
+                        <option value="P013">P013 - 燃排驱动机构</option>
+                        <option value="P014">P014 - 机架门</option>
+                        <option value="P015">P015 - 焊接小件</option>
+                        <option value="P016">P016 - 齿轮</option>
+                        <option value="P017">P017 - 铸件</option>
+                        <option value="P018">P018 - 供油单元、共轨单元</option>
+                        <option value="P019">P019 - HCU HPS ECP</option>
+                        <option value="P020">P020 - 排气阀</option>
+                        <option value="P021">P021 - MAN机进口件</option>
+                        <option value="P022">P022 - WGD 进口件</option>
+                        <option value="P023">P023 - UEC 进口件</option>
+                        <option value="P024">P024 - 国产弹簧</option>
+                        <option value="P025">P025 - 阀杆</option>
+                        <option value="P026">P026 - 白合金件</option>
+                        <option value="P027">P027 - 链条</option>
+                        <option value="P028">P028 - 填料函</option>
+                        <option value="P029">P029 - 空冷器</option>
+                        <option value="P030">P030 - 水分离器</option>
+                        <option value="P031">P031 - 活塞安装件</option>
+                        <option value="P032">P032 - 十字头滑油件</option>
+                        <option value="P033">P033 - SCR</option>
+                        <option value="P034">P034 - 接线箱</option>
+                        <option value="P035">P035 - 压力表、温度表、传感器、液位开关</option>
+                        <option value="P036">P036 - 起动元件板、压力表板</option>
+                        <option value="P037">P037 - 球阀、蝶阀</option>
+                        <option value="P038">P038 - 注油枪</option>
+                        <option value="P039">P039 - 空气瓶</option>
+                        <option value="P040">P040 - 膨胀节</option>
+                        <option value="P041">P041 - 管路</option>
+                        <option value="P042">P042 - 走台</option>
+                        <option value="P043">P043 - 扫气箱</option>
+                        <option value="P044">P044 - 排烟管</option>
+                        <option value="P045">P045 - 空冷器</option>
+                        <option value="P046">P046 - 隔热包装</option>
+                        <option value="P047">P047 - 木箱包装</option>
+                        <option value="P048">P048 - 弹性螺栓</option>
+                        <option value="P049">P049 - 圆螺母</option>
+                        <option value="P050">P050 - 金属标准件</option>
+                        <option value="P051">P051 - 铭牌</option>
+                        <option value="P052">P052 - 接头</option>
+                        <option value="P053">P053 - 防爆阀</option>
+                        <option value="P054">P054 - 非金属垫片</option>
+                        <option value="P055">P055 - 特殊垫片</option>
+                        <option value="P056">P056 - 加热柜（国产）</option>
+                        <option value="P057">P057 - 液压顶撑</option>
+                        <option value="P058">P058 - 电脑及附件</option>
+                        <option value="P059">P059 - 随机工具</option>
+                        <option value="P060">P060 - 机加工小件</option>
+                        <option value="P061">P061 - 消耗品A</option>
+                        <option value="P062">P062 - 消耗品M</option>
+                        <option value="P063">P063 - 消耗品W</option>
+                        <option value="P064">P064 - 消耗品P</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">可采购标记：</label>
+                    <select class="form-select" v-model="material.purchaseMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">可集采标记：</label>
+                    <select class="form-select" v-model="material.groupPurMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">可自采标记：</label>
+                    <select class="form-select" v-model="material.ownPurMark">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" type="button" @click="purchaseSave" :disabled="saving">{{action}}</button>
+        </div>
+        <div class="item">
+            <p class="line"></p>
+            <div>
+                <div class="form-group">
+                    <label class="form-label">默认仓库：</label>
+                    <select class="form-select" v-model="material.defRepository">
+                        <option disabled selected>请选择</option>
+                        <option value="01">01 - 成品库</option>
+                        <option value="10">10 - 原料</option>
+                        <option value="19">19 - 工装材料</option>
+                        <option value="20">20 - 毛坯件</option>
+                        <option value="30">30 - 零部件</option>
+                        <option value="39">39 - 零部件（进口件）</option>
+                        <option value="40">40 - 问题物料</option>
+                        <option value="50">50 - 消耗品</option>
+                        <option value="59">59 - 设备备品备件</option>
+                        <option value="60">60 - 主机备件</option>
+                        <option value="70">70 - 系统润滑油</option>
+                        <option value="80">80 - 自制半成品</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" type="button" @click="assemblyCenterSave" :disabled="saving">{{action}}</button>
+        </div>
+        <div class="item">
+            <p class="line"></p>
+            <div>
+                <div class="form-group">
+                    <label class="form-label">外协标记：</label>
+                    <select class="form-select" v-model="material.outSource">
+                        <option disabled selected>请选择</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">计划员：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.planner"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">固定提前期：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
+                </div>
+            </div>
+            <button class="btn" type="button" @click="produceOperateSave" :disabled="saving">{{action}}</button>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <span>&copy;2018 中国船舶重工集团柴油机有限公司</span>
+</footer>
+<div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
+    <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
+</div>
+<div id="mask" class="mask" v-if="loading">
+    <p class="mask-prompt">数据获取中...</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/naruto.js"></script>
+<script src="js/material-edit.js"></script>
+</body>
+</html>

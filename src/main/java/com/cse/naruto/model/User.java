@@ -18,7 +18,7 @@ public class User extends NarutoEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_user")
     @SequenceGenerator(name = "generator_user", sequenceName = "sequence_user", allocationSize = 1)
     private Integer id;
-    private String username;
+    private String code;
     private String name;
     private String password;
     private String roles;
@@ -33,12 +33,12 @@ public class User extends NarutoEntity {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getCode() {
+        return code;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {

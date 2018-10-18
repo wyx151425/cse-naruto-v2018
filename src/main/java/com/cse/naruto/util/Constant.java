@@ -12,6 +12,7 @@ public class Constant {
 
     public static final class DocType {
         public static final String XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        public static final String XLSX_UTF8 = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     }
 
     public static final class UserStatus {
@@ -29,6 +30,8 @@ public class Constant {
     }
 
     public static final class MaterialStatus {
-        public static final int COMMON = 1;
+        public static final int IMPERFECT = 1;
+        public static final int PERFECTED_AND_CAN_EXPORT = 2;
+        public static final int EXPORTED = 3;
     }
 }

@@ -129,6 +129,27 @@ public class Material extends NarutoEntity {
      */
     private String fixedAdvTime;
 
+    /**
+     * 技术中心完成标记
+     */
+    private Boolean technologyDeptMark;
+    /**
+     * 质量环保部完成标记
+     */
+    private Boolean qualifiedDeptMark;
+    /**
+     * 采购部完成标记
+     */
+    private Boolean purchaseDeptMark;
+    /**
+     * 集配中心完成标记
+     */
+    private Boolean assemblyDeptMark;
+    /**
+     * 生产运行部完成标记
+     */
+    private Boolean operateDeptMark;
+
     public Material() {
     }
 
@@ -354,5 +375,45 @@ public class Material extends NarutoEntity {
 
     public void setFixedAdvTime(String fixedAdvTime) {
         this.fixedAdvTime = fixedAdvTime;
+    }
+
+    public Boolean getTechnologyDeptMark() {
+        return technologyDeptMark;
+    }
+
+    public void setTechnologyDeptMark(Boolean technologyDeptMark) {
+        this.technologyDeptMark = technologyDeptMark;
+    }
+
+    public Boolean getQualifiedDeptMark() {
+        return qualifiedDeptMark;
+    }
+
+    public void setQualifiedDeptMark(Boolean qualifiedDeptMark) {
+        this.qualifiedDeptMark = qualifiedDeptMark;
+    }
+
+    public Boolean getPurchaseDeptMark() {
+        return purchaseDeptMark;
+    }
+
+    public void setPurchaseDeptMark(Boolean purchaseDeptMark) {
+        this.purchaseDeptMark = purchaseDeptMark;
+    }
+
+    public Boolean getAssemblyDeptMark() {
+        return assemblyDeptMark;
+    }
+
+    public void setAssemblyDeptMark(Boolean assemblyDeptMark) {
+        this.assemblyDeptMark = assemblyDeptMark;
+    }
+
+    public Boolean getOperateDeptMark() {
+        return operateDeptMark;
+    }
+
+    public void setOperateDeptMark(Boolean operateDeptMark) {
+        this.operateDeptMark = operateDeptMark;
     }
 }

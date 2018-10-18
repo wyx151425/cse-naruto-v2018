@@ -2,6 +2,7 @@ package com.cse.naruto.repository;
 
 import com.cse.naruto.model.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * createAt 2018/09/19
  * updateAt 2018/10/15
  */
-public interface MaterialRepository extends JpaRepository<Material, Integer> {
+public interface MaterialRepository extends JpaRepository<Material, Integer>, JpaSpecificationExecutor<Material> {
 
     /**
      * 根据物料编码获得物料对象
@@ -30,4 +31,12 @@ public interface MaterialRepository extends JpaRepository<Material, Integer> {
      */
     @Query(value = "select m.code from Material m")
     List<String> findAllMaterialCode();
+
+    /**
+     * 根据状态码获取物料基础数据对象集合
+     *
+     * @param status 状态码
+     * @return 物料基础数据对象集合
+     */
+    List<Material> findAllByStatus(int status);
 }

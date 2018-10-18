@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public User login(User user) {
-        User targetUser = userRepository.findByUsername(user.getUsername());
+        User targetUser = userRepository.findByCode(user.getCode());
         if (null == targetUser) {
             throw new NarutoException(StatusCode.USER_NOT_EXIST);
         } else {
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User register(User user) {
-        User targetUser = userRepository.findByUsername(user.getUsername());
+        User targetUser = userRepository.findByCode(user.getCode());
         if (null == targetUser) {
             user.setObjectId(Generator.getObjectId());
             LocalDateTime dateTime = LocalDateTime.now().withNano(0);
