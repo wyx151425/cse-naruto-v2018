@@ -39,10 +39,13 @@ const main = new Vue({
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
-                        popoverSpace.append("登录成功", true);
-                        main.loginResult();
+                        localStorage.setItem("user" ,JSON.stringify(response.data.data));
+                        // popoverSpace.append("登录成功", true);
+                        // main.loginResult();
+                        window.location.href = requestContext + "index";
                     } else {
-                        popoverSpace.append("登录失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.loginResult();
                     }
                 }).catch(function (error) {

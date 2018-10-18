@@ -25,7 +25,6 @@ import java.net.URLEncoder;
  * createAt 2018/10/16
  * updateAt 2018/10/17
  */
-@CrossOrigin
 @RestController
 @RequestMapping(value = "api")
 public class MaterialController extends NarutoFacade {

@@ -51,10 +51,10 @@ public class NarutoInterceptor implements HandlerInterceptor {
         User user = (User) request.getSession().getAttribute(Constant.USER);
         if (null == user) {
             if (uri.contains("/api")) {
-//                ObjectMapper om = new ObjectMapper();
-//                PrintWriter out = response.getWriter();
-//                out.print(om.writeValueAsString(new Response<>(StatusCode.USER_LOGIN_TIMEOUT)));
-//                out.flush();
+                ObjectMapper om = new ObjectMapper();
+                PrintWriter out = response.getWriter();
+                out.print(om.writeValueAsString(new Response<>(StatusCode.USER_LOGIN_TIMEOUT)));
+                out.flush();
                 return true;
             } else {
                 response.sendRedirect(request.getContextPath() + "/login");

@@ -1,6 +1,15 @@
 const main = new Vue({
     el: "#main",
     data: {
+        user: {
+            permissions: {
+                MATERIAL_EDIT_TECH_PART: false,
+                MATERIAL_EDIT_QA_ENV_PART: false,
+                MATERIAL_EDIT_PURCHASE_PART: false,
+                MATERIAL_EDIT_ASSEMBLY_PART: false,
+                MATERIAL_EDIT_PRO_OPE_PART: false
+            }
+        },
         loading: true,
         status: 0,
         import: false,
@@ -26,7 +35,8 @@ const main = new Vue({
                         main.pageContext.dataTotal = data.dataTotal;
                         main.materialList = data.data;
                     } else {
-                        popoverSpace.append("数据获取失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
@@ -82,6 +92,7 @@ const main = new Vue({
         }
     },
     mounted: function () {
+        this.user = JSON.parse(localStorage.user);
         axios.get(requestContext + "api/materials?pageIndex=" + 1 + "&pageSize=" + 15 + "&status=" + 0)
             .then(function (response) {
                 let statusCode = response.data.statusCode;
@@ -92,7 +103,8 @@ const main = new Vue({
                     main.pageContext.dataTotal = data.dataTotal;
                     main.materialList = data.data;
                 } else {
-                    popoverSpace.append("数据获取失败", false);
+                    let message = getMessage(statusCode);
+                    popoverSpace.append(message, false);
                 }
                 mask.loadStop();
             }).catch(function (error) {
@@ -136,7 +148,8 @@ const modal = new Vue({
                             modal.picked = false;
                             modal.importResult();
                         } else {
-                            popoverSpace.append("导入失败", false);
+                            let message = getMessage(statusCode);
+                            popoverSpace.append(message, false);
                             modal.importResult();
                         }
                     }).catch(function (error) {

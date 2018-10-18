@@ -24,16 +24,10 @@ public class UserController extends NarutoFacade {
         this.userService = userService;
     }
 
-    @CrossOrigin
     @PostMapping(value = "login")
     public Response<User> actionLogin(@RequestBody User requestUser) {
         User user = userService.login(requestUser);
         addCurrentUser(user);
         return new Response<>(user);
-    }
-
-    @PostMapping(value = "test")
-    public Response<Object> actionTest() {
-        return new Response<>();
     }
 }

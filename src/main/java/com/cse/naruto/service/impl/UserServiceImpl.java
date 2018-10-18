@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         User targetUser = userRepository.findByCode(user.getCode());
         if (null == targetUser) {
             user.setObjectId(Generator.getObjectId());
-            LocalDateTime dateTime = LocalDateTime.now().withNano(0);
+            LocalDateTime dateTime = LocalDateTime.now();
             user.setCreateAt(dateTime);
             user.setUpdateAt(dateTime);
             user.setRoles(Constant.UserRoles.ROLE_USER);

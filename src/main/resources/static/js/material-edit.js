@@ -2,6 +2,15 @@ const main = new Vue({
     el: "#main",
     data: {
         loading: true,
+        user: {
+            permissions: {
+                MATERIAL_EDIT_TECH_PART: false,
+                MATERIAL_EDIT_QA_ENV_PART: false,
+                MATERIAL_EDIT_PURCHASE_PART: false,
+                MATERIAL_EDIT_ASSEMBLY_PART: false,
+                MATERIAL_EDIT_PRO_OPE_PART: false
+            }
+        },
         material: {
             companyNo: "",
             code: "",
@@ -362,7 +371,8 @@ const main = new Vue({
                         popoverSpace.append("保存成功", true);
                         main.saveStop();
                     } else {
-                        popoverSpace.append("保存失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.saveStop();
                     }
                 }).catch(function () {
@@ -394,7 +404,8 @@ const main = new Vue({
                         popoverSpace.append("保存成功", true);
                         main.saveStop();
                     } else {
-                        popoverSpace.append("保存失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.saveStop();
                     }
                 }).catch(function () {
@@ -436,7 +447,8 @@ const main = new Vue({
                         popoverSpace.append("保存成功", true);
                         main.saveStop();
                     } else {
-                        popoverSpace.append("保存失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.saveStop();
                     }
                 }).catch(function () {
@@ -463,7 +475,8 @@ const main = new Vue({
                         popoverSpace.append("保存成功", true);
                         main.saveStop();
                     } else {
-                        popoverSpace.append("保存失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.saveStop();
                     }
                 }).catch(function () {
@@ -496,7 +509,8 @@ const main = new Vue({
                         popoverSpace.append("保存成功", true);
                         main.saveStop();
                     } else {
-                        popoverSpace.append("保存失败", false);
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
                         main.saveStop();
                     }
                 }).catch(function () {
@@ -638,6 +652,7 @@ const main = new Vue({
         }
     },
     mounted: function () {
+        this.user = JSON.parse(localStorage.user);
         let url = window.location;
         let code = getUrlParam(url, "materialCode");
         axios.get(requestContext + "api/materials/" + code)
@@ -676,7 +691,8 @@ const main = new Vue({
                         popoverSpace.append("数据获取失败", false);
                     }
                 } else {
-                    popoverSpace.append("数据获取失败", false);
+                    let message = getMessage(statusCode);
+                    popoverSpace.append(message, false);
                 }
                 mask.loadStop();
             }).catch(function (error) {

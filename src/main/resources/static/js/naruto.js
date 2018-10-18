@@ -18,6 +18,27 @@ function getUrlParam(url, name) {
     return items;
 }
 
+function getMessage(statusCode) {
+    switch (statusCode) {
+        case 500:
+            return "服务器错误";
+        case 1000:
+            return "用户不存在";
+        case 1001:
+            return "用户已注册";
+        case 1002:
+            return "用户被禁用";
+        case 1003:
+            return "登录超时";
+        case 1004:
+            return "密码错误";
+        case 1100:
+            return "文件格式错误";
+        case 1101:
+            return "文件解析错误";
+    }
+}
+
 Vue.component("popover", {
     props: ["prompt"],
     template: `
