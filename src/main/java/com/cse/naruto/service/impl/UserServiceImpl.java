@@ -49,14 +49,17 @@ public class UserServiceImpl implements UserService {
             } else {
                 if (targetUser.getPassword().equals(user.getPassword())) {
                     // 根据用户角色获取用户权限
-                    String[] roles = targetUser.getRoles().split(",");
+                    String[] roleArr = targetUser.getRole().split(",");
+                    Map<String, Boolean> roles = new HashMap<>();
                     Map<String, Boolean> permissions = new HashMap<>();
-                    for (String role : roles) {
+                    for (String role : roleArr) {
+                        roles.put(role, true);
                         List<Permission> permissionList = permissionRepository.findAllByRole(role);
                         for (Permission permission : permissionList) {
                             permissions.put(permission.getName(), true);
                         }
                     }
+                    targetUser.setRoles(roles);
                     targetUser.setPermissions(permissions);
                     return targetUser;
                 } else {
@@ -75,7 +78,7 @@ public class UserServiceImpl implements UserService {
             LocalDateTime dateTime = LocalDateTime.now();
             user.setCreateAt(dateTime);
             user.setUpdateAt(dateTime);
-            user.setRoles(Constant.UserRoles.ROLE_USER);
+            user.setRole(Constant.UserRoles.ROLE_USER);
             userRepository.save(user);
             return user;
         } else {

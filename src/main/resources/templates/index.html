@@ -2,43 +2,61 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>基础数据管理系统</title>
+    <title>基础数据管理工具</title>
     <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
     <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
 </head>
 <body>
-<header class="header">
+<header id="header" class="header">
     <div class="header-fixed">
         <div class="container">
-            <img class="logo" src="images/CSE.png" alt=""/>
+            <a th:href="@{/index}"><img class="logo" th:src="@{/images/CSE.png}" alt=""/></a>
+            <div class="account">
+                <span>{{user.name}}</span>
+                <a class="icon icon-off" th:href="@{/logout}"></a>
+            </div>
         </div>
     </div>
 </header>
 <main id="main" class="container">
     <div class="panel">
         <div class="select-group">
-            <label class="select-label">状态</label>
-            <select class="form-select" v-model="status" @change="statusQuery">
-                <option value="0">全部</option>
-                <option value="1">待完善</option>
-                <option value="2">已完善</option>
-            </select>
+            <div v-if="user.roles.ROLE_TECH_EMPLOYEE" v-cloak>
+                <label class="select-label">导出状态</label>
+                <select class="form-select" v-model="status" @change="statusQuery">
+                    <option value="0">全部</option>
+                    <option value="1">待完善</option>
+                    <option value="2">可导出</option>
+                    <option value="3">已导出</option>
+                </select>
+            </div>
+            <div v-if="!user.roles.ROLE_TECH_EMPLOYEE" v-cloak>
+                <label class="select-label">完善状态</label>
+                <select class="form-select" v-model="prefect" @change="prefectQuery">
+                    <option value="2">全部</option>
+                    <option value="0">未完善</option>
+                    <option value="1">已完善</option>
+                </select>
+            </div>
         </div>
-        <button class="btn btn-import pull-right" type="button" @click="exportFile" :disabled="exporting">
-            {{exportAction}}
-        </button>
-        <button class="btn btn-import pull-right" type="button" style="margin-right: 16px" @click="importModal">导入
-        </button>
+        <div v-if="user.roles.ROLE_TECH_EMPLOYEE">
+            <button class="btn btn-import pull-right" type="button" @click="exportFile" :disabled="exporting">
+                {{exportAction}}
+            </button>
+            <button class="btn btn-import pull-right" type="button" style="margin-right: 16px" @click="importModal">导入
+            </button>
+        </div>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th class="col-1-of-10">公司号</th>
                 <th class="col-2-of-10">物料编码</th>
                 <th class="col-3-of-10">物料名称</th>
-                <th class="col-1-of-10">物料简称</th>
+                <th class="col-1-of-10" v-if="user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
+                <th class="col-2-of-10" v-if="!user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
                 <th class="col-1-of-10">完善状态</th>
-                <th class="col-1-of-10">导出状态</th>
+                <th class="col-1-of-10" v-if="user.roles.ROLE_TECH_EMPLOYEE">导出状态</th>
                 <th class="col-1-of-10">操作</th>
             </tr>
             </thead>
@@ -71,13 +89,13 @@
                         || (user.permissions.MATERIAL_EDIT_ASSEMBLY_PART && material.assemblyDeptMark)
                         || (user.permissions.MATERIAL_EDIT_PRO_OPE_PART && material.operateDeptMark)">已完善</span>
                 </td>
-                <td :class="{error: 1 == material.status, success: 2 == material.status, prompt: 3 == material.status}">
+                <td v-if="user.roles.ROLE_TECH_EMPLOYEE" :class="{error: 1 == material.status, success: 2 == material.status, prompt: 3 == material.status}">
                     <span v-if="1 == material.status">待完善</span>
                     <span v-if="2 == material.status">可导出</span>
                     <span v-if="3 == material.status">已导出</span>
                 </td>
                 <td>
-                    <a class="link" :href="'material/edit?materialCode=' + material.code">编辑</a>
+                    <a class="link" :href="'material/edit?materialCode=' + material.code" v-if="3 != status">编辑</a>
                 </td>
             </tr>
             </tbody>

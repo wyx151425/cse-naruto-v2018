@@ -12,6 +12,7 @@ const main = new Vue({
         },
         loading: true,
         status: 0,
+        prefect: 0,
         import: false,
         exportAction: "导出",
         exporting: false,
@@ -24,8 +25,9 @@ const main = new Vue({
         materialList: [],
     },
     methods: {
-        materialListQuery: function (index, size, status) {
-            axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size + "&status=" + status)
+        materialListQuery: function (index, size, status, prefect) {
+            axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
+                + "&status=" + status + "&prefect=" +prefect)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
@@ -44,19 +46,22 @@ const main = new Vue({
         },
         previousPage: function () {
             if (this.pageContext.index > 1) {
-                this.materialListQuery(this.pageContext.index - 1, this.pageContext.size, this.status);
+                this.materialListQuery(this.pageContext.index - 1, this.pageContext.size, this.status, this.prefect);
             }
         },
         nextPage: function () {
             if (this.pageContext.index < this.pageContext.pageTotal) {
-                this.materialListQuery(this.pageContext.index + 1, this.pageContext.size, this.status);
+                this.materialListQuery(this.pageContext.index + 1, this.pageContext.size, this.status, this.prefect);
             }
         },
         importModal: function () {
             modal.importModal();
         },
         statusQuery: function () {
-            this.materialListQuery(1, 15, this.status);
+            this.materialListQuery(1, 15, this.status, 2);
+        },
+        prefectQuery: function () {
+            this.materialListQuery(1, 15, 0, this.prefect);
         },
         exportFile: function () {
             this.exportAction = "正在导出";
@@ -93,7 +98,14 @@ const main = new Vue({
     },
     mounted: function () {
         this.user = JSON.parse(localStorage.user);
-        axios.get(requestContext + "api/materials?pageIndex=" + 1 + "&pageSize=" + 15 + "&status=" + 0)
+        if (this.user.roles.ROLE_TECH_EMPLOYEE) {
+            this.prefect = 2;
+        }
+        if (!this.user.roles.ROLE_TECH_EMPLOYEE) {
+            this.prefect = 0;
+        }
+        axios.get(requestContext + "api/materials?pageIndex=" + this.pageContext.index
+            + "&pageSize=" + this.pageContext.size + "&status=" + this.status + "&prefect=" + this.prefect)
             .then(function (response) {
                 let statusCode = response.data.statusCode;
                 if (200 === statusCode) {

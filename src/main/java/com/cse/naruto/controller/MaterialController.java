@@ -102,9 +102,10 @@ public class MaterialController extends NarutoFacade {
     public Response<PageContext<Material>> actionQueryMaterialListByPagination(
             @RequestParam("pageIndex") Integer pageIndex,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("status") Integer status
+            @RequestParam("status") Integer status,
+            @RequestParam("prefect") Integer prefect
     ) {
-        PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, status);
+        PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, status, prefect, getCurrentUser());
         return new Response<>(pageContext);
     }
 }

@@ -2,6 +2,7 @@ package com.cse.naruto.service;
 
 import com.cse.naruto.model.Material;
 import com.cse.naruto.model.PageContext;
+import com.cse.naruto.model.User;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.data.domain.Page;
@@ -82,8 +83,10 @@ public interface MaterialService {
      *
      * @param pageIndex 分页页码
      * @param pageSize  每页数据量
-     * @param status    查询等于该状态码的数据
+     * @param status    查询等于该状态码的数据（0-全部/1-待完善/2-可导出/3-已导出）
+     * @param prefect 完善状态（2-全部/1-已完善/0-未完善）
+     * @param user 当前用户
      * @return 带有分页信息和物料数据集合的对象
      */
-    PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int status);
+    PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int status, int prefect, User user);
 }

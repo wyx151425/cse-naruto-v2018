@@ -397,6 +397,23 @@ main.container {
     margin-left: -2px;
 }
 
+.account {
+    float: right;
+    height: 64px;
+    line-height: 64px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.icon-off {
+    color: #000;
+    margin-left: 4px;
+}
+
+.icon-off:before {
+    content: "\e017";
+}
+
 /* footer部分 */
 .footer {
     width: 100%;

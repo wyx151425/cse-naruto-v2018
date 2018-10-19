@@ -89,11 +89,35 @@ public class NarutoApplicationTests {
 
     @Test
     public void addUser() {
-        User user = createUser();
-        user.setCode("CSE1010");
-        user.setPassword("151425");
-        user.setName("王振琦");
-        user.setRoles("ROLE_USER,ROLE_TECH_EMPLOYEE");
-        userRepository.save(user);
+        User user1 = createUser();
+        user1.setCode("CSE1010");
+        user1.setPassword("151425");
+        user1.setName("王振琦");
+        user1.setRole("ROLE_USER,ROLE_TECH_EMPLOYEE");
+        userRepository.save(user1);
+        User user2 = createUser();
+        user2.setCode("CSE1020");
+        user2.setPassword("151425");
+        user2.setName("王振琦");
+        user2.setRole("ROLE_USER,ROLE_QA_ENV_EMPLOYEE");
+        userRepository.save(user2);
+        User user3 = createUser();
+        user3.setCode("CSE1030");
+        user3.setPassword("151425");
+        user3.setName("王振琦");
+        user3.setRole("ROLE_USER,ROLE_PURCHASE_EMPLOYEE");
+        userRepository.save(user3);
+        User user4 = createUser();
+        user4.setCode("CSE1040");
+        user4.setPassword("151425");
+        user4.setName("王振琦");
+        user4.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
+        userRepository.save(user4);
+        User user5 = createUser();
+        user5.setCode("CSE1050");
+        user5.setPassword("151425");
+        user5.setName("王振琦");
+        user5.setRole("ROLE_USER,ROLE_PRO_OPE_EMPLOYEE");
+        userRepository.save(user5);
     }
 }

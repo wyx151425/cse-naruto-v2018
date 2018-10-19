@@ -18,11 +18,20 @@ public class NarutoWebConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new NarutoInterceptor())
+                .addPathPatterns("")
+                .addPathPatterns("/")
+                .addPathPatterns("/index")
+                .addPathPatterns("/material/**")
                 .addPathPatterns("/api/**");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-
+        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/logout").setViewName("login");
+        registry.addViewController("").setViewName("index");
+        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/material/edit").setViewName("material-edit");
     }
 }

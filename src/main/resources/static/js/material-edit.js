@@ -27,8 +27,8 @@ const main = new Vue({
             respDept: "请选择",
             keyPartMark: "请选择",
             keyPartSort: "请选择",
-            virtualPartMark: "N",
-            qualifiedMark: "Y",
+            virtualPartMark: "请选择",
+            qualifiedMark: "请选择",
             inspectMark: "请选择",
             batchMark: "请选择",
             purchaseSort: "请选择",
@@ -36,7 +36,7 @@ const main = new Vue({
             groupPurMark: "请选择",
             ownPurMark: "请选择",
             defRepository: "请选择",
-            outSource: "N",
+            outSource: "请选择",
             planner: "",
             fixedAdvTime: ""
         },
@@ -292,6 +292,14 @@ const main = new Vue({
             }
             this.material.respDept = "请选择";
         },
+        keyPartMarkSelect: function () {
+            if ("Y" === this.material.keyPartMark) {
+                this.material.keyPartSort = "请选择";
+            }
+            if ("" === this.material.keyPartMark) {
+                this.material.keyPartSort = "";
+            }
+        },
         saveStart: function () {
             this.saving = true;
             this.action = "正在保存";
@@ -301,11 +309,21 @@ const main = new Vue({
             this.saving = false;
         },
         technologyCenterSave: function () {
-            let material = {};
             if ("" === this.material.code) {
                 return;
             }
+            let material = {};
             material.code = this.material.code;
+            if ("" === this.material.name) {
+                popoverSpace.append("请输入物料名称", false);
+                return;
+            }
+            material.name = this.material.name;
+            if ("" === this.material.shortName) {
+                popoverSpace.append("请输入物料简称", false);
+                return;
+            }
+            material.shortName = this.material.shortName;
             if ("" === this.material.specification) {
                 popoverSpace.append("请输入规格", false);
                 return;
@@ -352,7 +370,7 @@ const main = new Vue({
             }
             material.keyPartMark = this.material.keyPartMark;
             if ("请选择" === this.material.keyPartSort) {
-                popoverSpace.append("请选择关键件分类", false);
+                popoverSpace.append("请选择关键件大类", false);
                 return;
             }
             material.keyPartSort = this.material.keyPartSort;
@@ -381,10 +399,10 @@ const main = new Vue({
             });
         },
         qualifiedEnvironmentSave: function () {
-            let material = {};
             if ("" === this.material.code) {
                 return;
             }
+            let material = {};
             material.code = this.material.code;
             if ("请选择" === this.material.inspectMark) {
                 popoverSpace.append("请选择质检标记", false);
@@ -414,10 +432,10 @@ const main = new Vue({
             });
         },
         purchaseSave: function () {
-            let material = {};
             if ("" === this.material.code) {
                 return;
             }
+            let material = {};
             material.code = this.material.code;
             if ("请选择" === this.material.purchaseSort) {
                 popoverSpace.append("请选择采购分类", false);
@@ -439,6 +457,11 @@ const main = new Vue({
                 return;
             }
             material.ownPurMark = this.material.ownPurMark;
+            if ("" === this.material.fixedAdvTime) {
+                popoverSpace.append("请输入固定提前期", false);
+                return;
+            }
+            material.fixedAdvTime = this.material.fixedAdvTime;
             this.saveStart();
             axios.put(requestContext + "api/materials/purchase", material)
                 .then(function (response) {
@@ -457,10 +480,10 @@ const main = new Vue({
             });
         },
         assemblyCenterSave: function () {
-            let material = {};
             if ("" === this.material.code) {
                 return;
             }
+            let material = {};
             material.code = this.material.code;
             if ("请选择" === this.material.defRepository) {
                 popoverSpace.append("请选择默认仓库", false);
@@ -485,10 +508,10 @@ const main = new Vue({
             });
         },
         produceOperateSave: function () {
-            let material = {};
             if ("" === this.material.code) {
                 return;
             }
+            let material = {};
             material.code = this.material.code;
             material.outSource = this.material.outSource;
             if ("" === this.material.planner) {
@@ -581,11 +604,17 @@ const main = new Vue({
             }
         },
         setMaterialKeyPartMark: function (keyPartMark) {
+            if (null === keyPartMark) {
+                this.material.keyPartMark = "";
+            }
             if (null !== keyPartMark && "" !== keyPartMark) {
                 this.material.keyPartMark = keyPartMark;
             }
         },
         setMaterialKeyPartSort: function (keyPartSort) {
+            if (null === keyPartSort) {
+                this.material.keyPartSort = "";
+            }
             if (null !== keyPartSort && "" !== keyPartSort) {
                 this.material.keyPartSort = keyPartSort;
             }

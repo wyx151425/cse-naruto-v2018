@@ -45,9 +45,17 @@ public class Material extends NarutoEntity {
      */
     private String description;
     /**
+     * 国标号
+     */
+    private String international;
+    /**
      * 图号
      */
     private String drawingNo;
+    /**
+     * 参考号
+     */
+    private String reference;
     /**
      * 普通分类
      */
@@ -217,12 +225,28 @@ public class Material extends NarutoEntity {
         this.description = description;
     }
 
+    public String getInternational() {
+        return international;
+    }
+
+    public void setInternational(String international) {
+        this.international = international;
+    }
+
     public String getDrawingNo() {
         return drawingNo;
     }
 
     public void setDrawingNo(String drawingNo) {
         this.drawingNo = drawingNo;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public String getGeneralSort() {

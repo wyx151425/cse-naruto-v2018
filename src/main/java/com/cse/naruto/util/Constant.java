@@ -20,9 +20,13 @@ public class Constant {
     }
 
     public static final class UserRoles {
-        public static final String ROLE_USER = "ROLE_USER,";
-        
-        public static final String ROLE_ADMIN = "ROLE_ADMIN,";
+        public static final String ROLE_USER = "ROLE_USER";
+        public static final String ROLE_ADMIN = "ROLE_ADMIN";
+        public static final String ROLE_TECH_EMPLOYEE = "ROLE_TECH_EMPLOYEE";
+        public static final String ROLE_QA_ENV_EMPLOYEE = "ROLE_QA_ENV_EMPLOYEE";
+        public static final String ROLE_PURCHASE_EMPLOYEE = "ROLE_PURCHASE_EMPLOYEE";
+        public static final String ROLE_ASSEMBLY_EMPLOYEE = "ROLE_ASSEMBLY_EMPLOYEE";
+        public static final String ROLE_PRO_OPE_EMPLOYEE = "ROLE_PRO_OPE_EMPLOYEE";
     }
 
     public static final class PermissionStatus {
@@ -31,7 +35,7 @@ public class Constant {
 
     public static final class MaterialStatus {
         public static final int IMPERFECT = 1;
-        public static final int PERFECTED_AND_CAN_EXPORT = 2;
+        public static final int CAN_EXPORT = 2;
         public static final int EXPORTED = 3;
     }
 }

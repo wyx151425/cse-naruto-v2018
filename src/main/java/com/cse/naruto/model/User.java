@@ -21,7 +21,9 @@ public class User extends NarutoEntity {
     private String code;
     private String name;
     private String password;
-    private String roles;
+    private String role;
+    @Transient
+    private Map<String, Boolean> roles;
     @Transient
     private Map<String, Boolean> permissions;
 
@@ -57,11 +59,19 @@ public class User extends NarutoEntity {
         this.password = password;
     }
 
-    public String getRoles() {
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Map<String, Boolean> getRoles() {
         return roles;
     }
 
-    public void setRoles(String roles) {
+    public void setRoles(Map<String, Boolean> roles) {
         this.roles = roles;
     }
 

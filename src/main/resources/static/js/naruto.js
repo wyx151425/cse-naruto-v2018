@@ -78,3 +78,13 @@ const mask = new Vue({
         }
     }
 });
+
+const header = new Vue({
+    el: "#header",
+    data: {
+        user: {}
+    },
+    mounted: function () {
+        this.user = JSON.parse(localStorage.user);
+    }
+});

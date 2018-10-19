@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>基础数据管理系统</title>
+    <title>基础数据管理工具</title>
     <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
     <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
@@ -10,10 +10,10 @@
 <body>
 <main id="main" class="container">
     <div class="head">
-        <img class="logo" src="images/CSE.png" alt=""/>
+        <img class="logo" th:src="@{/images/CSE.png}" alt=""/>
         <div class="brand">
             <p class="company">中国船舶重工集团柴油机有限公司</p>
-            <p class="system">基础数据管理系统</p>
+            <p class="system">基础数据管理工具</p>
         </div>
     </div>
     <form class="form-login form-inline" action="">

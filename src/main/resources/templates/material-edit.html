@@ -2,22 +2,26 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>基础数据管理系统</title>
+    <title>基础数据管理工具</title>
     <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
     <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
     <link rel="stylesheet" th:href="@{/css/material-edit.css}"/>
 </head>
 <body>
-<header class="header">
+<header id="header" class="header">
     <div class="header-fixed">
         <div class="container">
-            <img class="logo" src="images/CSE.png" alt=""/>
+            <a th:href="@{/index}"><img class="logo" th:src="@{/images/CSE.png}" alt=""/></a>
+            <div class="account">
+                <span>{{user.name}}</span>
+                <a class="icon icon-off" th:href="@{/logout}"></a>
+            </div>
         </div>
     </div>
 </header>
 <main id="main" class="container">
     <div class="panel">
-        <div>
+        <div v-if="!user.permissions.MATERIAL_EDIT_TECH_PART">
             <div class="form-group">
                 <label class="form-label">物料编码：</label>
                 <p class="form-text">{{material.code}}</p>
@@ -33,6 +37,24 @@
             <div class="form-group">
                 <label class="form-label">物料简称：</label>
                 <p class="form-text">{{material.shortName}}</p>
+            </div>
+        </div>
+        <div v-if="user.permissions.MATERIAL_EDIT_TECH_PART">
+            <div class="form-group">
+                <label class="form-label">物料编码：</label>
+                <p class="form-text">{{material.code}}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">公司号：</label>
+                <p class="form-text">{{material.companyNo}}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">物料名称：</label>
+                <input class="form-input" type="text" placeholder="请输入" v-model="material.name"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">物料简称：</label>
+                <input class="form-input" type="text" placeholder="请输入" v-model="material.shortName"/>
             </div>
         </div>
         <div class="item" v-if="user.permissions.MATERIAL_EDIT_TECH_PART" v-cloak>
@@ -151,15 +173,19 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">关键件标记：</label>
-                    <select class="form-select" v-model="material.keyPartMark">
+                    <select class="form-select" v-model="material.keyPartMark" @change="keyPartMarkSelect">
                         <option disabled selected>请选择</option>
+                        <option value=""></option>
                         <option value="Y">Y</option>
-                        <option value="N">N</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">关键件大类：</label>
-                    <select class="form-select" v-model="material.keyPartSort">
+                    <select class="form-select" v-model="material.keyPartSort" v-if="'Y' != material.keyPartMark">
+                        <option disabled selected>请选择</option>
+                        <option value=""></option>
+                    </select>
+                    <select class="form-select" v-model="material.keyPartSort" v-if="'Y' == material.keyPartMark">
                         <option disabled selected>请选择</option>
                         <option value="Y1">Y1</option>
                         <option value="Y2">Y2</option>
@@ -309,6 +335,10 @@
                         <option value="N">N</option>
                     </select>
                 </div>
+                <div class="form-group" v-if="'P' === material.sourceMark">
+                    <label class="form-label">固定提前期：</label>
+                    <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
+                </div>
             </div>
             <button class="btn" type="button" @click="purchaseSave" :disabled="saving">{{action}}</button>
         </div>
@@ -351,7 +381,7 @@
                     <label class="form-label">计划员：</label>
                     <input class="form-input" type="text" placeholder="请输入" v-model="material.planner"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group" v-if="'M' === material.sourceMark">
                     <label class="form-label">固定提前期：</label>
                     <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                 </div>
