@@ -73,6 +73,9 @@ const mask = new Vue({
         loading: true
     },
     methods: {
+        loadStart: function () {
+            this.loading = true;
+        },
         loadStop: function () {
             this.loading = false;
         }

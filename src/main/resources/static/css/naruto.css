@@ -30,7 +30,7 @@ a:link, a:hover, a:active, a:visited {
 }
 
 .container {
-    width: 1200px;
+    width: 1300px;
     margin: 0 auto;
 }
 
@@ -267,7 +267,7 @@ main.container {
 }
 
 .panel {
-    width: 1200px;
+    width: 1300px;
     min-height: 800px;
     padding: 40px;
     overflow: hidden;

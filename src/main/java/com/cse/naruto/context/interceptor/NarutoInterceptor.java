@@ -53,6 +53,7 @@ public class NarutoInterceptor implements HandlerInterceptor {
             if (uri.contains("/api")) {
                 ObjectMapper om = new ObjectMapper();
                 PrintWriter out = response.getWriter();
+                // 返回提示登录超时的JSON
                 out.print(om.writeValueAsString(new Response<>(StatusCode.USER_LOGIN_TIMEOUT)));
                 out.flush();
                 return true;

@@ -1,6 +1,7 @@
 const main = new Vue({
     el: "#main",
     data: {
+        tabIndex: 0,
         loading: true,
         user: {
             permissions: {
@@ -307,6 +308,20 @@ const main = new Vue({
         saveStop: function () {
             this.action = "保存";
             this.saving = false;
+        },
+        groupPurchase: function () {
+            if ("Y" === this.material.groupPurMark) {
+                this.material.ownPurMark = "N";
+            } else if ("N" === this.material.groupPurMark) {
+                this.material.ownPurMark = "Y";
+            }
+        },
+        ownPurchase: function () {
+            if ("Y" === this.material.ownPurMark) {
+                this.material.groupPurMark = "N";
+            } else if ("N" === this.material.ownPurMark) {
+                this.material.groupPurMark = "Y";
+            }
         },
         technologyCenterSave: function () {
             if ("" === this.material.code) {
@@ -678,10 +693,24 @@ const main = new Vue({
             if (null !== fixedAdvTime) {
                 this.material.fixedAdvTime = fixedAdvTime;
             }
+        },
+        tabChange: function (index) {
+            this.tabIndex = index;
         }
     },
     mounted: function () {
         this.user = JSON.parse(localStorage.user);
+        if (this.user.permissions.MATERIAL_EDIT_TECH_PART) {
+            this.tabIndex = 1;
+        } else if (this.user.permissions.MATERIAL_EDIT_QA_ENV_PART) {
+            this.tabIndex = 2;
+        } else if (this.user.permissions.MATERIAL_EDIT_PURCHASE_PART) {
+            this.tabIndex = 3;
+        } else if (this.user.permissions.MATERIAL_EDIT_ASSEMBLY_PART) {
+            this.tabIndex = 4;
+        } else if (this.user.permissions.MATERIAL_EDIT_PRO_OPE_PART) {
+            this.tabIndex = 5;
+        }
         let url = window.location;
         let code = getUrlParam(url, "materialCode");
         axios.get(requestContext + "api/materials/" + code)

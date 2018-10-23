@@ -39,7 +39,7 @@ const main = new Vue({
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
-                        localStorage.setItem("user" ,JSON.stringify(response.data.data));
+                        localStorage.setItem("user", JSON.stringify(response.data.data));
                         // popoverSpace.append("登录成功", true);
                         // main.loginResult();
                         window.location.href = requestContext + "index";

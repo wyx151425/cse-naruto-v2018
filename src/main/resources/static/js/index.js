@@ -11,18 +11,19 @@ const main = new Vue({
             }
         },
         loading: true,
-        status: 0,
+        status: 1,
         prefect: 0,
         import: false,
         exportAction: "导出",
         exporting: false,
         pageContext: {
             index: 1,
-            size: 15,
+            size: 100,
             pageTotal: 0,
             dataTotal: 0,
         },
         materialList: [],
+        targetPage: ""
     },
     methods: {
         materialListQuery: function (index, size, status, prefect) {
@@ -58,10 +59,10 @@ const main = new Vue({
             modal.importModal();
         },
         statusQuery: function () {
-            this.materialListQuery(1, 15, this.status, 2);
+            this.materialListQuery(1, 100, this.status, 2);
         },
         prefectQuery: function () {
-            this.materialListQuery(1, 15, 0, this.prefect);
+            this.materialListQuery(1, 100, 0, this.prefect);
         },
         exportFile: function () {
             this.exportAction = "正在导出";
@@ -94,6 +95,35 @@ const main = new Vue({
 
             document.body.appendChild(link);
             link.click();
+        },
+        pageSearch: function () {
+            if ("" === this.targetPage || "0" === this.targetPage) {
+                popoverSpace.append("请输入查找页数", false);
+                return;
+            }
+            if (this.targetPage > this.pageContext.pageTotal) {
+                popoverSpace.append("超过最大数据页数", false);
+                return;
+            }
+            mask.loadStart();
+            axios.get(requestContext + "api/materials?pageIndex=" + this.targetPage
+                + "&pageSize=" + this.pageContext.size + "&status=" + this.status + "&prefect=" + this.prefect)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let data = response.data.data;
+                        main.pageContext.index = data.index;
+                        main.pageContext.pageTotal = data.pageTotal;
+                        main.pageContext.dataTotal = data.dataTotal;
+                        main.materialList = data.data;
+                    } else {
+                        let message = getMessage(statusCode);
+                    }
+                    mask.loadStop();
+                }).catch(function (error) {
+                popoverSpace.append("服务器访问失败", false);
+                mask.loadStop();
+            });
         }
     },
     mounted: function () {
@@ -121,7 +151,6 @@ const main = new Vue({
                 mask.loadStop();
             }).catch(function (error) {
             popoverSpace.append("服务器访问失败", false);
-            console.log("FUCK" + error);
             mask.loadStop();
         });
     }
@@ -154,7 +183,8 @@ const modal = new Vue({
                 };  //添加请求头
                 axios.post(requestContext + "api/materials/import", param, config)
                     .then(function (response) {
-                        if (200 === response.data.statusCode) {
+                        let statusCode = response.data.statusCode;
+                        if (200 === statusCode) {
                             document.getElementById("file").value = "";
                             popoverSpace.append("导入成功，请刷新界面", true);
                             modal.picked = false;

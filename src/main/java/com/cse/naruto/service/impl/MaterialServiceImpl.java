@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author 王振琦
  * createAt 2018/10/16
- * updateAt 2018/10/17
+ * updateAt 2018/10/23
  */
 @Service
 public class MaterialServiceImpl implements MaterialService {
@@ -162,8 +162,12 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setInventoryUnit(material.getInventoryUnit());
         if (null == targetMater.getSourceMark()) {
             if ("M".equals(material.getSourceMark())) {
+                targetMater.setPurchaseMark("N");
+                targetMater.setGroupPurMark("N");
+                targetMater.setOwnPurMark("N");
                 targetMater.setPurchaseDeptMark(true);
             } else if ("P".equals(material.getSourceMark())) {
+                targetMater.setPurchaseMark("Y");
                 targetMater.setOperateDeptMark(true);
             }
         } else {
@@ -172,14 +176,17 @@ public class MaterialServiceImpl implements MaterialService {
                 // 这种情况下物料中就可能有相应部门修改的数据，所以应该把这些数据清空
                 if ("P".equals(targetMater.getSourceMark()) && "M".equals(material.getSourceMark())) {
                     targetMater.setPurchaseSort(null);
-                    targetMater.setPurchaseMark(null);
-                    targetMater.setGroupPurMark(null);
-                    targetMater.setOwnPurMark(null);
+                    targetMater.setPurchaseMark("N");
+                    targetMater.setGroupPurMark("N");
+                    targetMater.setOwnPurMark("N");
                     targetMater.setPurchaseDeptMark(true);
                     targetMater.setOperateDeptMark(false);
                 } else if ("M".equals(targetMater.getSourceMark()) && "P".equals(material.getSourceMark())) {
                     targetMater.setOutSource("N");
                     targetMater.setPlanner("QD624");
+                    targetMater.setPurchaseMark("Y");
+                    targetMater.setGroupPurMark(null);
+                    targetMater.setOwnPurMark(null);
                     targetMater.setPurchaseDeptMark(false);
                     targetMater.setOperateDeptMark(true);
                 }
@@ -455,11 +462,9 @@ public class MaterialServiceImpl implements MaterialService {
             XSSFCell cell26 = row.createCell(25);
             cell26.setCellValue(material.getDefRepository());
             XSSFCell cell27 = row.createCell(26);
-            // 因为自制件外协标记和计划员有默认值，当该物料为非采购件时，不能输入默认值，以下两列必须为空
-            if ("M".equals(material.getSourceMark())) {
             cell27.setCellValue(material.getOutSource());
-            }
             XSSFCell cell28 = row.createCell(27);
+            // 因为自制件计划员有默认值，当该物料为非采购件时，不能输入默认值，以下列必须为空
             if ("M".equals(material.getSourceMark())) {
                 cell28.setCellValue(material.getPlanner());
             }

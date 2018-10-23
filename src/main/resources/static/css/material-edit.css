@@ -1,5 +1,5 @@
 .panel {
-    padding: 80px 130px 80px;
+    padding: 80px 180px;
 }
 
 .form-group {
@@ -90,7 +90,7 @@
 
 .item {
     width: 940px;
-    margin: 20px 0;
+    margin: 42px 0 0 0;
     overflow: hidden;
 }
 
@@ -99,4 +99,31 @@
     height: 1px;
     margin: 0 68px 24px 48px;
     background-color: #dedfe0;
+}
+
+.option-list {
+    width: 820px;
+    margin: 24px 68px 0 48px;
+    font-size: 17px;
+    font-weight: bold;
+    border-top: solid 1px #dedfe0;
+}
+
+.option {
+    display: inline-block;
+    color: #888;
+    height: 50px;
+    line-height: 50px;
+    margin-right: 32px;
+    cursor: pointer;
+    outline: none;
+}
+
+.option:hover {
+    color: #444;
+}
+
+.option-list .active {
+    color: #000;
+    border-bottom: solid 3px #dedfe0;
 }

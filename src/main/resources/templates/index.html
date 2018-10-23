@@ -100,7 +100,7 @@
             </tr>
             </tbody>
         </table>
-        <nav class="pull-right">
+        <nav class="pull-left">
             <ul class="pagination">
                 <li :class="{disabled: 1 == pageContext.index}">
                     <span @click="previousPage"><span class="icon icon-menu-left"></span></span></li>
@@ -110,6 +110,15 @@
                 </li>
             </ul>
         </nav>
+        <div class="pull-right">
+            <div class="page-group">
+                <input class="page-input" type="text" v-model="targetPage"/>
+                <p class="page-search" @click="pageSearch">
+                    <span class="icon icon-search"></span>
+                </p>
+            </div>
+            <p class="page-total">共{{pageContext.pageTotal}}页</p>
+        </div>
     </div>
 </main>
 <footer class="footer">

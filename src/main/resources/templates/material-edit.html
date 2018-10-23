@@ -39,7 +39,7 @@
                 <p class="form-text">{{material.shortName}}</p>
             </div>
         </div>
-        <div v-if="user.permissions.MATERIAL_EDIT_TECH_PART">
+        <div v-if="user.permissions.MATERIAL_EDIT_TECH_PART" v-cloak>
             <div class="form-group">
                 <label class="form-label">物料编码：</label>
                 <p class="form-text">{{material.code}}</p>
@@ -57,8 +57,14 @@
                 <input class="form-input" type="text" placeholder="请输入" v-model="material.shortName"/>
             </div>
         </div>
-        <div class="item" v-if="user.permissions.MATERIAL_EDIT_TECH_PART" v-cloak>
-            <p class="line"></p>
+        <div class="option-list">
+            <span class="option" :class="{active: tabIndex == 1}" @click="tabChange(1)">技术中心</span>
+            <span class="option" :class="{active: tabIndex == 2}" @click="tabChange(2)">质量环保</span>
+            <span class="option" :class="{active: tabIndex == 3}" @click="tabChange(3)">战略采购</span>
+            <span class="option" :class="{active: tabIndex == 4}" @click="tabChange(4)">集配中心</span>
+            <span class="option" :class="{active: tabIndex == 5}" @click="tabChange(5)">生产运行</span>
+        </div>
+        <div class="item" v-if="1 == tabIndex" v-cloak>
             <div>
                 <div class="form-group">
                     <label class="form-label">规格：</label>
@@ -214,10 +220,11 @@
                     <textarea class="form-area" v-model="material.description"></textarea>
                 </div>
             </div>
-            <button class="btn" type="button" @click="technologyCenterSave" :disabled="saving">{{action}}</button>
+            <button class="btn" type="button" @click="technologyCenterSave" :disabled="saving"
+                    v-if="user.permissions.MATERIAL_EDIT_TECH_PART">{{action}}
+            </button>
         </div>
-        <div class="item" v-if="user.permissions.MATERIAL_EDIT_QA_ENV_PART" v-cloak>
-            <p class="line"></p>
+        <div class="item" v-if="2 == tabIndex" v-cloak>
             <div>
                 <div class="form-group">
                     <label class="form-label">质检标记：</label>
@@ -236,10 +243,11 @@
                     </select>
                 </div>
             </div>
-            <button class="btn" type="button" @click="qualifiedEnvironmentSave" :disabled="saving">{{action}}</button>
+            <button class="btn" type="button" @click="qualifiedEnvironmentSave" :disabled="saving"
+                    v-if="user.permissions.MATERIAL_EDIT_QA_ENV_PART">{{action}}
+            </button>
         </div>
-        <div class="item" v-if="user.permissions.MATERIAL_EDIT_PURCHASE_PART" v-cloak>
-            <p class="line"></p>
+        <div class="item" v-if="3 == tabIndex" v-cloak>
             <div>
                 <div class="form-group">
                     <label class="form-label">采购分类：</label>
@@ -321,7 +329,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">可集采标记：</label>
-                    <select class="form-select" v-model="material.groupPurMark">
+                    <select class="form-select" v-model="material.groupPurMark" @change="groupPurchase">
                         <option disabled selected>请选择</option>
                         <option value="Y">Y</option>
                         <option value="N">N</option>
@@ -329,7 +337,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">可自采标记：</label>
-                    <select class="form-select" v-model="material.ownPurMark">
+                    <select class="form-select" v-model="material.ownPurMark" @change="ownPurchase">
                         <option disabled selected>请选择</option>
                         <option value="Y">Y</option>
                         <option value="N">N</option>
@@ -340,10 +348,11 @@
                     <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                 </div>
             </div>
-            <button class="btn" type="button" @click="purchaseSave" :disabled="saving">{{action}}</button>
+            <button class="btn" type="button" @click="purchaseSave" :disabled="saving"
+                    v-if="user.permissions.MATERIAL_EDIT_PURCHASE_PART">{{action}}
+            </button>
         </div>
-        <div class="item" v-if="user.permissions.MATERIAL_EDIT_ASSEMBLY_PART" v-cloak>
-            <p class="line"></p>
+        <div class="item" v-if="4 == tabIndex" v-cloak>
             <div>
                 <div class="form-group">
                     <label class="form-label">默认仓库：</label>
@@ -364,10 +373,11 @@
                     </select>
                 </div>
             </div>
-            <button class="btn" type="button" @click="assemblyCenterSave" :disabled="saving">{{action}}</button>
+            <button class="btn" type="button" @click="assemblyCenterSave" :disabled="saving"
+                    v-if="user.permissions.MATERIAL_EDIT_ASSEMBLY_PART">{{action}}
+            </button>
         </div>
-        <div class="item" v-if="user.permissions.MATERIAL_EDIT_PRO_OPE_PART" v-cloak>
-            <p class="line"></p>
+        <div class="item" v-if="5 == tabIndex" v-cloak>
             <div>
                 <div class="form-group">
                     <label class="form-label">外协标记：</label>
@@ -386,7 +396,9 @@
                     <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                 </div>
             </div>
-            <button class="btn" type="button" @click="produceOperateSave" :disabled="saving">{{action}}</button>
+            <button class="btn" type="button" @click="produceOperateSave" :disabled="saving"
+                    v-if="user.permissions.MATERIAL_EDIT_PRO_OPE_PART">{{action}}
+            </button>
         </div>
     </div>
 </main>
