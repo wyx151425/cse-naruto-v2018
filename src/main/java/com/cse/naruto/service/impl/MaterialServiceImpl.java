@@ -73,7 +73,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public void saveMaterialListByBOM(MultipartFile file) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
-        Sheet sheet = workbook.getSheet("sheet1");
+        Sheet sheet = workbook.getSheet("BOM");
         List<Material> materialList = new ArrayList<>(128);
         List<String> codeList = materialRepository.findAllMaterialCode();
         List<String> targetCodeList = new ArrayList<>();
@@ -82,42 +82,65 @@ public class MaterialServiceImpl implements MaterialService {
         int index = 0;
         for (Row row : sheet) {
             // 前三行数据为机器信息及字段的批注，所以不予解析
-            if (index < 1) {
+            if (index < 3) {
                 index++;
             } else {
-                if (null == row.getCell(1)) {
+                if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
                     break;
                 }
-                Material material = getNewMaterial();
-                String code = row.getCell(1).toString().trim();
-                if (!codeList.contains(code) && !targetCodeList.contains(code)) {
-                    material.setCode(code);
-                    if (null != row.getCell(2)) {
-                        material.setName(row.getCell(2).toString().trim());
+                if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
+                    Material material = getNewMaterial();
+                    String code = row.getCell(3).toString().trim();
+                    if (!codeList.contains(code) && !targetCodeList.contains(code)) {
+                        material.setCode(code);
+                        material.setDrawingNo(code);
+                        if (null != row.getCell(7)) {
+                            material.setName(row.getCell(7).toString().trim());
+                            material.setShortName(row.getCell(7).toString().trim());
+                        }
+                        if (null != row.getCell(8)) {
+                            material.setSpecification(row.getCell(8).toString().trim());
+                        }
+                        if (null != row.getCell(18)) {
+                            material.setDescription(row.getCell(18).toString().trim());
+                        }
+//                        if (code.startsWith("EN")) {
+//                            material.setQualifiedMark("Y");
+//                        } else {
+//                            material.setQualifiedMark("N");
+//                        }
+                        if (null != row.getCell(12)) {
+                            String source = row.getCell(12).toString().trim();
+                            if (!"*".equals(source)) {
+                                if (source.startsWith("B") || source.startsWith("P") || source.startsWith("K")) {
+                                    if ("B".equals(source) || "P5".equals(source) || "P6".equals(source)) {
+                                        material.setQualifiedMark("Y");
+                                    } else {
+                                        material.setQualifiedMark("N");
+                                    }
+                                    if (source.startsWith("K")) {
+                                        material.setGroupPurMark("Y");
+                                        material.setOwnPurMark("N");
+                                    } else {
+                                        material.setGroupPurMark("N");
+                                        material.setOwnPurMark("Y");
+                                    }
+                                    material.setSourceMark("P");
+                                    material.setPurchaseMark("Y");
+                                    material.setOperateDeptMark(true);
+                                } else if (source.startsWith("Z")) {
+                                    material.setQualifiedMark("N");
+                                    material.setSourceMark("M");
+                                    material.setPurchaseMark("N");
+                                    material.setGroupPurMark("N");
+                                    material.setOwnPurMark("N");
+                                    material.setPurchaseDeptMark(true);
+                                }
+                            }
+                        }
+                        materialList.add(material);
+                        targetCodeList.add(material.getCode());
                     }
-                    if (null != row.getCell(3)) {
-                        material.setShortName(row.getCell(3).toString().trim());
-                    }
-                    if (null != row.getCell(4)) {
-                        material.setSpecification(row.getCell(4).toString().trim());
-                    }
-                    if (null != row.getCell(7)) {
-                        material.setInternational(row.getCell(7).toString().trim());
-                    }
-                    if (null != row.getCell(9)) {
-                        material.setReference(row.getCell(9).toString().trim());
-                    }
-                    if (null != row.getCell(23)) {
-                        material.setDescription(row.getCell(23).toString().trim());
-                    }
-                    material.setDrawingNo(code);
-                    if (code.startsWith("EN")) {
-                        material.setQualifiedMark("Y");
-                    } else {
-                        material.setQualifiedMark("N");
-                    }
-                    materialList.add(material);
-                    targetCodeList.add(material.getCode());
                 }
             }
         }
