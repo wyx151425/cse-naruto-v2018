@@ -43,7 +43,7 @@ const main = new Vue({
         },
         responsibility: [
             {
-                company: "中国船柴",
+                company: "01",
                 department: [
                     {
                         name: "办公室",
@@ -108,7 +108,7 @@ const main = new Vue({
                 ]
             },
             {
-                company: "宜昌基地",
+                company: "02",
                 department: [
                     {
                         name: "综合办公室",
@@ -181,7 +181,7 @@ const main = new Vue({
                 ]
             },
             {
-                company: "青岛基地",
+                company: "03",
                 department: [
                     {
                         name: "生产部",
@@ -216,68 +216,68 @@ const main = new Vue({
                         code: "6208"
                     }
                 ]
-            },
-            {
-                company: "大连基地",
-                department: [
-                    {
-                        name: "综合办公室",
-                        code: "6301"
-                    },
-                    {
-                        name: "人力资源部",
-                        code: "6302"
-                    },
-                    {
-                        name: "纪检监察部",
-                        code: "6303"
-                    },
-                    {
-                        name: "销售部",
-                        code: "6304"
-                    },
-                    {
-                        name: "生产部",
-                        code: "6305"
-                    },
-                    {
-                        name: "采购部",
-                        code: "6306"
-                    },
-                    {
-                        name: "安全环保部",
-                        code: "6307"
-                    },
-                    {
-                        name: "质量合规部",
-                        code: "6308"
-                    },
-                    {
-                        name: "机动保障部",
-                        code: "6309"
-                    },
-                    {
-                        name: "钢构制造部",
-                        code: "6310"
-                    },
-                    {
-                        name: "机械加工部",
-                        code: "6311"
-                    },
-                    {
-                        name: "总装制造部",
-                        code: "6312"
-                    },
-                    {
-                        name: "集配中心",
-                        code: "6313"
-                    },
-                    {
-                        name: "船厂服务部",
-                        code: "6314"
-                    }
-                ]
             }
+            // {
+            //     company: "大连基地",
+            //     department: [
+            //         {
+            //             name: "综合办公室",
+            //             code: "6301"
+            //         },
+            //         {
+            //             name: "人力资源部",
+            //             code: "6302"
+            //         },
+            //         {
+            //             name: "纪检监察部",
+            //             code: "6303"
+            //         },
+            //         {
+            //             name: "销售部",
+            //             code: "6304"
+            //         },
+            //         {
+            //             name: "生产部",
+            //             code: "6305"
+            //         },
+            //         {
+            //             name: "采购部",
+            //             code: "6306"
+            //         },
+            //         {
+            //             name: "安全环保部",
+            //             code: "6307"
+            //         },
+            //         {
+            //             name: "质量合规部",
+            //             code: "6308"
+            //         },
+            //         {
+            //             name: "机动保障部",
+            //             code: "6309"
+            //         },
+            //         {
+            //             name: "钢构制造部",
+            //             code: "6310"
+            //         },
+            //         {
+            //             name: "机械加工部",
+            //             code: "6311"
+            //         },
+            //         {
+            //             name: "总装制造部",
+            //             code: "6312"
+            //         },
+            //         {
+            //             name: "集配中心",
+            //             code: "6313"
+            //         },
+            //         {
+            //             name: "船厂服务部",
+            //             code: "6314"
+            //         }
+            //     ]
+            // }
         ],
         department: [],
         action: "保存",
