@@ -308,21 +308,21 @@ public class MaterialServiceImpl implements MaterialService {
                 List<Predicate> predicates = new ArrayList<>();
                 if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PURCHASE_EMPLOYEE, false)) {
                     if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("purchaseDeptMark"), false));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.PURCHASE_DEPT_MARK), false));
                     } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("purchaseDeptMark"), true));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.PURCHASE_DEPT_MARK), true));
                     }
-                    predicates.add(criteriaBuilder.equal(root.get("sourceMark"), "P"));
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.SOURCE_MARK), "P"));
                 } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PRO_OPE_EMPLOYEE, false)) {
                     if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("operateDeptMark"), false));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.OPERATE_DEPT_MARK), false));
                     } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("operateDeptMark"), true));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.OPERATE_DEPT_MARK), true));
                     }
-                    predicates.add(criteriaBuilder.equal(root.get("sourceMark"), "M"));
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.SOURCE_MARK), "M"));
                 }
-                predicates.add(criteriaBuilder.equal(root.get("technologyDeptMark"), true));
-                predicates.add(criteriaBuilder.between(root.get("status"), 1, 2));
+                predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.TECHNOLOGY_DEPT_MARK), true));
+                predicates.add(criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2));
                 return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
             }, PageRequest.of(pageIndex - 1, pageSize, sort));
         } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_QA_ENV_EMPLOYEE, false)
@@ -332,26 +332,26 @@ public class MaterialServiceImpl implements MaterialService {
                 List<Predicate> predicates = new ArrayList<>();
                 if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_QA_ENV_EMPLOYEE, false)) {
                     if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("qualifiedDeptMark"), false));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.QUALIFIED_DEPT_MARK), false));
                     } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("qualifiedDeptMark"), true));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.QUALIFIED_DEPT_MARK), true));
                     }
                 } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_ASSEMBLY_EMPLOYEE, false)) {
                     if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("assemblyDeptMark"), false));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.ASSEMBLY_DEPT_MARK), false));
                     } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get("assemblyDeptMark"), true));
+                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.ASSEMBLY_DEPT_MARK), true));
                     }
                 }
-                predicates.add(criteriaBuilder.between(root.get("status"), 1, 2));
+                predicates.add(criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2));
                 return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
             }, PageRequest.of(pageIndex - 1, pageSize, sort));
         } else {
             materialData = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
                 if (0 == status) {
-                    return criteriaBuilder.between(root.get("status"), 1, 2);
+                    return criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2);
                 } else {
-                    return criteriaBuilder.equal(root.get("status"), status);
+                    return criteriaBuilder.equal(root.get(Constant.MaterialProperty.STATUS), status);
                 }
             }, PageRequest.of(pageIndex - 1, pageSize, sort));
         }

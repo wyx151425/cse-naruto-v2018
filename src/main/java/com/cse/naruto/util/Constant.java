@@ -29,6 +29,25 @@ public class Constant {
         public static final String ROLE_PRO_OPE_EMPLOYEE = "ROLE_PRO_OPE_EMPLOYEE";
     }
 
+    public static final class Premissions {
+        public static final String MATERIAL_STANDARD = "MATERIAL_STANDARD";
+        public static final String MATERIAL_EDIT_TECH_PART = "MATERIAL_EDIT_TECH_PART";
+        public static final String MATERIAL_EDIT_QA_ENV_PART = "MATERIAL_EDIT_QA_ENV_PART";
+        public static final String MATERIAL_EDIT_PURCHASE_PART = "MATERIAL_EDIT_PURCHASE_PART";
+        public static final String MATERIAL_EDIT_ASSEMBLY_PART = "MATERIAL_EDIT_ASSEMBLY_PART";
+        public static final String MATERIAL_EDIT_PRO_OPE_PART = "MATERIAL_EDIT_PRO_OPE_PART";
+    }
+
+    public static final class MaterialProperty {
+        public static final String STATUS = "status";
+        public static final String SOURCE_MARK = "sourceMark";
+        public static final String TECHNOLOGY_DEPT_MARK = "technologyDeptMark";
+        public static final String QUALIFIED_DEPT_MARK = "qualifiedDeptMark";
+        public static final String PURCHASE_DEPT_MARK = "purchaseDeptMark";
+        public static final String ASSEMBLY_DEPT_MARK = "assemblyDeptMark";
+        public static final String OPERATE_DEPT_MARK = "operateDeptMark";
+    }
+
     public static final class PermissionStatus {
         public static final int COMMON = 1;
     }
