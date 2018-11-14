@@ -86,9 +86,9 @@ public class MaterialServiceImpl implements MaterialService {
                 index++;
             } else {
                 if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
-                    break;
+                    continue;
                 }
-                if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
+//                if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
                     Material material = getNewMaterial();
                     String code = row.getCell(3).toString().trim();
                     if (!codeList.contains(code) && !targetCodeList.contains(code)) {
@@ -104,11 +104,11 @@ public class MaterialServiceImpl implements MaterialService {
                         if (null != row.getCell(18)) {
                             material.setDescription(row.getCell(18).toString().trim());
                         }
-//                        if (code.startsWith("EN")) {
-//                            material.setQualifiedMark("Y");
-//                        } else {
-//                            material.setQualifiedMark("N");
-//                        }
+                        if (code.startsWith("EN")) {
+                            material.setQualifiedMark("Y");
+                        } else {
+                            material.setQualifiedMark("N");
+                        }
                         if (null != row.getCell(12)) {
                             String source = row.getCell(12).toString().trim();
                             if (!"*".equals(source)) {
@@ -141,7 +141,7 @@ public class MaterialServiceImpl implements MaterialService {
                         materialList.add(material);
                         targetCodeList.add(material.getCode());
                     }
-                }
+//                }
             }
         }
 
