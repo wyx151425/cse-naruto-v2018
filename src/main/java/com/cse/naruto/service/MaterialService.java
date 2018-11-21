@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Pageable;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 物料业务逻辑
@@ -89,4 +90,11 @@ public interface MaterialService {
      * @return 带有分页信息和物料数据集合的对象
      */
     PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int status, int prefect, User user);
+
+    /**
+     * 模糊查询物料
+     * @param queryStr 查询字符串
+     * @return 物料数据集合
+     */
+    List<Material> findMaterialListByCodeLike(String queryStr);
 }

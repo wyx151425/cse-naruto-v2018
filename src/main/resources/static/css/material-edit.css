@@ -85,7 +85,9 @@
     width: 120px;
     height: 40px;
     margin-top: 30px;
-    margin-right: 72px;
+    margin-right: 12px;
+    text-align: center;
+    line-height: 40px;
 }
 
 .item {

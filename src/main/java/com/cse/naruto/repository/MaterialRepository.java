@@ -4,6 +4,7 @@ import com.cse.naruto.model.Material;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -39,4 +40,13 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @return 物料基础数据对象集合
      */
     List<Material> findAllByStatus(int status);
+
+    /**
+     * 根据物料编码模糊查询物料数据
+     *
+     * @param queryStr 模糊查询匹配字符串
+     * @return 物料数据集合
+     */
+    @Query(value = "select m from Material m where m.code like :queryStr")
+    List<Material> findAllByCodeLike(@Param("queryStr") String queryStr);
 }

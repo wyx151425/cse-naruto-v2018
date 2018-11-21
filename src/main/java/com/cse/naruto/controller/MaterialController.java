@@ -17,6 +17,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * 物料数据CRUD API
@@ -107,5 +108,13 @@ public class MaterialController extends NarutoFacade {
     ) {
         PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, status, prefect, getCurrentUser());
         return new Response<>(pageContext);
+    }
+
+    @GetMapping(value = "materials/query")
+    public Response<List<Material>> actionQueryMaterialListByCodeLike(
+            @RequestParam("queryStr") String queryStr
+    ) {
+        List<Material> materialList = materialService.findMaterialListByCodeLike(queryStr);
+        return new Response<>(materialList);
     }
 }

@@ -497,4 +497,11 @@ public class MaterialServiceImpl implements MaterialService {
 
         return workbook;
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public List<Material> findMaterialListByCodeLike(String queryStr) {
+        String str = queryStr + "%";
+        return materialRepository.findAllByCodeLike(str);
+    }
 }

@@ -40,6 +40,11 @@
                 </select>
             </div>
         </div>
+        <div class="select-group">
+            <input class="form-control" type="text" style="margin-right: 8px" v-model="queryStr"/>
+            <button class="btn btn-import pull-right" type="button" @click="queryMaterialList" :disabled="isDisabled">{{action}}
+            </button>
+        </div>
         <div v-if="user.roles.ROLE_TECH_EMPLOYEE">
             <button class="btn btn-import pull-right" type="button" @click="exportFile" :disabled="exporting">
                 {{exportAction}}
@@ -50,19 +55,17 @@
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th class="col-1-of-10">公司号</th>
-                <th class="col-2-of-10">物料编码</th>
-                <th class="col-3-of-10">物料名称</th>
-                <th class="col-1-of-10" v-if="user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
-                <th class="col-2-of-10" v-if="!user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
-                <th class="col-1-of-10">完善状态</th>
-                <th class="col-1-of-10" v-if="user.roles.ROLE_TECH_EMPLOYEE">导出状态</th>
-                <th class="col-1-of-10">操作</th>
+                <th>物料编码</th>
+                <th>物料名称</th>
+                <th v-if="user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
+                <th v-if="!user.roles.ROLE_TECH_EMPLOYEE">物料简称</th>
+                <th>完善状态</th>
+                <th v-if="user.roles.ROLE_TECH_EMPLOYEE">导出状态</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="material in materialList" v-cloak>
-                <td>{{material.companyNo}}</td>
                 <td>{{material.code}}</td>
                 <td>{{material.name}}</td>
                 <td>{{material.shortName}}</td>
@@ -89,13 +92,14 @@
                         || (user.permissions.MATERIAL_EDIT_ASSEMBLY_PART && material.assemblyDeptMark)
                         || (user.permissions.MATERIAL_EDIT_PRO_OPE_PART && material.operateDeptMark)">已完善</span>
                 </td>
-                <td v-if="user.roles.ROLE_TECH_EMPLOYEE" :class="{error: 1 == material.status, success: 2 == material.status, prompt: 3 == material.status}">
+                <td v-if="user.roles.ROLE_TECH_EMPLOYEE"
+                    :class="{error: 1 == material.status, success: 2 == material.status, prompt: 3 == material.status}">
                     <span v-if="1 == material.status">待完善</span>
                     <span v-if="2 == material.status">可导出</span>
                     <span v-if="3 == material.status">已导出</span>
                 </td>
                 <td>
-                    <a class="link" :href="'material/edit?materialCode=' + material.code" v-if="3 != status">编辑</a>
+                    <a class="link" :href="'material/edit?materialCode=' + material.code">编辑</a>
                 </td>
             </tr>
             </tbody>

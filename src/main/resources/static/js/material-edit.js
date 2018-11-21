@@ -13,6 +13,7 @@ const main = new Vue({
             }
         },
         material: {
+            status: 0,
             companyNo: "",
             code: "",
             name: "",
@@ -339,15 +340,7 @@ const main = new Vue({
                 return;
             }
             material.shortName = this.material.shortName;
-            if ("" === this.material.specification) {
-                popoverSpace.append("请输入规格", false);
-                return;
-            }
             material.specification = this.material.specification;
-            if ("" === this.material.model) {
-                popoverSpace.append("请输入型号", false);
-                return;
-            }
             material.model = this.material.model;
             if ("" === this.material.drawingNo) {
                 popoverSpace.append("请输入图号", false);
@@ -391,10 +384,6 @@ const main = new Vue({
             material.keyPartSort = this.material.keyPartSort;
             material.virtualPartMark = this.material.virtualPartMark;
             material.qualifiedMark = this.material.qualifiedMark;
-            if ("" === this.material.description) {
-                popoverSpace.append("请填写具体描述", false);
-                return;
-            }
             material.description = this.material.description;
             this.saveStart();
             axios.put(requestContext + "api/materials/technologyCenter", material)
@@ -555,6 +544,9 @@ const main = new Vue({
                 popoverSpace.append("服务器访问失败", false);
                 main.saveStop();
             });
+        },
+        setStatus: function (status) {
+            this.material.status = status;
         },
         setMaterialCompanyNo: function (companyNo) {
             if (null !== companyNo) {
@@ -719,6 +711,7 @@ const main = new Vue({
                 if (200 === statusCode) {
                     let material = response.data.data;
                     if (null !== material) {
+                        main.setStatus(material.status);
                         main.setMaterialCompanyNo(material.companyNo);
                         main.setMaterialCode(material.code);
                         main.setMaterialName(material.name);

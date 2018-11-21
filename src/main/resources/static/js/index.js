@@ -10,6 +10,7 @@ const main = new Vue({
                 MATERIAL_EDIT_PRO_OPE_PART: false
             }
         },
+        queryStr: "",
         loading: true,
         status: 1,
         prefect: 0,
@@ -23,7 +24,9 @@ const main = new Vue({
             dataTotal: 0,
         },
         materialList: [],
-        targetPage: ""
+        targetPage: "",
+        isDisabled: false,
+        action: "查询"
     },
     methods: {
         materialListQuery: function (index, size, status, prefect) {
@@ -124,7 +127,35 @@ const main = new Vue({
                 popoverSpace.append("服务器访问失败", false);
                 mask.loadStop();
             });
-        }
+        },
+        queryMaterialList: function () {
+            this.isDisabled = true;
+            this.action = "查询中";
+            axios.get(requestContext + "api/materials/query?queryStr=" + this.queryStr)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        main.setMaterialListData(response.data.data);
+                    } else {
+                        popoverSpace.append("数据获取失败", false);
+                    }
+                    main.queryCallback();
+                })
+                .catch(function () {
+                    popoverSpace.append("服务器访问失败", false);
+                    main.queryCallback();
+                });
+        },
+        queryCallback: function () {
+            this.action = "查询";
+            this.isDisabled = false;
+        },
+        setMaterialListData: function (data) {
+            this.pageContext.index = 1;
+            this.pageContext.pageTotal = 1;
+            this.pageContext.dataTotal = data.length;
+            this.materialList = data;
+        },
     },
     mounted: function () {
         this.user = JSON.parse(localStorage.user);
