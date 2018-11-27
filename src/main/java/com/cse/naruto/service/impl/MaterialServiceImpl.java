@@ -70,6 +70,13 @@ public class MaterialServiceImpl implements MaterialService {
         return material;
     }
 
+    /**
+     * 通过BOM导入物料数据列表
+     *
+     * @param file 前端提交的柴油机BOM
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误引起的异常
+     */
     @Override
     public void saveMaterialListByBOM(MultipartFile file) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
@@ -89,58 +96,65 @@ public class MaterialServiceImpl implements MaterialService {
                     continue;
                 }
 //                if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
-                    Material material = getNewMaterial();
-                    String code = row.getCell(3).toString().trim();
-                    if (!codeList.contains(code) && !targetCodeList.contains(code)) {
-                        material.setCode(code);
-                        material.setDrawingNo(code);
-                        if (null != row.getCell(7)) {
-                            material.setName(row.getCell(7).toString().trim());
-                            material.setShortName(row.getCell(7).toString().trim());
-                        }
-                        if (null != row.getCell(8)) {
-                            material.setSpecification(row.getCell(8).toString().trim());
-                        }
-                        if (null != row.getCell(18)) {
-                            material.setDescription(row.getCell(18).toString().trim());
-                        }
-                        if (code.startsWith("EN")) {
-                            material.setQualifiedMark("Y");
-                        } else {
-                            material.setQualifiedMark("N");
-                        }
-                        if (null != row.getCell(12)) {
-                            String source = row.getCell(12).toString().trim();
-                            if (!"*".equals(source)) {
-                                if (source.startsWith("B") || source.startsWith("P") || source.startsWith("K")) {
-                                    if ("B".equals(source) || "P5".equals(source) || "P6".equals(source)) {
-                                        material.setQualifiedMark("Y");
-                                    } else {
-                                        material.setQualifiedMark("N");
-                                    }
-                                    if (source.startsWith("K")) {
-                                        material.setGroupPurMark("Y");
-                                        material.setOwnPurMark("N");
-                                    } else {
-                                        material.setGroupPurMark("N");
-                                        material.setOwnPurMark("Y");
-                                    }
-                                    material.setSourceMark("P");
-                                    material.setPurchaseMark("Y");
-                                    material.setOperateDeptMark(true);
-                                } else if (source.startsWith("Z")) {
+                Material material = getNewMaterial();
+                String code = row.getCell(3).toString().trim();
+                if (!codeList.contains(code) && !targetCodeList.contains(code)) {
+                    material.setCode(code);
+                    material.setDrawingNo(code);
+                    if (null != row.getCell(7)) {
+                        material.setName(row.getCell(7).toString().trim());
+                        material.setShortName(row.getCell(7).toString().trim());
+                    }
+                    if (null != row.getCell(8)) {
+                        material.setSpecification(row.getCell(8).toString().trim());
+                    }
+                    if (null != row.getCell(18)) {
+                        material.setDescription(row.getCell(18).toString().trim());
+                    }
+                    if (code.startsWith("EN")) {
+                        material.setQualifiedMark("Y");
+                    } else {
+                        material.setQualifiedMark("N");
+                    }
+                    if (null != row.getCell(12)) {
+                        String source = row.getCell(12).toString().trim();
+                        /*
+                         * 检查货源是否为*
+                         * 以B P K开头的，都是采购件，
+                         * 货源是B P5 P6的都是合批的，其他的采购件均不合批
+                         * 以K开头的都是集采，其他的都是自采
+                         */
+                        if (!"*".equals(source)) {
+                            if (source.startsWith("B") || source.startsWith("P") || source.startsWith("K")) {
+                                if ("B".equals(source) || "P5".equals(source) || "P6".equals(source)) {
+                                    material.setQualifiedMark("Y");
+                                } else {
                                     material.setQualifiedMark("N");
-                                    material.setSourceMark("M");
-                                    material.setPurchaseMark("N");
-                                    material.setGroupPurMark("N");
-                                    material.setOwnPurMark("N");
-                                    material.setPurchaseDeptMark(true);
                                 }
+                                if (source.startsWith("K")) {
+                                    material.setGroupPurMark("Y");
+                                    material.setOwnPurMark("N");
+                                } else {
+                                    material.setGroupPurMark("N");
+                                    material.setOwnPurMark("Y");
+                                }
+                                material.setSourceMark("P");
+                                material.setPurchaseMark("Y");
+                                material.setOperateDeptMark(true);
+                            } else if (source.startsWith("Z")) {
+                                // 货源标识以Z开始的，是自制，不合批，不采购，不集采，不自采，无采购分类
+                                material.setQualifiedMark("N");
+                                material.setSourceMark("M");
+                                material.setPurchaseMark("N");
+                                material.setGroupPurMark("N");
+                                material.setOwnPurMark("N");
+                                material.setPurchaseDeptMark(true);
                             }
                         }
-                        materialList.add(material);
-                        targetCodeList.add(material.getCode());
                     }
+                    materialList.add(material);
+                    targetCodeList.add(material.getCode());
+                }
 //                }
             }
         }
