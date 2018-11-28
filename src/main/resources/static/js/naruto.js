@@ -39,6 +39,21 @@ function getMessage(statusCode) {
     }
 }
 
+function download(data, fileName) {
+    if (!data) {
+        return;
+    }
+    let url = window.URL.createObjectURL(new Blob([data.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"}));
+    let link = document.createElement("a");
+    link.style.display = "none";
+    link.href = url;
+    link.download = fileName;
+
+    document.body.appendChild(link);
+    link.click();
+}
+
 Vue.component("popover", {
     props: ["prompt"],
     template: `

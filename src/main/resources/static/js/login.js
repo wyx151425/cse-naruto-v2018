@@ -1,19 +1,19 @@
-const main = new Vue({
-    el: "#main",
+const container = new Vue({
+    el: "#container",
     data: {
         user: {
             code: "",
             password: ""
         },
         type: "password",
-        signing: false,
+        isDisabled: false,
         action: "登录"
     },
     methods: {
         removeCode: function () {
             this.user.code = "";
         },
-        typeExchange: function () {
+        toggleType: function () {
             if ("password" === this.type) {
                 this.type = "text";
             } else {
@@ -33,29 +33,27 @@ const main = new Vue({
                 popoverSpace.append("请输入正确格式的密码", false);
                 return;
             }
-            this.signing = true;
+            this.isDisabled = true;
             this.action = "正在登录";
             axios.post(requestContext + "api/users/login", this.user)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         localStorage.setItem("user", JSON.stringify(response.data.data));
-                        // popoverSpace.append("登录成功", true);
-                        // main.loginResult();
                         window.location.href = requestContext + "index";
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.loginResult();
+                        container.loginCallback();
                     }
-                }).catch(function (error) {
+                }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.loginResult();
+                container.loginCallback();
             });
         },
-        loginResult: function () {
+        loginCallback: function () {
             this.action = "登录";
-            this.signing = false;
+            this.isDisabled = false;
         }
     }
 });

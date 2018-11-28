@@ -54,7 +54,7 @@ public class MaterialController extends NarutoFacade {
     public void actionExportMaterialListToExcel() throws IOException {
         Workbook workbook = materialService.findMaterialListToExcel();
         getResponse().reset();
-        getResponse().setHeader("Content-Disposition", "attachment;filename=excel.xlsx");
+        getResponse().setHeader("Content-Disposition", "attachment;filename=data.xlsx");
         getResponse().setContentType("application/octet-stream");
         OutputStream out = getResponse().getOutputStream();
         BufferedOutputStream buffer = new BufferedOutputStream(out);
@@ -103,18 +103,18 @@ public class MaterialController extends NarutoFacade {
     public Response<PageContext<Material>> actionQueryMaterialListByPagination(
             @RequestParam("pageIndex") Integer pageIndex,
             @RequestParam("pageSize") Integer pageSize,
-            @RequestParam("status") Integer status,
-            @RequestParam("prefect") Integer prefect
+            @RequestParam("exportStatus") Integer exportStatus,
+            @RequestParam("perfectStatus") Integer perfectStatus
     ) {
-        PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, status, prefect, getCurrentUser());
+        PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, exportStatus, perfectStatus, getCurrentUser());
         return new Response<>(pageContext);
     }
 
     @GetMapping(value = "materials/query")
     public Response<List<Material>> actionQueryMaterialListByCodeLike(
-            @RequestParam("queryStr") String queryStr
+            @RequestParam("materialCode") String materialCode
     ) {
-        List<Material> materialList = materialService.findMaterialListByCodeLike(queryStr);
+        List<Material> materialList = materialService.findMaterialListByCodeLike(materialCode);
         return new Response<>(materialList);
     }
 }

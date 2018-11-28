@@ -3,8 +3,8 @@ spring:
     enabled: false
   servlet:
     multipart:
-      max-file-size: 20Mb
-      max-request-size: 20Mb
+      max-file-size: 20MB
+      max-request-size: 20MB
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

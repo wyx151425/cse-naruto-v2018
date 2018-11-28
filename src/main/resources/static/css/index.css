@@ -1,22 +1,18 @@
-.btn-import {
-    margin-bottom: 20px;
-}
-
 .form-control {
-    width: 140px;
-    height: 36px;
+    width: 120px;
+    height: 34px;
     color: #000;
-    font-size: 15px;
+    font-size: 14px;
     padding: 0 8px;
     box-sizing: border-box;
-    border: 1px solid #000;
+    border: 1px solid #bbb;
 }
 
 .form-file {
     width: 319px;
     padding: 6px;
     margin-left: 8px;
-    border: 1px solid #000;
+    border: 1px solid #bbb;
 }
 
 .form-label {
@@ -25,27 +21,22 @@
     margin-left: 10px;
 }
 
-.select-group {
-    float: left;
-    margin-bottom: 20px;
-    margin-right: 16px;
-}
-
 .select-label {
-    font-size: 17px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 15px;
     font-weight: 700;
-    margin-left: 2px;
-    margin-right: 6px;
+    margin-right: 8px;
 }
 
 .form-select {
-    width: 100px;
-    height: 36px;
+    width: 96px;
+    height: 34px;
     color: #000;
-    font-size: 15px;
+    font-size: 14px;
     padding-left: 4px;
     box-sizing: border-box;
-    border: 1px solid #000;
+    border: 1px solid #bbb;
 }
 
 .btn-picker {
@@ -87,31 +78,32 @@ tbody {
     content: "\e003";
 }
 
-.page-group {
-    float: left;
-    position: relative;
-    width: 80px;
+.page-panel {
     height: 36px;
-    margin-right: 8px;
+    margin-top: 16px;
 }
 
-.page-input {
+.page-group {
+    position: relative;
+    width: 160px;
+    height: 36px;
+}
+
+.page-control {
+    float: right;
     width: 80px;
     height: 36px;
     padding: 0 32px 0 8px;
     text-align: center;
-    font-size: 16px;
+    font-size: 15px;
     box-sizing: border-box;
-    position: relative;
-    float: left;
-    margin-left: -1px;
     line-height: 36px;
     color: #000;
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid #bbb;
 }
 
-.page-search {
+.page-query {
     position: absolute;
     top: 0;
     right: 0;
@@ -123,7 +115,36 @@ tbody {
 }
 
 .page-total {
-    float: left;
+    float: right;
+    font-size: 15px;
     height: 36px;
     line-height: 36px;
+    margin-right: 8px;
+}
+
+.query-group {
+    position: relative;
+    width: 160px;
+    height: 34px;
+}
+
+.query-control {
+    width: 160px;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 34px 0 8px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+}
+
+.query-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    line-height: 34px;
+    text-align: center;
 }

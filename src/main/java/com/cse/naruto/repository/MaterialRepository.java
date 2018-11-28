@@ -44,9 +44,9 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
     /**
      * 根据物料编码模糊查询物料数据
      *
-     * @param queryStr 模糊查询匹配字符串
+     * @param materialCode 模糊查询匹配字符串
      * @return 物料数据集合
      */
-    @Query(value = "select m from Material m where m.code like :queryStr")
-    List<Material> findAllByCodeLike(@Param("queryStr") String queryStr);
+    @Query(value = "select m from Material m where m.code like :materialCode")
+    List<Material> findAllByCodeLike(@Param("materialCode") String materialCode);
 }
