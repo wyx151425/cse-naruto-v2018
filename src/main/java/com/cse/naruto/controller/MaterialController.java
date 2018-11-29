@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @author 王振琦
  * createAt 2018/10/16
- * updateAt 2018/10/17
+ * updateAt 2018/11/29
  */
 @RestController
 @RequestMapping(value = "api")
@@ -43,7 +42,7 @@ public class MaterialController extends NarutoFacade {
             throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
         }
         try {
-            materialService.saveMaterialListByBOM(file);
+            materialService.importMaterialList(file);
         } catch (InvalidFormatException | IOException e) {
             throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
         }
@@ -52,7 +51,7 @@ public class MaterialController extends NarutoFacade {
 
     @PostMapping(value = "materials/export")
     public void actionExportMaterialListToExcel() throws IOException {
-        Workbook workbook = materialService.findMaterialListToExcel();
+        Workbook workbook = materialService.exportMaterialList();
         getResponse().reset();
         getResponse().setHeader("Content-Disposition", "attachment;filename=data.xlsx");
         getResponse().setContentType("application/octet-stream");
@@ -63,33 +62,33 @@ public class MaterialController extends NarutoFacade {
         buffer.close();
     }
 
-    @PutMapping(value = "materials/technologyCenter")
+    @PutMapping(value = "materials/technology")
     public Response<Material> actionUpdateMaterialByTechnologyCenter(@RequestBody Material material) {
-        materialService.updateMaterialByTechnologyCenter(material);
+        materialService.updateMaterialTechnology(material);
         return new Response<>();
     }
 
-    @PutMapping(value = "materials/qualifiedEnvironment")
+    @PutMapping(value = "materials/quality")
     public Response<Material> actionUpdateMaterialByQualifiedEnvironment(@RequestBody Material material) {
-        materialService.updateMaterialByQualifiedEnvironment(material);
+        materialService.updateMaterialQuality(material);
         return new Response<>();
     }
 
     @PutMapping(value = "materials/purchase")
     public Response<Material> actionUpdateMaterialByPurchase(@RequestBody Material material) {
-        materialService.updateMaterialByPurchase(material);
+        materialService.updateMaterialPurchase(material);
         return new Response<>();
     }
 
-    @PutMapping(value = "materials/assemblyCenter")
+    @PutMapping(value = "materials/assembly")
     public Response<Material> actionUpdateMaterialByAssemblyCenter(@RequestBody Material material) {
-        materialService.updateMaterialByAssemblyCenter(material);
+        materialService.updateMaterialAssembly(material);
         return new Response<>();
     }
 
-    @PutMapping(value = "materials/produceOperate")
+    @PutMapping(value = "materials/produce")
     public Response<Material> actionUpdateMaterialByProduceOperate(@RequestBody Material material) {
-        materialService.updateMaterialByProduceOperate(material);
+        materialService.updateMaterialProduce(material);
         return new Response<>();
     }
 

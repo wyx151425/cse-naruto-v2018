@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ import java.util.List;
  *
  * @author 王振琦
  * createAt 2018/10/16
- * updateAt 2018/10/23
+ * updateAt 2018/11/29
  */
 @Service
 public class MaterialServiceImpl implements MaterialService {
@@ -51,25 +48,6 @@ public class MaterialServiceImpl implements MaterialService {
         this.materialRepository = materialRepository;
     }
 
-    private Material getNewMaterial() {
-        Material material = new Material();
-        material.setObjectId(Generator.getObjectId());
-        material.setStatus(Constant.MaterialStatus.IMPERFECT);
-        LocalDateTime dateTime = LocalDateTime.now();
-        material.setCreateAt(dateTime);
-        material.setUpdateAt(dateTime);
-        material.setCompanyNo("01");
-        material.setVirtualPartMark("N");
-        material.setOutSource("N");
-        material.setPlanner("QD624");
-        material.setTechnologyDeptMark(false);
-        material.setQualifiedDeptMark(false);
-        material.setPurchaseDeptMark(false);
-        material.setAssemblyDeptMark(false);
-        material.setOperateDeptMark(false);
-        return material;
-    }
-
     /**
      * 通过BOM导入物料数据列表
      *
@@ -78,9 +56,9 @@ public class MaterialServiceImpl implements MaterialService {
      * @throws InvalidFormatException 文件格式错误引起的异常
      */
     @Override
-    public void saveMaterialListByBOM(MultipartFile file) throws IOException, InvalidFormatException {
+    public void importMaterialList(MultipartFile file) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
-        Sheet sheet = workbook.getSheet("BOM");
+        Sheet sheet = workbook.getSheet("整机BOM");
         List<Material> materialList = new ArrayList<>(128);
         List<String> codeList = materialRepository.findAllMaterialCode();
         List<String> targetCodeList = new ArrayList<>();
@@ -95,8 +73,7 @@ public class MaterialServiceImpl implements MaterialService {
                 if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
                     continue;
                 }
-//                if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
-                Material material = getNewMaterial();
+                Material material = Material.newInstance();
                 String code = row.getCell(3).toString().trim();
                 if (!codeList.contains(code) && !targetCodeList.contains(code)) {
                     material.setCode(code);
@@ -140,7 +117,7 @@ public class MaterialServiceImpl implements MaterialService {
                                 }
                                 material.setSourceMark("P");
                                 material.setPurchaseMark("Y");
-                                material.setOperateDeptMark(true);
+                                material.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
                             } else if (source.startsWith("Z")) {
                                 // 货源标识以Z开始的，是自制，不合批，不采购，不集采，不自采，无采购分类
                                 material.setQualifiedMark("N");
@@ -148,14 +125,13 @@ public class MaterialServiceImpl implements MaterialService {
                                 material.setPurchaseMark("N");
                                 material.setGroupPurMark("N");
                                 material.setOwnPurMark("N");
-                                material.setPurchaseDeptMark(true);
+                                material.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
                             }
                         }
                     }
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
                 }
-//                }
             }
         }
 
@@ -164,30 +140,30 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Workbook findMaterialListToExcel() {
-        List<Material> materialList = materialRepository.findAllByStatus(Constant.MaterialStatus.CAN_EXPORT);
+    public Workbook exportMaterialList() {
+        List<Material> materialList = materialRepository.findAllByStatus(Constant.Material.ExportStatus.EXPORTABLE);
         Workbook workbook = createWorkbook(materialList);
         for (Material material : materialList) {
-            material.setStatus(Constant.MaterialStatus.EXPORTED);
+            material.setExportStatus(Constant.Material.ExportStatus.EXPORTED);
         }
         materialRepository.saveAll(materialList);
         return workbook;
     }
 
 
-    private void statusInspect(Material material) {
-        if (material.getTechnologyDeptMark()
-                && material.getQualifiedDeptMark()
-                && material.getPurchaseDeptMark()
-                && material.getAssemblyDeptMark()
-                && material.getOperateDeptMark()) {
-            material.setStatus(Constant.MaterialStatus.CAN_EXPORT);
+    private void checkExportStatus(Material material) {
+        if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
+                && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
+                && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
+                && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
+                && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()) {
+            material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMaterialByTechnologyCenter(Material material) {
+    public void updateMaterialTechnology(Material material) {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setName(material.getName());
         targetMater.setShortName(material.getShortName());
@@ -202,10 +178,10 @@ public class MaterialServiceImpl implements MaterialService {
                 targetMater.setPurchaseMark("N");
                 targetMater.setGroupPurMark("N");
                 targetMater.setOwnPurMark("N");
-                targetMater.setPurchaseDeptMark(true);
+                targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
             } else if ("P".equals(material.getSourceMark())) {
                 targetMater.setPurchaseMark("Y");
-                targetMater.setOperateDeptMark(true);
+                targetMater.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
             }
         } else {
             if (!targetMater.getSourceMark().equals(material.getSourceMark())) {
@@ -216,19 +192,19 @@ public class MaterialServiceImpl implements MaterialService {
                     targetMater.setPurchaseMark("N");
                     targetMater.setGroupPurMark("N");
                     targetMater.setOwnPurMark("N");
-                    targetMater.setPurchaseDeptMark(true);
-                    targetMater.setOperateDeptMark(false);
+                    targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    targetMater.setProduceStatus(Constant.Material.PerfectStatus.IMPERFECT);
                 } else if ("M".equals(targetMater.getSourceMark()) && "P".equals(material.getSourceMark())) {
                     targetMater.setOutSource("N");
                     targetMater.setPlanner("QD624");
                     targetMater.setPurchaseMark("Y");
                     targetMater.setGroupPurMark(null);
                     targetMater.setOwnPurMark(null);
-                    targetMater.setPurchaseDeptMark(false);
-                    targetMater.setOperateDeptMark(true);
+                    targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.IMPERFECT);
+                    targetMater.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
                 }
-                if (Constant.MaterialStatus.CAN_EXPORT == targetMater.getStatus()) {
-                    targetMater.setStatus(Constant.MaterialStatus.IMPERFECT);
+                if (Constant.Material.ExportStatus.EXPORTABLE == targetMater.getExportStatus()) {
+                    targetMater.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
                 }
                 targetMater.setFixedAdvTime(null);
             }
@@ -240,60 +216,60 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setKeyPartSort(material.getKeyPartSort());
         targetMater.setVirtualPartMark(material.getVirtualPartMark());
         targetMater.setQualifiedMark(material.getQualifiedMark());
-        targetMater.setTechnologyDeptMark(true);
+        targetMater.setTechnologyStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        statusInspect(targetMater);
+        checkExportStatus(targetMater);
         materialRepository.save(targetMater);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMaterialByQualifiedEnvironment(Material material) {
+    public void updateMaterialQuality(Material material) {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setInspectMark(material.getInspectMark());
         targetMater.setBatchMark(material.getBatchMark());
-        targetMater.setQualifiedDeptMark(true);
+        targetMater.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        statusInspect(targetMater);
+        checkExportStatus(targetMater);
         materialRepository.save(targetMater);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMaterialByPurchase(Material material) {
+    public void updateMaterialPurchase(Material material) {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setPurchaseSort(material.getPurchaseSort());
         targetMater.setPurchaseMark(material.getPurchaseMark());
         targetMater.setGroupPurMark(material.getGroupPurMark());
         targetMater.setOwnPurMark(material.getOwnPurMark());
         targetMater.setFixedAdvTime(material.getFixedAdvTime());
-        targetMater.setPurchaseDeptMark(true);
+        targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        statusInspect(targetMater);
+        checkExportStatus(targetMater);
         materialRepository.save(targetMater);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMaterialByAssemblyCenter(Material material) {
+    public void updateMaterialAssembly(Material material) {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setDefRepository(material.getDefRepository());
-        targetMater.setAssemblyDeptMark(true);
+        targetMater.setAssemblyStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        statusInspect(targetMater);
+        checkExportStatus(targetMater);
         materialRepository.save(targetMater);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMaterialByProduceOperate(Material material) {
+    public void updateMaterialProduce(Material material) {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setOutSource(material.getOutSource());
         targetMater.setPlanner(material.getPlanner());
         targetMater.setFixedAdvTime(material.getFixedAdvTime());
-        targetMater.setOperateDeptMark(true);
+        targetMater.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        statusInspect(targetMater);
+        checkExportStatus(targetMater);
         materialRepository.save(targetMater);
     }
 
@@ -305,75 +281,81 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
-    public PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int status, int prefect, User user) {
-        // 指定排序参数对象：根据id，进行降序查询
+    public PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int exportStatus, int perfectStatus, User user) {
+        // 指定排序参数对象：根据id，进行升序查询
         Sort sort = new Sort(Sort.Direction.ASC, "id");
-        /**
+        /*
          * 封装分页实体 Pageable
          * 参数一：pageIndex表示当前查询的第几页(默认从0开始，0表示第一页)
-         * 参数二：表示每页展示多少数据，现在设置每页展示2条数据
-         * 参数三：封装排序对象，根据该对象的参数指定根据id降序查询
+         * 参数二：表示每页展示多少数据，现在设置每页展示100条数据
+         * 参数三：封装排序对象，根据该对象的参数指定根据id升序查询
          * */
-        Page<Material> materialData;
-        // 采购部与生产运行部只能看到技术中心已经修改完的并且有采购自制件标记的物料数据
-        if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PURCHASE_EMPLOYEE, false)
-                || user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PRO_OPE_EMPLOYEE, false)) {
-            materialData = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+        Page<Material> materialPage = null;
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.TECHNOLOGY_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
                 List<Predicate> predicates = new ArrayList<>();
-                if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PURCHASE_EMPLOYEE, false)) {
-                    if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.PURCHASE_DEPT_MARK), false));
-                    } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.PURCHASE_DEPT_MARK), true));
-                    }
-                    predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.SOURCE_MARK), "P"));
-                } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_PRO_OPE_EMPLOYEE, false)) {
-                    if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.OPERATE_DEPT_MARK), false));
-                    } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.OPERATE_DEPT_MARK), true));
-                    }
-                    predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.SOURCE_MARK), "M"));
+                if (3 != exportStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.EXPORT_STATUS), exportStatus));
                 }
-                predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.TECHNOLOGY_DEPT_MARK), true));
-                predicates.add(criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2));
+                if (2 != perfectStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.TECHNOLOGY_STATUS), perfectStatus));
+                }
                 return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
-            }, PageRequest.of(pageIndex - 1, pageSize, sort));
-        } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_QA_ENV_EMPLOYEE, false)
-                || user.getRoles().getOrDefault(Constant.UserRoles.ROLE_ASSEMBLY_EMPLOYEE, false)) {
-            // 质量环保部和集配中心的数据只区分未完善和已完善两种状态，不区分物料的导入导出状态
-            materialData = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
-                List<Predicate> predicates = new ArrayList<>();
-                if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_QA_ENV_EMPLOYEE, false)) {
-                    if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.QUALIFIED_DEPT_MARK), false));
-                    } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.QUALIFIED_DEPT_MARK), true));
-                    }
-                } else if (user.getRoles().getOrDefault(Constant.UserRoles.ROLE_ASSEMBLY_EMPLOYEE, false)) {
-                    if (0 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.ASSEMBLY_DEPT_MARK), false));
-                    } else if (1 == prefect) {
-                        predicates.add(criteriaBuilder.equal(root.get(Constant.MaterialProperty.ASSEMBLY_DEPT_MARK), true));
-                    }
-                }
-                predicates.add(criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2));
-                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
-            }, PageRequest.of(pageIndex - 1, pageSize, sort));
-        } else {
-            materialData = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
-                if (0 == status) {
-                    return criteriaBuilder.between(root.get(Constant.MaterialProperty.STATUS), 1, 2);
-                } else {
-                    return criteriaBuilder.equal(root.get(Constant.MaterialProperty.STATUS), status);
-                }
             }, PageRequest.of(pageIndex - 1, pageSize, sort));
         }
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.QUALITY_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                if (2 != perfectStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.QUALITY_STATUS), perfectStatus));
+                }
+                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
+            }, PageRequest.of(pageIndex - 1, pageSize, sort));
+        }
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.PURCHASE_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.TECHNOLOGY_STATUS), Constant.Material.PerfectStatus.PERFECTED));
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.SOURCE_MARK), "P"));
+                if (2 != perfectStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.PURCHASE_STATUS), perfectStatus));
+                }
+                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
+            }, PageRequest.of(pageIndex - 1, pageSize, sort));
+        }
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.ASSEMBLY_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                if (2 != perfectStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.ASSEMBLY_STATUS), perfectStatus));
+                }
+                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
+            }, PageRequest.of(pageIndex - 1, pageSize, sort));
+        }
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.PRODUCE_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.TECHNOLOGY_STATUS), Constant.Material.PerfectStatus.PERFECTED));
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.SOURCE_MARK), "M"));
+                if (2 != perfectStatus) {
+                    predicates.add(criteriaBuilder.equal(root.get(Constant.Material.PRODUCE_STATUS), perfectStatus));
+                }
+                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
+            }, PageRequest.of(pageIndex - 1, pageSize, sort));
+        }
+
         PageContext<Material> pageContext = new PageContext<>();
         pageContext.setIndex(pageIndex);
-        pageContext.setDataTotal(materialData.getTotalElements());
-        pageContext.setPageTotal(materialData.getTotalPages());
-        pageContext.setData(materialData.getContent());
+        if (materialPage != null) {
+            pageContext.setDataTotal(materialPage.getTotalElements());
+            pageContext.setPageTotal(materialPage.getTotalPages());
+            pageContext.setData(materialPage.getContent());
+        }
         return pageContext;
     }
 
@@ -443,7 +425,7 @@ public class MaterialServiceImpl implements MaterialService {
         XSSFCell cell029 = row0.createCell(28);
         cell029.setCellValue("固定提前期");
 
-        for (Material material : materialList) {
+        for (com.cse.naruto.model.Material material : materialList) {
             rowIndex++;
             XSSFRow row = sheet.createRow(rowIndex);
             XSSFCell cell1 = row.createCell(0);
@@ -514,7 +496,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
-    public List<Material> findMaterialListByCodeLike(String queryStr) {
+    public List<com.cse.naruto.model.Material> findMaterialListByCodeLike(String queryStr) {
         String str = queryStr + "%";
         return materialRepository.findAllByCodeLike(str);
     }

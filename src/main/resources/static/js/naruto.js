@@ -82,16 +82,14 @@ const popoverSpace = new Vue({
         }
     }
 });
-const mask = new Vue({
-    el: "#mask",
+
+const loadModal = new Vue({
+    el: "#loadModal",
     data: {
         loading: true
     },
     methods: {
-        loadStart: function () {
-            this.loading = true;
-        },
-        loadStop: function () {
+        loadCallback: function () {
             this.loading = false;
         }
     }

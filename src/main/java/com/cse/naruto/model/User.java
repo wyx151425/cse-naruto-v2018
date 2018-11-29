@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author 王振琦
  * createAt 2018/09/19
- * updateAt 2018/10/12
+ * updateAt 2018/11/29
  */
 @Entity
 @Table(name = "cse_user")
@@ -24,8 +24,6 @@ public class User extends NarutoEntity {
     private String role;
     @Transient
     private Map<String, Boolean> roles;
-    @Transient
-    private Map<String, Boolean> permissions;
 
     public Integer getId() {
         return id;
@@ -73,13 +71,5 @@ public class User extends NarutoEntity {
 
     public void setRoles(Map<String, Boolean> roles) {
         this.roles = roles;
-    }
-
-    public Map<String, Boolean> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Map<String, Boolean> permissions) {
-        this.permissions = permissions;
     }
 }

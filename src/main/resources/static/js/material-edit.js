@@ -306,7 +306,7 @@ const main = new Vue({
             this.saving = true;
             this.action = "正在保存";
         },
-        saveStop: function () {
+        saveSuccessCallback: function () {
             this.action = "保存";
             this.saving = false;
         },
@@ -391,15 +391,15 @@ const main = new Vue({
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         popoverSpace.append("保存成功", true);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                main.saveSuccessCallback();
             });
         },
         qualifiedEnvironmentSave: function () {
@@ -424,15 +424,15 @@ const main = new Vue({
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         popoverSpace.append("保存成功", true);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                main.saveSuccessCallback();
             });
         },
         purchaseSave: function () {
@@ -472,15 +472,15 @@ const main = new Vue({
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         popoverSpace.append("保存成功", true);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                main.saveSuccessCallback();
             });
         },
         assemblyCenterSave: function () {
@@ -500,15 +500,15 @@ const main = new Vue({
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         popoverSpace.append("保存成功", true);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                main.saveSuccessCallback();
             });
         },
         produceOperateSave: function () {
@@ -534,15 +534,15 @@ const main = new Vue({
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
                         popoverSpace.append("保存成功", true);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
-                        main.saveStop();
+                        main.saveSuccessCallback();
                     }
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                main.saveSuccessCallback();
             });
         },
         setStatus: function (status) {
@@ -745,10 +745,10 @@ const main = new Vue({
                     let message = getMessage(statusCode);
                     popoverSpace.append(message, false);
                 }
-                mask.loadStop();
+                loading.loadCallback();
             }).catch(function (error) {
             popoverSpace.append("服务器访问失败", false);
-            mask.loadStop();
+            loading.loadCallback();
         });
     }
 });

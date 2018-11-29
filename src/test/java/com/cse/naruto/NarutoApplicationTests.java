@@ -50,7 +50,7 @@ public class NarutoApplicationTests {
 //    private Permission createPermission() {
 //        Permission permission = new Permission();
 //        permission.setObjectId(Generator.getObjectId());
-//        permission.setStatus(Constant.PermissionStatus.COMMON);
+//        permission.setStatus(Constant.PermissionStatus.GENERAL);
 //        LocalDateTime dateTime = LocalDateTime.now();
 //        permission.setCreateAt(dateTime);
 //        permission.setUpdateAt(dateTime);
@@ -60,7 +60,7 @@ public class NarutoApplicationTests {
 //    private User createUser() {
 //        User user = new User();
 //        user.setObjectId(Generator.getObjectId());
-//        user.setStatus(Constant.UserStatus.COMMON);
+//        user.setStatus(Constant.UserStatus.GENERAL);
 //        LocalDateTime dateTime = LocalDateTime.now();
 //        user.setCreateAt(dateTime);
 //        user.setUpdateAt(dateTime);
@@ -81,12 +81,12 @@ public class NarutoApplicationTests {
 //        permissionList.add(permission1);
 //
 //        Permission permission2 = createPermission();
-//        permission2.setRole("ROLE_TECH_EMPLOYEE");
+//        permission2.setRole("ROLE_TECHNOLOGY_EMPLOYEE");
 //        permission2.setName("MATERIAL_EDIT_TECH_PART");
 //        permissionList.add(permission2);
 //
 //        Permission permission3 = createPermission();
-//        permission3.setRole("ROLE_QA_ENV_EMPLOYEE");
+//        permission3.setRole("ROLE_QUALITY_EMPLOYEE");
 //        permission3.setName("MATERIAL_EDIT_QA_ENV_PART");
 //        permissionList.add(permission3);
 //
@@ -101,7 +101,7 @@ public class NarutoApplicationTests {
 //        permissionList.add(permission5);
 //
 //        Permission permission6 = createPermission();
-//        permission6.setRole("ROLE_PRO_OPE_EMPLOYEE");
+//        permission6.setRole("ROLE_PRODUCE_EMPLOYEE");
 //        permission6.setName("MATERIAL_PRO_OPE_PART");
 //        permissionList.add(permission6);
 //
@@ -114,13 +114,13 @@ public class NarutoApplicationTests {
 //        user1.setCode("CSE1001");
 //        user1.setPassword("123456");
 //        user1.setName("技术中心");
-//        user1.setRole("ROLE_USER,ROLE_TECH_EMPLOYEE");
+//        user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user1);
 //        User user2 = createUser();
 //        user2.setCode("CSE1002");
 //        user2.setPassword("123456");
 //        user2.setName("质量环保");
-//        user2.setRole("ROLE_USER,ROLE_QA_ENV_EMPLOYEE");
+//        user2.setRole("ROLE_USER,ROLE_QUALITY_EMPLOYEE");
 //        userRepository.save(user2);
 //        User user3 = createUser();
 //        user3.setCode("CSE1003");
@@ -138,7 +138,7 @@ public class NarutoApplicationTests {
 //        user5.setCode("CSE1005");
 //        user5.setPassword("123456");
 //        user5.setName("生产运行");
-//        user5.setRole("ROLE_USER,ROLE_PRO_OPE_EMPLOYEE");
+//        user5.setRole("ROLE_USER,ROLE_PRODUCE_EMPLOYEE");
 //        userRepository.save(user5);
 //    }
 
@@ -148,7 +148,7 @@ public class NarutoApplicationTests {
 //        admin.setCode("admin");
 //        admin.setPassword("151425");
 //        admin.setName("admin");
-//        admin.setRole("ROLE_USER,ROLE_TECH_EMPLOYEE,ROLE_QA_ENV_EMPLOYEE,ROLE_PURCHASE_EMPLOYEE,ROLE_ASSEMBLY_EMPLOYEE,ROLE_PRO_OPE_EMPLOYEE");
+//        admin.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE,ROLE_QUALITY_EMPLOYEE,ROLE_PURCHASE_EMPLOYEE,ROLE_ASSEMBLY_EMPLOYEE,ROLE_PRODUCE_EMPLOYEE");
 //        userRepository.save(admin);
 //    }
 
@@ -226,5 +226,19 @@ public class NarutoApplicationTests {
 //
 //            }
 //        }
+//    }
+
+//    @Test
+//    public void cnm() {
+//        List<Material> materials = materialRepository.findAll();
+//        for (Material material : materials) {
+//            material.setTechnologyStatus(0);
+//            material.setQualityStatus(0);
+//            material.setPurchaseStatus(0);
+//            material.setAssemblyStatus(0);
+//            material.setProduceStatus(0);
+//            material.setExportStatus(0);
+//        }
+//        materialRepository.saveAll(materials);
 //    }
 }

@@ -12,7 +12,7 @@ window.onload = function () {
             ths[index].style.transform = "translate(" + scrollLeft + "px, 0px) translateZ(999px)";
         }
         for (let index = 0; index < tds.length; index++) {
-            tds[index].style.transform = "translate(" + scrollLeft + "px, 0px) translateZ(0px)";
+            tds[index].style.transform = "translate(" + scrollLeft + "px, 0px) translateZ(900px)";
         }
     }
 
@@ -25,11 +25,20 @@ const container = new Vue({
         exportAction: "导出",
         isExportDisabled: false,
         isQueryDisabled: false,
-        exportStatus: 1,
+        isSaveDisabled: false,
+        exportStatus: 3,
         perfectStatus: 0,
         currentPage: "",
         materialCode: "",
-        user: {},
+        user: {
+            roles: {
+                ROLE_TECHNOLOGY_EMPLOYEE: false,
+                ROLE_QUALITY_EMPLOYEE: false,
+                ROLE_PURCHASE_EMPLOYEE: false,
+                ROLE_ASSEMBLY_EMPLOYEE: false,
+                ROLE_PRODUCE_EMPLOYEE: false
+            }
+        },
         pageContext: {
             index: 1,
             size: 100,
@@ -37,152 +46,6 @@ const container = new Vue({
             dataTotal: 0,
         },
         materialList: [],
-    },
-    methods: {
-        setMaterialList: function (materialList) {
-            this.materialList = materialList;
-        },
-        setPageContext: function (pageContext) {
-            this.pageContext.index = pageContext.index;
-            this.pageContext.pageTotal = pageContext.pageTotal;
-            this.pageContext.dataTotal = pageContext.dataTotal;
-        },
-        queryMaterialList: function (index, size, exportStatus, perfectStatus) {
-            axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
-                + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
-                .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        let pageContext = response.data.data;
-                        container.setPageContext(pageContext);
-                        container.setMaterialList(pageContext.data);
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                    }
-                    mask.loadStop();
-                }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                mask.loadStop();
-            });
-        },
-        queryAllByPreviousPage: function () {
-            if (this.pageContext.index > 1) {
-                this.queryMaterialList(this.pageContext.index - 1, this.pageContext.size, this.status, this.prefect);
-            }
-        },
-        queryAllByNextPage: function () {
-            if (this.pageContext.index < this.pageContext.pageTotal) {
-                this.queryMaterialList(this.pageContext.index + 1, this.pageContext.size, this.status, this.prefect);
-            }
-        },
-        showFileImportModal: function () {
-            fileImportModal.visible();
-        },
-        queryAllByExportStatus: function () {
-            this.queryMaterialList(1, 100, this.exportStatus, 2);
-        },
-        queryAllByPerfectStatus: function () {
-            this.queryMaterialList(1, 100, 0, this.perfectStatus);
-        },
-        exportFile: function () {
-            this.exportAction = "正在导出";
-            this.isExportDisabled = true;
-            axios({
-                method: "post",
-                url: requestContext + "api/materials/export",
-                responseType: "blob"
-            }).then(function (response) {
-                download(response, "基础数据.xlsx");
-                container.exportCallback();
-            }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                container.exportCallback();
-            });
-        },
-        exportCallback: function () {
-            this.exportAction = "导出";
-            this.exporting = false;
-        },
-        queryAllByPage: function () {
-            if ("" === this.currentPage || "0" === this.currentPage) {
-                popoverSpace.append("请输入查找页数", false);
-                return;
-            }
-            if (this.currentPage > this.pageContext.pageTotal) {
-                popoverSpace.append("超过最大数据页数", false);
-                return;
-            }
-            this.queryMaterialList(this.currentPage, this.pageContext.size, this.exportStatus, this.perfectStatus);
-        },
-        queryAllByMaterialCode: function () {
-            this.isQueryDisabled = true;
-            axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode)
-                .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        let data = response.data.data;
-                        let pageContext = {index: 1, pageTotal: 1, dataTotal: data.length};
-                        container.setPageContext(pageContext);
-                        container.setMaterialList(data);
-                    } else {
-                        popoverSpace.append("数据获取失败", false);
-                    }
-                    container.queryCallback();
-                })
-                .catch(function () {
-                    popoverSpace.append("服务器访问失败", false);
-                    container.queryCallback();
-                });
-        },
-        queryCallback: function () {
-            this.isQueryDisabled = false;
-        }
-    },
-    mounted: function () {
-        this.user = JSON.parse(localStorage.user);
-        if (this.user.roles.ROLE_TECH_EMPLOYEE) {
-            this.perfectStatus = 2;
-        } else {
-            this.perfectStatus = 0;
-        }
-        this.queryMaterialList(this.pageContext.index, this.pageContext.size, this.exportStatus, this.perfectStatus);
-    }
-});
-
-const main = new Vue({
-    el: "#main",
-    data: {
-        material: {
-            status: 0,
-            companyNo: "",
-            code: "",
-            name: "",
-            shortName: "",
-            specification: "",
-            model: "",
-            description: "",
-            drawingNo: "",
-            generalSort: "请选择",
-            inventoryUnit: "请选择",
-            sourceMark: "请选择",
-            respCompany: "请选择",
-            respDept: "请选择",
-            keyPartMark: "请选择",
-            keyPartSort: "请选择",
-            virtualPartMark: "请选择",
-            qualifiedMark: "请选择",
-            inspectMark: "请选择",
-            batchMark: "请选择",
-            purchaseSort: "请选择",
-            purchaseMark: "请选择",
-            groupPurMark: "请选择",
-            ownPurMark: "请选择",
-            defRepository: "请选择",
-            outSource: "请选择",
-            planner: "",
-            fixedAdvTime: ""
-        },
         responsibility: [
             {
                 company: "01",
@@ -359,407 +222,298 @@ const main = new Vue({
                     }
                 ]
             }
-        ],
-        department: []
+        ]
     },
     methods: {
-        respDeptSelect: function () {
-            for (let index = 0; index < this.responsibility.length; index++) {
-                if (this.material.respCompany === this.responsibility[index].company) {
-                    this.department = this.responsibility[index].department;
+        setMaterialList: function (materialList) {
+            this.materialList = materialList;
+            for (let index = 0; index < this.materialList.length; index++) {
+                this.selectRespDepts(index, true);
+            }
+        },
+        setPageContext: function (pageContext) {
+            this.pageContext.index = pageContext.index;
+            this.pageContext.pageTotal = pageContext.pageTotal;
+            this.pageContext.dataTotal = pageContext.dataTotal;
+        },
+        removePerfectMaterial: function (index) {
+            this.materialList.splice(index, 1);
+        },
+        queryMaterialList: function (index, size, exportStatus, perfectStatus) {
+            axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
+                + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let pageContext = response.data.data;
+                        container.setPageContext(pageContext);
+                        container.setMaterialList(pageContext.data);
+                    } else {
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
+                    }
+                    loadModal.loadCallback();
+                }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                loadModal.loadCallback();
+            });
+        },
+        queryAllByPreviousPage: function () {
+            if (this.pageContext.index > 1) {
+                this.queryMaterialList(this.pageContext.index - 1, this.pageContext.size, this.exportStatus, this.perfectStatus);
+            }
+        },
+        queryAllByNextPage: function () {
+            if (this.pageContext.index < this.pageContext.pageTotal) {
+                this.queryMaterialList(this.pageContext.index + 1, this.pageContext.size, this.exportStatus, this.perfectStatus);
+            }
+        },
+        showFileImportModal: function () {
+            fileImportModal.visible();
+        },
+        queryAllByExportStatus: function () {
+            this.perfectStatus = 2;
+            this.queryMaterialList(1, this.pageContext.size, this.exportStatus, this.perfectStatus);
+        },
+        queryAllByPerfectStatus: function () {
+            this.exportStatus = 3;
+            this.queryMaterialList(1, this.pageContext.size, this.exportStatus, this.perfectStatus);
+        },
+        exportFile: function () {
+            this.exportAction = "正在导出";
+            this.isExportDisabled = true;
+            axios({
+                method: "post",
+                url: requestContext + "api/materials/export",
+                responseType: "blob"
+            }).then(function (response) {
+                download(response, "基础数据.xlsx");
+                container.exportCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                container.exportCallback();
+            });
+        },
+        exportCallback: function () {
+            this.exportAction = "导出";
+            this.exporting = false;
+        },
+        queryAllByPage: function () {
+            if ("" === this.currentPage || "0" === this.currentPage) {
+                popoverSpace.append("请输入查找页数", false);
+                return;
+            }
+            if (this.currentPage > this.pageContext.pageTotal) {
+                popoverSpace.append("超过最大数据页数", false);
+                return;
+            }
+            this.queryMaterialList(this.currentPage, this.pageContext.size, this.exportStatus, this.perfectStatus);
+        },
+        queryAllByMaterialCode: function () {
+            this.isQueryDisabled = true;
+            axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let data = response.data.data;
+                        let pageContext = {index: 1, pageTotal: 1, dataTotal: data.length};
+                        container.setPageContext(pageContext);
+                        container.setMaterialList(data);
+                    } else {
+                        popoverSpace.append("数据获取失败", false);
+                    }
+                    container.queryCallback();
+                })
+                .catch(function () {
+                    popoverSpace.append("服务器访问失败", false);
+                    container.queryCallback();
+                });
+        },
+        queryCallback: function () {
+            this.isQueryDisabled = false;
+        },
+        selectRespDepts: function (index, isPersist) {
+            for (let i = 0; i < this.responsibility.length; i++) {
+                if (this.materialList[index].respCompany === this.responsibility[i].company) {
+                    this.materialList[index].respDepts = this.responsibility[i].department;
                     break;
                 }
             }
-            this.material.respDept = "请选择";
-        },
-        keyPartMarkSelect: function () {
-            if ("Y" === this.material.keyPartMark) {
-                this.material.keyPartSort = "请选择";
-            }
-            if ("" === this.material.keyPartMark) {
-                this.material.keyPartSort = "";
+            if (!isPersist) {
+                this.materialList[index].respDept = null;
             }
         },
-        groupPurchase: function () {
-            if ("Y" === this.material.groupPurMark) {
-                this.material.ownPurMark = "N";
-            } else if ("N" === this.material.groupPurMark) {
-                this.material.ownPurMark = "Y";
+        selectKeyPartMark: function (index) {
+            if (null === this.materialList[index].keyPartMark || "null" === this.materialList[index].keyPartMark) {
+                this.materialList[index].keyPartMark = null;
+                this.materialList[index].keyPartSort = null;
             }
         },
-        ownPurchase: function () {
-            if ("Y" === this.material.ownPurMark) {
-                this.material.groupPurMark = "N";
-            } else if ("N" === this.material.ownPurMark) {
-                this.material.groupPurMark = "Y";
+        selectKeyPartSort: function (index) {
+            this.materialList[index].keyPartMark = "Y";
+        },
+        toggleGroupPurMark: function (index) {
+            if ("Y" === this.materialList[index].groupPurMark) {
+                this.materialList[index].ownPurMark = "N";
+            } else if ("N" === this.materialList[index].groupPurMark) {
+                this.materialList[index].ownPurMark = "Y";
             }
         },
-        technologyCenterSave: function () {
-            if ("" === this.material.code) {
+        toggleOwnPurMark: function (index) {
+            if ("Y" === this.materialList[index].ownPurMark) {
+                this.materialList[index].groupPurMark = "N";
+            } else if ("N" === this.materialList[index].ownPurMark) {
+                this.materialList[index].groupPurMark = "Y";
+            }
+        },
+        saveTechnologyAttr: function (material, index) {
+            if (null === material.name || "" === material.name) {
+                popoverSpace.append("请填写物料名称", false);
                 return;
             }
-            let material = {};
-            material.code = this.material.code;
-            if ("" === this.material.name) {
-                popoverSpace.append("请输入物料名称", false);
+            if (null === material.shortName || "" === material.shortName) {
+                popoverSpace.append("请填写物料简称", false);
                 return;
             }
-            material.name = this.material.name;
-            if ("" === this.material.shortName) {
-                popoverSpace.append("请输入物料简称", false);
+            if (null === material.drawingNo || "" === material.drawingNo) {
+                popoverSpace.append("请填写图号", false);
                 return;
             }
-            material.shortName = this.material.shortName;
-            material.specification = this.material.specification;
-            material.model = this.material.model;
-            if ("" === this.material.drawingNo) {
-                popoverSpace.append("请输入图号", false);
-                return;
-            }
-            material.drawingNo = this.material.drawingNo;
-            if ("请选择" === this.material.generalSort) {
+            if (null === material.generalSort || "" === material.generalSort) {
                 popoverSpace.append("请选择普通分类", false);
                 return;
             }
-            material.generalSort = this.material.generalSort;
-            if ("请选择" === this.material.inventoryUnit) {
+            if (null === material.inventoryUnit || "" === material.inventoryUnit) {
                 popoverSpace.append("请选择库存单位", false);
                 return;
             }
-            material.inventoryUnit = this.material.inventoryUnit;
-            if ("请选择" === this.material.sourceMark) {
+            if (null === material.sourceMark || "" === material.sourceMark) {
                 popoverSpace.append("请选择采购自制件标记", false);
                 return;
             }
-            material.sourceMark = this.material.sourceMark;
-            if ("请选择" === this.material.respCompany) {
+            if (null === material.respCompany || "" === material.respCompany) {
                 popoverSpace.append("请选择责任公司", false);
                 return;
             }
-            material.respCompany = this.material.respCompany;
-            if ("请选择" === this.material.respDept) {
+            if (null === material.respDept || "" === material.respDept) {
                 popoverSpace.append("请选择责任部门", false);
                 return;
             }
-            material.respDept = this.material.respDept;
-            if ("请选择" === this.material.keyPartMark) {
-                popoverSpace.append("请选择关键件标记", false);
+            if (null === material.virtualPartMark || "" === material.virtualPartMark) {
+                popoverSpace.append("请选择虚拟件标记", false);
                 return;
             }
-            material.keyPartMark = this.material.keyPartMark;
-            if ("请选择" === this.material.keyPartSort) {
-                popoverSpace.append("请选择关键件大类", false);
+            if (null === material.qualifiedMark || "" === material.qualifiedMark) {
+                popoverSpace.append("请选择合批标记", false);
                 return;
             }
-            material.keyPartSort = this.material.keyPartSort;
-            material.virtualPartMark = this.material.virtualPartMark;
-            material.qualifiedMark = this.material.qualifiedMark;
-            material.description = this.material.description;
-            this.saveStart();
-            axios.put(requestContext + "api/materials/technologyCenter", material)
+            this.isSaveDisabled = true;
+            axios.put(requestContext + "api/materials/technology", material)
                 .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        popoverSpace.append("保存成功", true);
-                        main.saveStop();
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                        main.saveStop();
-                    }
+                    container.saveSuccessCallback(response.data.statusCode, index);
                 }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                container.saveErrorCallback();
             });
         },
-        qualifiedEnvironmentSave: function () {
-            if ("" === this.material.code) {
-                return;
-            }
-            let material = {};
-            material.code = this.material.code;
-            if ("请选择" === this.material.inspectMark) {
+        saveQualityAttr: function (material, index) {
+            if (null === material.inspectMark || "" === material.inspectMark) {
                 popoverSpace.append("请选择质检标记", false);
                 return;
             }
-            material.inspectMark = this.material.inspectMark;
-            if ("请选择" === this.material.batchMark) {
+            if (null === material.batchMark || "" === material.batchMark) {
                 popoverSpace.append("请选择批次标记", false);
                 return;
             }
-            material.batchMark = this.material.batchMark;
-            this.saveStart();
-            axios.put(requestContext + "api/materials/qualifiedEnvironment", material)
+            this.isSaveDisabled = true;
+            axios.put(requestContext + "api/materials/quality", material)
                 .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        popoverSpace.append("保存成功", true);
-                        main.saveStop();
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                        main.saveStop();
-                    }
+                    container.saveSuccessCallback(response.data.statusCode, index);
                 }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                container.saveErrorCallback();
             });
         },
-        purchaseSave: function () {
-            if ("" === this.material.code) {
-                return;
-            }
-            let material = {};
-            material.code = this.material.code;
-            if ("请选择" === this.material.purchaseSort) {
+        savePurchaseAttr: function (material, index) {
+            if (null === material.purchaseSort || "" === material.purchaseSort) {
                 popoverSpace.append("请选择采购分类", false);
                 return;
             }
-            material.purchaseSort = this.material.purchaseSort;
-            if ("请选择" === this.material.purchaseMark) {
+            if (null === material.purchaseMark || "" === material.purchaseMark) {
                 popoverSpace.append("请选择可采购标记", false);
                 return;
             }
-            material.purchaseMark = this.material.purchaseMark;
-            if ("请选择" === this.material.groupPurMark) {
+            if (null === material.groupPurMark || "" === material.groupPurMark) {
                 popoverSpace.append("请选择可集采标记", false);
                 return;
             }
-            material.groupPurMark = this.material.groupPurMark;
-            if ("请选择" === this.material.ownPurMark) {
+            if (null === material.ownPurMark || "" === material.ownPurMark) {
                 popoverSpace.append("请选择自采标记", false);
                 return;
             }
-            material.ownPurMark = this.material.ownPurMark;
-            if ("" === this.material.fixedAdvTime) {
+            if (null === material.fixedAdvTime || "" === material.fixedAdvTime) {
                 popoverSpace.append("请输入固定提前期", false);
                 return;
             }
-            material.fixedAdvTime = this.material.fixedAdvTime;
-            this.saveStart();
+            this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/purchase", material)
                 .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        popoverSpace.append("保存成功", true);
-                        main.saveStop();
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                        main.saveStop();
-                    }
+                    container.saveSuccessCallback(response.data.statusCode, index);
                 }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                container.saveErrorCallback();
             });
         },
-        assemblyCenterSave: function () {
-            if ("" === this.material.code) {
-                return;
-            }
-            let material = {};
-            material.code = this.material.code;
-            if ("请选择" === this.material.defRepository) {
+        saveAssemblyAttr: function (material, index) {
+            if (null === material.defRepository || "" === material.defRepository) {
                 popoverSpace.append("请选择默认仓库", false);
                 return;
             }
-            material.defRepository = this.material.defRepository;
-            this.saveStart();
-            axios.put(requestContext + "api/materials/assemblyCenter", material)
+            this.isSaveDisabled = true;
+            axios.put(requestContext + "api/materials/assembly", material)
                 .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        popoverSpace.append("保存成功", true);
-                        main.saveStop();
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                        main.saveStop();
-                    }
+                    container.saveSuccessCallback(response.data.statusCode, index);
                 }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                container.saveErrorCallback();
             });
         },
-        produceOperateSave: function () {
-            if ("" === this.material.code) {
+        saveProduceAttr: function (material, index) {
+            if (null === material.outSource || "" === material.outSource) {
+                popoverSpace.append("请填写外协标记", false);
                 return;
             }
-            let material = {};
-            material.code = this.material.code;
-            material.outSource = this.material.outSource;
-            if ("" === this.material.planner) {
-                popoverSpace.append("请输入计划员", false);
+            if (null === material.planner || "" === material.planner) {
+                popoverSpace.append("请填写计划员", false);
                 return;
             }
-            material.planner = this.material.planner;
-            if ("" === this.material.fixedAdvTime) {
-                popoverSpace.append("请输入固定提前期", false);
+            if (null === material.fixedAdvTime || "" === material.fixedAdvTime) {
+                popoverSpace.append("请填写固定提前期", false);
                 return;
             }
-            material.fixedAdvTime = this.material.fixedAdvTime;
-            this.saveStart();
-            axios.put(requestContext + "api/materials/produceOperate", material)
+            this.isSaveDisabled = true;
+            axios.put(requestContext + "api/materials/produce", material)
                 .then(function (response) {
-                    let statusCode = response.data.statusCode;
-                    if (200 === statusCode) {
-                        popoverSpace.append("保存成功", true);
-                        main.saveStop();
-                    } else {
-                        let message = getMessage(statusCode);
-                        popoverSpace.append(message, false);
-                        main.saveStop();
-                    }
+                    container.saveSuccessCallback(response.data.statusCode, index);
                 }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                main.saveStop();
+                container.saveErrorCallback();
             });
         },
-        setStatus: function (status) {
-            this.material.status = status;
+        saveSuccessCallback: function (statusCode, index) {
+            if (200 === statusCode) {
+                popoverSpace.append("保存成功", true);
+                container.removePerfectMaterial(index);
+            } else {
+                let message = getMessage(statusCode);
+                popoverSpace.append(message, false);
+            }
+            this.isSaveDisabled = false;
         },
-        setMaterialCompanyNo: function (companyNo) {
-            if (null !== companyNo) {
-                this.material.companyNo = companyNo;
-            }
-        },
-        setMaterialCode: function (code) {
-            if (null !== code) {
-                this.material.code = code;
-            }
-        },
-        setMaterialName: function (name) {
-            if (null !== name) {
-                this.material.name = name;
-            }
-        },
-        setMaterialShortName: function (shortName) {
-            if (null !== shortName) {
-                this.material.shortName = shortName;
-            }
-        },
-        setMaterialSpecification: function (specification) {
-            if (null !== specification) {
-                this.material.specification = specification;
-            }
-        },
-        setMaterialModel: function (model) {
-            if (null !== model) {
-                this.material.model = model;
-            }
-        },
-        setMaterialDescription: function (description) {
-            if (null !== description) {
-                this.material.description = description;
-            }
-        },
-        setMaterialDrawingNo: function (drawingNo) {
-            if (null !== drawingNo) {
-                this.material.drawingNo = drawingNo;
-            }
-        },
-        setMaterialGeneralSort: function (generalSort) {
-            if (null !== generalSort && "" !== generalSort) {
-                this.material.generalSort = generalSort;
-            }
-        },
-        setMaterialInventoryUnit: function (inventoryUnit) {
-            if (null !== inventoryUnit && "" !== inventoryUnit) {
-                this.material.inventoryUnit = inventoryUnit;
-            }
-        },
-        setMaterialSourceMark: function (sourceMark) {
-            if (null !== sourceMark && "" !== sourceMark) {
-                this.material.sourceMark = sourceMark;
-            }
-        },
-        setMaterialRespCompany: function (respCompany, respDept) {
-            if (null !== respCompany && "" !== respCompany) {
-                this.material.respCompany = respCompany;
-                this.respDeptSelect();
-                this.material.respDept = respDept;
-            }
-        },
-        setMaterialKeyPartMark: function (keyPartMark) {
-            if (null === keyPartMark) {
-                this.material.keyPartMark = "";
-            }
-            if (null !== keyPartMark && "" !== keyPartMark) {
-                this.material.keyPartMark = keyPartMark;
-            }
-        },
-        setMaterialKeyPartSort: function (keyPartSort) {
-            if (null === keyPartSort) {
-                this.material.keyPartSort = "";
-            }
-            if (null !== keyPartSort && "" !== keyPartSort) {
-                this.material.keyPartSort = keyPartSort;
-            }
-        },
-        setMaterialVirtualPartMark: function (virtualPartMark) {
-            if (null !== virtualPartMark && "" !== virtualPartMark) {
-                this.material.virtualPartMark = virtualPartMark;
-            }
-        },
-        setMaterialQualifiedMark: function (qualifiedMark) {
-            if (null !== qualifiedMark && "" !== qualifiedMark) {
-                this.material.qualifiedMark = qualifiedMark;
-            }
-        },
-        setMaterialInspectMark: function (inspectMark) {
-            if (null !== inspectMark && "" !== inspectMark) {
-                this.material.inspectMark = inspectMark;
-            }
-        },
-        setMaterialBatchMark: function (batchMark) {
-            if (null !== batchMark && "" !== batchMark) {
-                this.material.batchMark = batchMark;
-            }
-        },
-        setMaterialPurchaseSort: function (purchaseSort) {
-            if (null !== purchaseSort && "" !== purchaseSort) {
-                this.material.purchaseSort = purchaseSort;
-            }
-        },
-        setMaterialPurchaseMark: function (purchaseMark) {
-            if (null !== purchaseMark && "" !== purchaseMark) {
-                this.material.purchaseMark = purchaseMark;
-            }
-        },
-        setMaterialGroupPurMark: function (groupPurMark) {
-            if (null !== groupPurMark && "" !== groupPurMark) {
-                this.material.groupPurMark = groupPurMark;
-            }
-        },
-        setMaterialOwnPurMark: function (ownPurMark) {
-            if (null !== ownPurMark && "" !== ownPurMark) {
-                this.material.ownPurMark = ownPurMark;
-            }
-        },
-        setMaterialDefRepository: function (defRepository) {
-            if (null !== defRepository && "" !== defRepository) {
-                this.material.defRepository = defRepository;
-            }
-        },
-        setMaterialOutSource: function (outSource) {
-            if (null !== outSource && "" !== outSource) {
-                this.material.outSource = outSource;
-            }
-        },
-        setMaterialPlanner: function (planner) {
-            if (null !== planner) {
-                this.material.planner = planner;
-            }
-        },
-        setMaterialFixedAdvTime: function (fixedAdvTime) {
-            if (null !== fixedAdvTime) {
-                this.material.fixedAdvTime = fixedAdvTime;
-            }
-        },
-        tabChange: function (index) {
-            this.tabIndex = index;
+        saveErrorCallback: function () {
+            popoverSpace.append("服务器访问失败", false);
+            this.isSaveDisabled = false;
         }
     },
+    mounted: function () {
+        this.user = JSON.parse(localStorage.user);
+        this.queryMaterialList(this.pageContext.index, this.pageContext.size, this.exportStatus, this.perfectStatus);
+    }
 });
 
 const fileImportModal = new Vue({

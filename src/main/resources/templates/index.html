@@ -22,16 +22,7 @@
 <main id="container" class="container">
     <div class="panel">
         <div class="btn-list">
-            <div class="pull-left" v-if="user.roles.ROLE_TECH_EMPLOYEE" v-cloak>
-                <label class="select-label">导出状态</label>
-                <select class="form-select" v-model="exportStatus" @change="queryAllByExportStatus">
-                    <option value="0">全部</option>
-                    <option value="1">待完善</option>
-                    <option value="2">可导出</option>
-                    <option value="3">已导出</option>
-                </select>
-            </div>
-            <div class="pull-left" v-if="!user.roles.ROLE_TECH_EMPLOYEE" v-cloak>
+            <div class="pull-left">
                 <label class="select-label">完善状态</label>
                 <select class="form-select" v-model="perfectStatus" @change="queryAllByPerfectStatus">
                     <option value="2">全部</option>
@@ -39,12 +30,21 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
+            <div class="pull-left" style="margin-left: 16px" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>
+                <label class="select-label">导出状态</label>
+                <select class="form-select" v-model="exportStatus" @change="queryAllByExportStatus">
+                    <option value="3">全部</option>
+                    <option value="0">待完善</option>
+                    <option value="1">可导出</option>
+                    <option value="2">已导出</option>
+                </select>
+            </div>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
-                    :disabled="isExportDisabled" v-if="user.roles.ROLE_TECH_EMPLOYEE" v-cloak>
+                    :disabled="isExportDisabled" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>
                 {{exportAction}}
             </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
-                    v-if="user.roles.ROLE_TECH_EMPLOYEE">导入
+                    v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>导入
             </button>
             <div class="query-group pull-right">
                 <input class="query-control" type="text" v-model="materialCode" placeholder="查询物料"/>
@@ -53,18 +53,18 @@
             </div>
         </div>
         <div id="table-space" class="table-wrap">
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECH_EMPLOYEE"
-                   style="width: 2837px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
+                   style="width: 2737px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th class="table-fixed" style="width: 160px;">物料编码</th>
                     <th class="table-fixed" style="width: 160px;">物料名称</th>
                     <th style="width: 160px;">物料简称</th>
                     <th style="width: 100px;">完善状态</th>
-                    <th style="width: 100px;">导出状态</th>
                     <!-- 技术中心 -->
                     <th style="width: 160px;">规格</th>
                     <th style="width: 160px;">型号</th>
+                    <th style="width: 160px;">具体描述</th>
                     <th style="width: 160px;">图号</th>
                     <th style="width: 160px;">普通分类</th>
                     <th style="width: 160px;">库存单位</th>
@@ -75,37 +75,37 @@
                     <th style="width: 160px;">关键件大类</th>
                     <th style="width: 160px;">虚拟件标记</th>
                     <th style="width: 160px;">合批标记</th>
-                    <th style="width: 160px;">具体描述</th>
                     <th style="width: 77px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="material in materialList" v-cloak>
+                <tr v-for="(material, index) in materialList" v-cloak>
                     <td class="table-fixed" style="width: 160px;">{{material.code}}</td>
                     <td class="table-fixed" style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.name"/>
+                        <input class="form-input" type="text" v-model="material.name" placeholder="请填写"/>
                     </td>
                     <td style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.shortName"/>
+                        <input class="form-input" type="text" v-model="material.shortName" placeholder="请填写"/>
                     </td>
-                    <td style="width: 100px;"
-                        :class="{error: !material.technologyDeptMark, success: material.technologyDeptMark}">
-                        <span v-if="!material.technologyDeptMark">未完善</span>
-                        <span v-if="material.technologyDeptMark">已完善</span>
+                    <td style="width: 100px;" :class="{error: 0 == material.technologyStatus, success: 1 == material.technologyStatus}">
+                        <span v-if="0 == material.technologyStatus">未完善</span>
+                        <span v-if="1 == material.technologyStatus">已完善</span>
                     </td>
-                    <td style="width: 100px;"
-                        :class="{error: 1 == material.status, success: 2 == material.status, prompt: 3 == material.status}">
-                        <span v-if="1 == material.status">待完善</span>
-                        <span v-if="2 == material.status">可导出</span>
-                        <span v-if="3 == material.status">已导出</span>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.specification" placeholder="请填写"/>
                     </td>
-                    <td style="width: 160px;"><input class="form-input" type="text" v-model="material.specification"/>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.model" placeholder="请填写"/>
                     </td>
-                    <td style="width: 160px;"><input class="form-input" type="text" v-model="material.model"/></td>
-                    <td style="width: 160px;"><input class="form-input" type="text" v-model="material.drawingNo"/></td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.description" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.drawingNo" placeholder="请填写"/>
+                    </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.generalSort">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="G01">G01 - 原料</option>
                             <option value="G02">G02 - 毛胚件</option>
                             <option value="G03">G03 - 加工大件</option>
@@ -129,7 +129,7 @@
                     </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.inventoryUnit">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="020">020 - mm</option>
                             <option value="021">021 - um</option>
                             <option value="022">022 - bar</option>
@@ -177,34 +177,34 @@
                     </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.sourceMark">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="M">M</option>
                             <option value="P">P</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
-                        <select class="form-input" v-model="material.respCompany" @change="respDeptSelect">
-                            <option disabled selected>请选择</option>
-                            <option value="01">中国船柴</option>
-                            <option value="02">宜昌基地</option>
-                            <option value="03">青岛基地</option>
+                        <select class="form-input" v-model="material.respCompany" @change="selectRespDepts(index)">
+                            <option value="null" disabled>请选择</option>
+                            <option value="01">01 - 中国船柴</option>
+                            <option value="02">02 - 宜昌基地</option>
+                            <option value="03">03 - 青岛基地</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.respDept">
-                            <option disabled selected>请选择</option>
-                            <option v-for="dept in department" :value="dept.code">{{dept.code}} - {{dept.name}}</option>
+                            <option value="null" disabled>请选择</option>
+                            <option v-for="dept in material.respDepts" :value="dept.code">{{dept.code}} - {{dept.name}}</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
-                        <select class="form-input" v-model="material.keyPartMark" @change="keyPartMarkSelect">
-                            <option disabled selected>请选择</option>
+                        <select class="form-input" v-model="material.keyPartMark" @change="selectKeyPartMark(index)">
+                            <option value="null">请选择</option>
                             <option value="Y">Y</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
-                        <select class="form-input" v-model="material.keyPartSort">
-                            <option disabled selected>请选择</option>
+                        <select class="form-input" v-model="material.keyPartSort" @change="selectKeyPartSort(index)">
+                            <option value="null" disabled>请选择</option>
                             <option value="Y1">Y1</option>
                             <option value="Y2">Y2</option>
                             <option value="Y3">Y3</option>
@@ -213,27 +213,25 @@
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.virtualPartMark">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.qualifiedMark">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
-                    <td style="width: 160px;"><input class="form-input" type="text" v-model="material.description"/>
-                    </td>
                     <td style="width: 77px;">
-                        <button class="btn-link">保存</button>
+                        <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_QA_ENV_EMPLOYEE"
+            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_QUALITY_EMPLOYEE"
                    style="width: 1080px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
@@ -248,14 +246,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="material in materialList" v-cloak>
+                <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px"
-                        :class="{error: !material.qualifiedDeptMark, success: material.qualifiedDeptMark}">
-                        <span v-if="!material.qualifiedDeptMark">未完善</span>
-                        <span v-if="material.qualifiedDeptMark">已完善</span>
+                    <td style="width: 100px;" :class="{error: 0 == material.qualityStatus, success: 1 == material.qualityStatus}">
+                        <span v-if="0 == material.qualityStatus">未完善</span>
+                        <span v-if="1 == material.qualityStatus">已完善</span>
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.inspectMark">
@@ -272,13 +269,13 @@
                         </select>
                     </td>
                     <td style="width: 100px;">
-                        <button class="btn-link">保存</button>
+                        <button class="btn-link" type="button" @click="saveQualityAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE"
-                   style="width: 1397px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 1560px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px" class="table-fixed">物料编码</th>
@@ -290,22 +287,22 @@
                     <th style="width: 160px">可采购标记</th>
                     <th style="width: 160px">可集采标记</th>
                     <th style="width: 160px">可自采标记</th>
-                    <th style="width: 97px">操作</th>
+                    <th style="width: 160px">固定提前期</th>
+                    <th style="width: 100px">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="material in materialList" v-cloak>
+                <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px"
-                        :class="{error: !material.purchaseDeptMark, success: material.purchaseDeptMark}">
-                        <span v-if="!material.purchaseDeptMark">未完善</span>
-                        <span v-if="material.purchaseDeptMark">已完善</span>
+                    <td style="width: 100px;" :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
+                        <span v-if="0 == material.purchaseStatus">未完善</span>
+                        <span v-if="1 == material.purchaseStatus">已完善</span>
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.purchaseSort">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
                             <option value="P01">P01 - 曲轴</option>
                             <option value="P02">P02 - 增压器</option>
                             <option value="P03">P03 - 锻件毛坯（缸盖、活塞头、活塞杆、连杆、十字头销）</option>
@@ -374,27 +371,29 @@
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.purchaseMark">
-                            <option disabled selected>请选择</option>
+                            <option value="null" disabled>请选择</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)">
+                            <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
                     <td style="width: 160px">
-                        <select class="form-input" v-model="material.groupPurMark" @change="groupPurchase">
-                            <option disabled selected>请选择</option>
+                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)">
+                            <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
                     <td style="width: 160px">
-                        <select class="form-input" v-model="material.ownPurMark" @change="ownPurchase">
-                            <option disabled selected>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
+                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                     </td>
-                    <td style="width: 97px;">
-                        <button class="btn-link">保存</button>
+                    <td style="width: 100px;">
+                        <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
                 </tbody>
@@ -413,14 +412,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="material in materialList" v-cloak>
+                <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px"
-                        :class="{error: !material.assemblyDeptMark, success: material.assemblyDeptMark}">
-                        <span v-if="!material.assemblyDeptMark">未完善</span>
-                        <span v-if="material.assemblyDeptMark">已完善</span>
+                    <td style="width: 100px;" :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
+                        <span v-if="0 == material.assemblyStatus">未完善</span>
+                        <span v-if="1 == material.assemblyStatus">已完善</span>
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.defRepository">
@@ -440,12 +438,12 @@
                         </select>
                     </td>
                     <td style="width: 100px;">
-                        <button class="btn-link">保存</button>
+                        <button class="btn-link" type="button" @click="saveAssemblyAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PRO_OPE_EMPLOYEE"
+            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PRODUCE_EMPLOYEE"
                    style="width: 1197px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
@@ -461,14 +459,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="material in materialList" v-cloak>
+                <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 80px"
-                        :class="{error: !material.operateDeptMark, success: material.operateDeptMark}">
-                        <span v-if="!material.operateDeptMark">未完善</span>
-                        <span v-if="material.operateDeptMark">已完善</span>
+                    <td style="width: 80px;" :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
+                        <span v-if="0 == material.produceStatus">未完善</span>
+                        <span v-if="1 == material.produceStatus">已完善</span>
                     </td>
                     <td style="width: 160px">
                         <select class="form-input" v-model="material.outSource">
@@ -484,7 +481,7 @@
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                     </td>
                     <td style="width: 77px;">
-                        <button class="btn-link">保存</button>
+                        <button class="btn-link" type="button" @click="saveProduceAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
                 </tbody>
@@ -532,7 +529,7 @@
 <div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
     <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
 </div>
-<div id="mask" class="mask" v-if="loading">
+<div id="loadModal" class="mask" v-if="loading">
     <p class="mask-prompt">数据获取中...</p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>

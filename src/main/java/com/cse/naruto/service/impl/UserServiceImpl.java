@@ -29,12 +29,10 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PermissionRepository permissionRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PermissionRepository permissionRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.permissionRepository = permissionRepository;
     }
 
     @Override
@@ -49,18 +47,12 @@ public class UserServiceImpl implements UserService {
             } else {
                 if (targetUser.getPassword().equals(user.getPassword())) {
                     // 根据用户角色获取用户权限
-                    String[] roleArr = targetUser.getRole().split(",");
-                    Map<String, Boolean> roles = new HashMap<>();
-                    Map<String, Boolean> permissions = new HashMap<>();
-                    for (String role : roleArr) {
+                    String[] roleArray = targetUser.getRole().split(",");
+                    Map<String, Boolean> roles = new HashMap<>(2);
+                    for (String role : roleArray) {
                         roles.put(role, true);
-                        List<Permission> permissionList = permissionRepository.findAllByRole(role);
-                        for (Permission permission : permissionList) {
-                            permissions.put(permission.getName(), true);
-                        }
                     }
                     targetUser.setRoles(roles);
-                    targetUser.setPermissions(permissions);
                     return targetUser;
                 } else {
                     throw new NarutoException(StatusCode.USER_LOGIN_PASSWORD_ERROR);
@@ -78,7 +70,7 @@ public class UserServiceImpl implements UserService {
             LocalDateTime dateTime = LocalDateTime.now();
             user.setCreateAt(dateTime);
             user.setUpdateAt(dateTime);
-            user.setRole(Constant.UserRoles.ROLE_USER);
+            user.setRole(Constant.UserRoles.USER);
             userRepository.save(user);
             return user;
         } else {

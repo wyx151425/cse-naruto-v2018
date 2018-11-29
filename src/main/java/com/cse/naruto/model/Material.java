@@ -1,6 +1,10 @@
 package com.cse.naruto.model;
 
+import com.cse.naruto.util.Constant;
+import com.cse.naruto.util.Generator;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * 物料类
@@ -138,25 +142,30 @@ public class Material extends NarutoEntity {
     private String fixedAdvTime;
 
     /**
-     * 技术中心完成标记
+     * 技术中心完成标记（0-未完善/1-已完善）
      */
-    private Boolean technologyDeptMark;
+    private Integer technologyStatus;
     /**
-     * 质量环保部完成标记
+     * 质量合规部完成标记（0-未完善/1-已完善）
      */
-    private Boolean qualifiedDeptMark;
+    private Integer qualityStatus;
     /**
-     * 采购部完成标记
+     * 采购部完成标记（0-未完善/1-已完善）
      */
-    private Boolean purchaseDeptMark;
+    private Integer purchaseStatus;
     /**
-     * 集配中心完成标记
+     * 集配中心完成标记（0-未完善/1-已完善）
      */
-    private Boolean assemblyDeptMark;
+    private Integer assemblyStatus;
     /**
-     * 生产运行部完成标记
+     * 生产部完成标记（0-未完善/1-已完善）
      */
-    private Boolean operateDeptMark;
+    private Integer produceStatus;
+    /**
+     * 导出状态（0-待完善/1-可导出/2-已导出）
+     */
+    private Integer exportStatus;
+
 
     public Material() {
     }
@@ -401,43 +410,71 @@ public class Material extends NarutoEntity {
         this.fixedAdvTime = fixedAdvTime;
     }
 
-    public Boolean getTechnologyDeptMark() {
-        return technologyDeptMark;
+    public Integer getTechnologyStatus() {
+        return technologyStatus;
     }
 
-    public void setTechnologyDeptMark(Boolean technologyDeptMark) {
-        this.technologyDeptMark = technologyDeptMark;
+    public void setTechnologyStatus(Integer technologyStatus) {
+        this.technologyStatus = technologyStatus;
     }
 
-    public Boolean getQualifiedDeptMark() {
-        return qualifiedDeptMark;
+    public Integer getQualityStatus() {
+        return qualityStatus;
     }
 
-    public void setQualifiedDeptMark(Boolean qualifiedDeptMark) {
-        this.qualifiedDeptMark = qualifiedDeptMark;
+    public void setQualityStatus(Integer qualityStatus) {
+        this.qualityStatus = qualityStatus;
     }
 
-    public Boolean getPurchaseDeptMark() {
-        return purchaseDeptMark;
+    public Integer getPurchaseStatus() {
+        return purchaseStatus;
     }
 
-    public void setPurchaseDeptMark(Boolean purchaseDeptMark) {
-        this.purchaseDeptMark = purchaseDeptMark;
+    public void setPurchaseStatus(Integer purchaseStatus) {
+        this.purchaseStatus = purchaseStatus;
     }
 
-    public Boolean getAssemblyDeptMark() {
-        return assemblyDeptMark;
+    public Integer getAssemblyStatus() {
+        return assemblyStatus;
     }
 
-    public void setAssemblyDeptMark(Boolean assemblyDeptMark) {
-        this.assemblyDeptMark = assemblyDeptMark;
+    public void setAssemblyStatus(Integer assemblyStatus) {
+        this.assemblyStatus = assemblyStatus;
     }
 
-    public Boolean getOperateDeptMark() {
-        return operateDeptMark;
+    public Integer getProduceStatus() {
+        return produceStatus;
     }
 
-    public void setOperateDeptMark(Boolean operateDeptMark) {
-        this.operateDeptMark = operateDeptMark;
+    public void setProduceStatus(Integer produceStatus) {
+        this.produceStatus = produceStatus;
+    }
+
+    public Integer getExportStatus() {
+        return exportStatus;
+    }
+
+    public void setExportStatus(Integer exportStatus) {
+        this.exportStatus = exportStatus;
+    }
+
+    public static Material newInstance() {
+        Material material = new Material();
+        material.setObjectId(Generator.getObjectId());
+        material.setStatus(Constant.Status.GENERAL);
+        LocalDateTime dateTime = LocalDateTime.now();
+        material.setCreateAt(dateTime);
+        material.setUpdateAt(dateTime);
+        material.setCompanyNo("01");
+        material.setVirtualPartMark("N");
+        material.setOutSource("N");
+        material.setPlanner("QD624");
+        material.setTechnologyStatus(Constant.Material.PerfectStatus.IMPERFECT);
+        material.setQualityStatus(Constant.Material.PerfectStatus.IMPERFECT);
+        material.setPurchaseStatus(Constant.Material.PerfectStatus.IMPERFECT);
+        material.setAssemblyStatus(Constant.Material.PerfectStatus.IMPERFECT);
+        material.setProduceStatus(Constant.Material.PerfectStatus.IMPERFECT);
+        material.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
+        return material;
     }
 }

@@ -17,59 +17,60 @@ import java.util.List;
  *
  * @author 王振琦
  * createAt 2018/10/16
- * updateAt 2018/10/18
+ * updateAt 2018/11/29
  */
 public interface MaterialService {
 
     /**
-     * 通过BOM导入物料
+     * 通过BOM导入物料基础数据
      *
-     * @param file 文件
+     * @param file BOM文件
      * @throws IOException            输入输出异常
      * @throws InvalidFormatException 文件格式错误异常
      */
-    void saveMaterialListByBOM(MultipartFile file) throws IOException, InvalidFormatException;
+    void importMaterialList(MultipartFile file) throws IOException, InvalidFormatException;
 
     /**
-     * 导出物料基础数据到EXCEL表中
+     * 导出物料基础数据
+     *
      * @return 处理完成的EXCEL表
      */
-    Workbook findMaterialListToExcel();
+    Workbook exportMaterialList();
 
     /**
-     * 技术中心更新物料基础数据的方法
+     * 更新物料基础数据的技术信息
      *
      * @param material 包含物料信息的物料对象
      */
-    void updateMaterialByTechnologyCenter(Material material);
+    void updateMaterialTechnology(Material material);
 
     /**
-     * 质量环保部更新物料基础数据的方法
+     * 更新物料基础数据的质量信息
      *
      * @param material 包含物料信息的物料对象
      */
-    void updateMaterialByQualifiedEnvironment(Material material);
+    void updateMaterialQuality(Material material);
 
     /**
-     * 采购部更新物料基础数据的方法
+     * 更新物料基础数据的采购信息
      *
      * @param material 包含物料信息的物料对象
      */
-    void updateMaterialByPurchase(Material material);
+    void updateMaterialPurchase(Material material);
 
     /**
-     * 集配中心更新物料基础数据的方法
+     * 更新物料基础数据的装配信息
      *
      * @param material 包含物料信息的物料对象
      */
-    void updateMaterialByAssemblyCenter(Material material);
+    void updateMaterialAssembly(Material material);
 
     /**
-     * 生产运行部更新物料基础数据的方法
+     * 更新物料基础数据的生产信息
      *
      * @param material 包含物料信息的物料对象
      */
-    void updateMaterialByProduceOperate(Material material);
+    void updateMaterialProduce(Material material);
 
     /**
      * 根据物料编码获取物料对象
@@ -82,19 +83,20 @@ public interface MaterialService {
     /**
      * 分页查询物料数据集合
      *
-     * @param pageIndex 分页页码
-     * @param pageSize  每页数据量
-     * @param status    查询等于该状态码的数据（0-全部/1-待完善/2-可导出/3-已导出）
-     * @param prefect 完善状态（2-全部/1-已完善/0-未完善）
-     * @param user 当前用户
+     * @param pageIndex     分页页码
+     * @param pageSize      每页数据量
+     * @param exportStatus  查询等于该状态码的数据（0-待完善/1-可导出/2-已导出/3-全部）
+     * @param perfectStatus 完善状态（0-未完善/1-已完善/2-全部）
+     * @param user          当前用户
      * @return 带有分页信息和物料数据集合的对象
      */
-    PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int status, int prefect, User user);
+    PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int exportStatus, int perfectStatus, User user);
 
     /**
      * 模糊查询物料
-     * @param queryStr 查询字符串
+     *
+     * @param materialCode 查询字符串
      * @return 物料数据集合
      */
-    List<Material> findMaterialListByCodeLike(String queryStr);
+    List<Material> findMaterialListByCodeLike(String materialCode);
 }
