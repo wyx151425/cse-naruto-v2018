@@ -6,7 +6,6 @@ import com.cse.naruto.model.User;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.service.MaterialService;
 import com.cse.naruto.util.Constant;
-import com.cse.naruto.util.Generator;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -141,7 +140,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Workbook exportMaterialList() {
-        List<Material> materialList = materialRepository.findAllByStatus(Constant.Material.ExportStatus.EXPORTABLE);
+        List<Material> materialList = materialRepository.findAllByExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         Workbook workbook = createWorkbook(materialList);
         for (Material material : materialList) {
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTED);
@@ -156,7 +155,7 @@ public class MaterialServiceImpl implements MaterialService {
                 && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
                 && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
                 && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
-                && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()) {
+                && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         }
     }

@@ -253,7 +253,8 @@ const container = new Vue({
                         popoverSpace.append(message, false);
                     }
                     loadModal.loadCallback();
-                }).catch(function () {
+                }).catch(function (error) {
+                    console.log(error);
                 popoverSpace.append("服务器访问失败", false);
                 loadModal.loadCallback();
             });
@@ -296,7 +297,7 @@ const container = new Vue({
         },
         exportCallback: function () {
             this.exportAction = "导出";
-            this.exporting = false;
+            this.isExportDisabled = false;
         },
         queryAllByPage: function () {
             if ("" === this.currentPage || "0" === this.currentPage) {
@@ -310,7 +311,13 @@ const container = new Vue({
             this.queryMaterialList(this.currentPage, this.pageContext.size, this.exportStatus, this.perfectStatus);
         },
         queryAllByMaterialCode: function () {
+            if (this.materialCode.length < 4) {
+                popoverSpace.append("模糊查询的物料号至少输入4位", false);
+                return;
+            }
             this.isQueryDisabled = true;
+            this.exportStatus = 3;
+            this.perfectStatus = 2;
             axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
@@ -319,6 +326,9 @@ const container = new Vue({
                         let pageContext = {index: 1, pageTotal: 1, dataTotal: data.length};
                         container.setPageContext(pageContext);
                         container.setMaterialList(data);
+                        if (0 === data.length) {
+                            popoverSpace.append("未查询到数据", true);
+                        }
                     } else {
                         popoverSpace.append("数据获取失败", false);
                     }

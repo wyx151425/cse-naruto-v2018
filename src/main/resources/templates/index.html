@@ -275,20 +275,20 @@
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE"
-                   style="width: 1560px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 1674px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px" class="table-fixed">物料编码</th>
                     <th style="width: 200px" class="table-fixed">物料名称</th>
                     <th style="width: 200px">物料简称</th>
-                    <th style="width: 100px">完善状态</th>
+                    <th style="width: 97px">完善状态</th>
                     <!-- 战略采购 -->
-                    <th style="width: 160px">采购分类</th>
-                    <th style="width: 160px">可采购标记</th>
-                    <th style="width: 160px">可集采标记</th>
-                    <th style="width: 160px">可自采标记</th>
-                    <th style="width: 160px">固定提前期</th>
-                    <th style="width: 100px">操作</th>
+                    <th style="width: 180px">采购分类</th>
+                    <th style="width: 180px">可采购标记</th>
+                    <th style="width: 180px">可集采标记</th>
+                    <th style="width: 180px">可自采标记</th>
+                    <th style="width: 180px">固定提前期</th>
+                    <th style="width: 117px">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -296,12 +296,12 @@
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px;" :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
+                    <td style="width: 97px;" :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
                         <span v-if="0 == material.purchaseStatus">未完善</span>
                         <span v-if="1 == material.purchaseStatus">已完善</span>
                     </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.purchaseSort">
+                    <td style="width: 180px">
+                        <select class="form-input" v-model="material.purchaseSort" style="width: 163px">
                             <option value="null" disabled>请选择</option>
                             <option value="P01">P01 - 曲轴</option>
                             <option value="P02">P02 - 增压器</option>
@@ -369,30 +369,30 @@
                             <option value="P64">P64 - 消耗品P</option>
                         </select>
                     </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.purchaseMark">
+                    <td style="width: 180px">
+                        <select class="form-input" v-model="material.purchaseMark" style="width: 163px">
                             <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                         </select>
                     </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)">
-                            <option value="null" disabled>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
-                    </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)">
+                    <td style="width: 180px">
+                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)" style="width: 163px">
                             <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
-                    <td style="width: 160px">
-                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
+                    <td style="width: 180px">
+                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)" style="width: 163px">
+                            <option value="null" disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
                     </td>
-                    <td style="width: 100px;">
+                    <td style="width: 180px">
+                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime" style="width: 163px"/>
+                    </td>
+                    <td style="width: 117px;">
                         <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>
@@ -532,8 +532,8 @@
 <div id="loadModal" class="mask" v-if="loading">
     <p class="mask-prompt">数据获取中...</p>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script th:src="@{/js/vue.min.js}"></script>
+<script th:src="@{/js/axios.min.js}"></script>
 <script th:src="@{/js/naruto.js}"></script>
 <script th:src="@{/js/index.js}"></script>
 </body>

@@ -39,7 +39,7 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @param status 状态码
      * @return 物料基础数据对象集合
      */
-    List<Material> findAllByStatus(int status);
+    List<Material> findAllByExportStatus(int status);
 
     /**
      * 根据物料编码模糊查询物料数据

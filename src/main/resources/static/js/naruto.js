@@ -60,7 +60,7 @@ Vue.component("popover", {
             <div class="popover" :class="{success: prompt.success, error: !prompt.success}">
                 <span class="icon icon-ok" v-if="prompt.success"></span>
                 <span class="icon icon-remove" v-if="!prompt.success"></span>
-                <span>{{prompt.message}}</span>
+                <span style="margin-left: 4px">{{prompt.message}}</span>
             </div>
         `
 });

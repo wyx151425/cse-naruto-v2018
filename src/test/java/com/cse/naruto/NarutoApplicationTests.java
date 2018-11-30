@@ -232,11 +232,11 @@ public class NarutoApplicationTests {
 //    public void cnm() {
 //        List<Material> materials = materialRepository.findAll();
 //        for (Material material : materials) {
-//            material.setTechnologyStatus(0);
-//            material.setQualityStatus(0);
-//            material.setPurchaseStatus(0);
-//            material.setAssemblyStatus(0);
-//            material.setProduceStatus(0);
+////            material.setTechnologyStatus(0);
+////            material.setQualityStatus(0);
+////            material.setPurchaseStatus(0);
+////            material.setAssemblyStatus(0);
+////            material.setProduceStatus(0);
 //            material.setExportStatus(0);
 //        }
 //        materialRepository.saveAll(materials);
