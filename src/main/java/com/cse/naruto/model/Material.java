@@ -25,6 +25,10 @@ public class Material extends NarutoEntity {
      */
     private String companyNo;
     /**
+     * 部套号
+     */
+    private String structureNo;
+    /**
      * 物料编码
      */
     private String code;
@@ -140,6 +144,10 @@ public class Material extends NarutoEntity {
      * 固定提前期
      */
     private String fixedAdvTime;
+    /**
+     * 货源标记
+     */
+    private String resourceMark;
 
     /**
      * 技术中心完成标记（0-未完善/1-已完善）
@@ -184,6 +192,14 @@ public class Material extends NarutoEntity {
 
     public void setCompanyNo(String companyNo) {
         this.companyNo = companyNo;
+    }
+
+    public String getStructureNo() {
+        return structureNo;
+    }
+
+    public void setStructureNo(String structureNo) {
+        this.structureNo = structureNo;
     }
 
     public String getCode() {
@@ -408,6 +424,14 @@ public class Material extends NarutoEntity {
 
     public void setFixedAdvTime(String fixedAdvTime) {
         this.fixedAdvTime = fixedAdvTime;
+    }
+
+    public String getResourceMark() {
+        return resourceMark;
+    }
+
+    public void setResourceMark(String resourceMark) {
+        this.resourceMark = resourceMark;
     }
 
     public Integer getTechnologyStatus() {

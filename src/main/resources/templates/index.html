@@ -54,13 +54,15 @@
         </div>
         <div id="table-space" class="table-wrap">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2737px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 2997px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
+                    <th class="table-fixed" style="width: 120px;">部套号</th>
                     <th class="table-fixed" style="width: 160px;">物料编码</th>
                     <th class="table-fixed" style="width: 160px;">物料名称</th>
                     <th style="width: 160px;">物料简称</th>
                     <th style="width: 100px;">完善状态</th>
+                    <th style="width: 100px;">货源标记</th>
                     <!-- 技术中心 -->
                     <th style="width: 160px;">规格</th>
                     <th style="width: 160px;">型号</th>
@@ -75,11 +77,12 @@
                     <th style="width: 160px;">关键件大类</th>
                     <th style="width: 160px;">虚拟件标记</th>
                     <th style="width: 160px;">合批标记</th>
-                    <th style="width: 77px;">操作</th>
+                    <th style="width: 117px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(material, index) in materialList" v-cloak>
+                    <td class="table-fixed" style="width: 120px">{{material.structureNo}}</td>
                     <td class="table-fixed" style="width: 160px;">{{material.code}}</td>
                     <td class="table-fixed" style="width: 160px;">
                         <input class="form-input" type="text" v-model="material.name" placeholder="请填写"/>
@@ -91,6 +94,7 @@
                         <span v-if="0 == material.technologyStatus">未完善</span>
                         <span v-if="1 == material.technologyStatus">已完善</span>
                     </td>
+                    <td style="width: 100px;">{{material.resourceMark}}</td>
                     <td style="width: 160px;">
                         <input class="form-input" type="text" v-model="material.specification" placeholder="请填写"/>
                     </td>
@@ -225,7 +229,7 @@
                             <option value="N">N</option>
                         </select>
                     </td>
-                    <td style="width: 77px;">
+                    <td style="width: 117px;">
                         <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)" :disabled="isSaveDisabled">保存</button>
                     </td>
                 </tr>

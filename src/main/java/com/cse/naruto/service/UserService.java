@@ -20,6 +20,7 @@ public interface UserService {
 
     /**
      * 用户注册
+     *
      * @param user 封装前端数据的用户对象
      * @return 具有完整信息的用户对象
      */

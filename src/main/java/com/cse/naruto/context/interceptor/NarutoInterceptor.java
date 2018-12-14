@@ -29,10 +29,10 @@ public class NarutoInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("NemoInterceptor: preHandle ----------");
-        logger.info("User Address: " + request.getRemoteHost() + " ----------");
-        logger.info("Request URL: " + request.getRequestURL().toString() + " ----------");
-        logger.info("Request Method: " + request.getMethod() + " ----------");
+        logger.info("---------- preHandle ----------");
+        logger.info("User-Address: " + request.getRemoteHost());
+        logger.info("Request-URL: " + request.getRequestURL().toString());
+        logger.info("Request-Method: " + request.getMethod());
 
         /* 1.请求相关数据 操作 */
         String contextPath = request.getContextPath();
@@ -68,12 +68,12 @@ public class NarutoInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        logger.info("NemoInterceptor: postHandle ----------");
+        logger.info("---------- postHandle ----------");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-        logger.info("NemoInterceptor: afterCompletion ----------");
+        logger.info("---------- afterCompletion ----------");
     }
 }
 

@@ -64,6 +64,7 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Workbook行索引
         int index = 0;
+        String structureNo = null;
         for (Row row : sheet) {
             // 前三行数据为机器信息及字段的批注，所以不予解析
             if (index < 3) {
@@ -77,6 +78,10 @@ public class MaterialServiceImpl implements MaterialService {
                 if (!codeList.contains(code) && !targetCodeList.contains(code)) {
                     material.setCode(code);
                     material.setDrawingNo(code);
+                    if (null != row.getCell(0) && !"".equals(row.getCell(0).toString().trim())) {
+                        structureNo = row.getCell(0).toString().trim();
+                    }
+                    material.setStructureNo(structureNo);
                     if (null != row.getCell(7)) {
                         material.setName(row.getCell(7).toString().trim());
                         material.setShortName(row.getCell(7).toString().trim());
@@ -94,6 +99,7 @@ public class MaterialServiceImpl implements MaterialService {
                     }
                     if (null != row.getCell(12)) {
                         String source = row.getCell(12).toString().trim();
+                        material.setResourceMark(source);
                         /*
                          * 检查货源是否为*
                          * 以B P K开头的，都是采购件，
