@@ -1,6 +1,7 @@
 package com.cse.naruto;
 
 import com.cse.naruto.model.Material;
+import com.cse.naruto.model.User;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
@@ -238,6 +239,78 @@ public class NarutoApplicationTests {
 ////            material.setAssemblyStatus(0);
 ////            material.setProduceStatus(0);
 //            material.setExportStatus(0);
+//        }
+//        materialRepository.saveAll(materials);
+//    }
+
+//    @Test
+//    public void addUserList() {
+//        InputStream in = null;
+//        try {
+//            in = new FileInputStream(new File("users.xlsx"));
+//            Workbook workbook = WorkbookFactory.create(in);
+//            Sheet sheet = workbook.getSheet("sheet1");
+//
+//            List<User> userList = new ArrayList<>();
+//            User user = new User();
+//            user.setObjectId(Generator.getObjectId());
+//            user.setStatus(1);
+//            LocalDateTime dateTime = LocalDateTime.now();
+//            user.setCreateAt(dateTime);
+//            user.setUpdateAt(dateTime);
+//            user.setCode("QD1010");
+//            user.setName("王振琦");
+//            user.setPassword("123456");
+//            user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
+//            userList.add(user);
+//
+//            int index = 0;
+//            for (Row row : sheet) {
+//                if (index < 1) {
+//                    index++;
+//                } else {
+//                    if (null == row.getCell(1)) {
+//                        break;
+//                    }
+//                    User user1 = new User();
+//                    user1.setObjectId(Generator.getObjectId());
+//                    user1.setStatus(1);
+//                    LocalDateTime dateTime1 = LocalDateTime.now();
+//                    user1.setCreateAt(dateTime1);
+//                    user1.setUpdateAt(dateTime1);
+//                    String code = row.getCell(1).toString().trim();
+//                    if (code.startsWith("A") || code.startsWith("D")) {
+//                        user1.setCode(code);
+//                    } else {
+//                        user1.setCode("QD" + code);
+//                    }
+//                    user1.setName(row.getCell(2).toString().trim());
+//                    user1.setPassword("123456");
+//                    user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
+//                    userList.add(user1);
+//                }
+//            }
+//            userRepository.saveAll(userList);
+//
+//        } catch (InvalidFormatException | IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (in != null) {
+//                    in.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//
+//            }
+//        }
+//    }
+
+//    @Test
+//    public void updateCompany() {
+//        List<Material> materials = materialRepository.findAll();
+//        for (Material material : materials) {
+//            material.setRespCompany("03");
 //        }
 //        materialRepository.saveAll(materials);
 //    }

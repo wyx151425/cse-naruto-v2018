@@ -37,10 +37,6 @@ public class Material extends NarutoEntity {
      */
     private String name;
     /**
-     * 物料简称
-     */
-    private String shortName;
-    /**
      * 规格
      */
     private String specification;
@@ -216,14 +212,6 @@ public class Material extends NarutoEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
     }
 
     public String getSpecification() {

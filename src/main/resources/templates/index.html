@@ -48,88 +48,47 @@
             </button>
             <div class="query-group pull-right">
                 <input class="query-control" type="text" v-model="materialCode" placeholder="查询物料"/>
-                <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled"><span
-                        class="icon icon-search"></span></p>
+                <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
             </div>
         </div>
         <div id="table-space" class="table-wrap">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2997px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 2797px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
-                    <th class="table-fixed" style="width: 120px;">部套号</th>
-                    <th class="table-fixed" style="width: 160px;">物料编码</th>
+                    <th class="table-fixed" style="width: 100px;">部套号</th>
+                    <th class="table-fixed" style="width: 160px;">物料号</th>
+                    <th class="table-fixed" style="width: 160px;">图号</th>
                     <th class="table-fixed" style="width: 160px;">物料名称</th>
-                    <th style="width: 160px;">物料简称</th>
-                    <th style="width: 100px;">完善状态</th>
-                    <th style="width: 100px;">货源标记</th>
+                    <th class="table-fixed" style="width: 80px;">货源</th>
                     <!-- 技术中心 -->
-                    <th style="width: 160px;">规格</th>
-                    <th style="width: 160px;">型号</th>
                     <th style="width: 160px;">具体描述</th>
-                    <th style="width: 160px;">图号</th>
-                    <th style="width: 160px;">普通分类</th>
                     <th style="width: 160px;">库存单位</th>
                     <th style="width: 160px;">采购自制标记</th>
-                    <th style="width: 160px;">责任公司</th>
                     <th style="width: 160px;">责任部门</th>
+                    <th style="width: 160px;">普通分类</th>
                     <th style="width: 160px;">关键件标记</th>
                     <th style="width: 160px;">关键件大类</th>
-                    <th style="width: 160px;">虚拟件标记</th>
                     <th style="width: 160px;">合批标记</th>
+                    <th style="width: 160px;">规格</th>
+                    <th style="width: 160px;">型号</th>
+                    <th style="width: 160px;">责任公司</th>
+                    <th style="width: 160px;">虚拟件标记</th>
+                    <th style="width: 100px;">完善状态</th>
                     <th style="width: 117px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(material, index) in materialList" v-cloak>
-                    <td class="table-fixed" style="width: 120px">{{material.structureNo}}</td>
+                    <td class="table-fixed" style="width: 100px">{{material.structureNo}}</td>
                     <td class="table-fixed" style="width: 160px;">{{material.code}}</td>
-                    <td class="table-fixed" style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.name" placeholder="请填写"/>
-                    </td>
-                    <td style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.shortName" placeholder="请填写"/>
-                    </td>
-                    <td style="width: 100px;" :class="{error: 0 == material.technologyStatus, success: 1 == material.technologyStatus}">
-                        <span v-if="0 == material.technologyStatus">未完善</span>
-                        <span v-if="1 == material.technologyStatus">已完善</span>
-                    </td>
-                    <td style="width: 100px;">{{material.resourceMark}}</td>
-                    <td style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.specification" placeholder="请填写"/>
-                    </td>
-                    <td style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.model" placeholder="请填写"/>
-                    </td>
+                    <td class="table-fixed" style="width: 160px;">{{material.drawingNo}}</td>
+                    <td class="table-fixed" style="width: 160px;">{{material.name}}</td>
+                    <td class="table-fixed" style="width: 80px;">{{material.resourceMark}}</td>
+
                     <td style="width: 160px;">
                         <input class="form-input" type="text" v-model="material.description" placeholder="请填写"/>
-                    </td>
-                    <td style="width: 160px;">
-                        <input class="form-input" type="text" v-model="material.drawingNo" placeholder="请填写"/>
-                    </td>
-                    <td style="width: 160px;">
-                        <select class="form-input" v-model="material.generalSort">
-                            <option value="null" disabled>请选择</option>
-                            <option value="G01">G01 - 原料</option>
-                            <option value="G02">G02 - 毛胚件</option>
-                            <option value="G03">G03 - 加工大件</option>
-                            <option value="G04">G04 - 加工小件</option>
-                            <option value="G05">G05 - 焊接结构大件</option>
-                            <option value="G06">G06 - 焊接结构中小件</option>
-                            <option value="G07">G07 - 电器件</option>
-                            <option value="G08">G08 - 总成功能件</option>
-                            <option value="G09">G09 - 仪器仪表</option>
-                            <option value="G10">G10 - 管路/走台部件</option>
-                            <option value="G11">G11 - 阀类部件</option>
-                            <option value="G12">G12 - 工具工装件</option>
-                            <option value="G13">G13 - 标准件</option>
-                            <option value="G14">G14 - 消耗品</option>
-                            <option value="G15">G15 - 柴油机备品备件</option>
-                            <option value="G16">G16 - 系统润滑油</option>
-                            <option value="G17">G17 - 工装材料</option>
-                            <option value="G18">G18 - 自制半成品</option>
-                            <option value="G19">G19 - 设备备品备件</option>
-                        </select>
                     </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.inventoryUnit">
@@ -187,17 +146,35 @@
                         </select>
                     </td>
                     <td style="width: 160px;">
-                        <select class="form-input" v-model="material.respCompany" @change="selectRespDepts(index)">
+                        <select class="form-input" v-model="material.respDept">
                             <option value="null" disabled>请选择</option>
-                            <option value="01">01 - 中国船柴</option>
-                            <option value="02">02 - 宜昌基地</option>
-                            <option value="03">03 - 青岛基地</option>
+                            <option v-for="dept in material.respDepts" :value="dept.code">
+                                {{dept.code}} - {{dept.name}}
+                            </option>
                         </select>
                     </td>
                     <td style="width: 160px;">
-                        <select class="form-input" v-model="material.respDept">
+                        <select class="form-input" v-model="material.generalSort">
                             <option value="null" disabled>请选择</option>
-                            <option v-for="dept in material.respDepts" :value="dept.code">{{dept.code}} - {{dept.name}}</option>
+                            <option value="G01">G01 - 原料</option>
+                            <option value="G02">G02 - 毛胚件</option>
+                            <option value="G03">G03 - 加工大件</option>
+                            <option value="G04">G04 - 加工小件</option>
+                            <option value="G05">G05 - 焊接结构大件</option>
+                            <option value="G06">G06 - 焊接结构中小件</option>
+                            <option value="G07">G07 - 电器件</option>
+                            <option value="G08">G08 - 总成功能件</option>
+                            <option value="G09">G09 - 仪器仪表</option>
+                            <option value="G10">G10 - 管路/走台部件</option>
+                            <option value="G11">G11 - 阀类部件</option>
+                            <option value="G12">G12 - 工具工装件</option>
+                            <option value="G13">G13 - 标准件</option>
+                            <option value="G14">G14 - 消耗品</option>
+                            <option value="G15">G15 - 柴油机备品备件</option>
+                            <option value="G16">G16 - 系统润滑油</option>
+                            <option value="G17">G17 - 工装材料</option>
+                            <option value="G18">G18 - 自制半成品</option>
+                            <option value="G19">G19 - 设备备品备件</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
@@ -215,13 +192,6 @@
                             <option value="Y4">Y4</option>
                         </select>
                     </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.virtualPartMark">
-                            <option value="null" disabled>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
-                    </td>
                     <td style="width: 160px;">
                         <select class="form-input" v-model="material.qualifiedMark">
                             <option value="null" disabled>请选择</option>
@@ -229,8 +199,36 @@
                             <option value="N">N</option>
                         </select>
                     </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.specification" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.model" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.respCompany" @change="selectRespDepts(index)">
+                            <option value="null" disabled>请选择</option>
+                            <option value="01">01 - 中国船柴</option>
+                            <option value="02">02 - 宜昌基地</option>
+                            <option value="03">03 - 青岛基地</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.virtualPartMark">
+                            <option value="null" disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 100px;"
+                        :class="{error: 0 == material.technologyStatus, success: 1 == material.technologyStatus}">
+                        <span v-if="0 == material.technologyStatus">未完善</span>
+                        <span v-if="1 == material.technologyStatus">已完善</span>
+                    </td>
                     <td style="width: 117px;">
-                        <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)" :disabled="isSaveDisabled">保存</button>
+                        <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -254,7 +252,8 @@
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px;" :class="{error: 0 == material.qualityStatus, success: 1 == material.qualityStatus}">
+                    <td style="width: 100px;"
+                        :class="{error: 0 == material.qualityStatus, success: 1 == material.qualityStatus}">
                         <span v-if="0 == material.qualityStatus">未完善</span>
                         <span v-if="1 == material.qualityStatus">已完善</span>
                     </td>
@@ -273,7 +272,9 @@
                         </select>
                     </td>
                     <td style="width: 100px;">
-                        <button class="btn-link" type="button" @click="saveQualityAttr(material, index)" :disabled="isSaveDisabled">保存</button>
+                        <button class="btn-link" type="button" @click="saveQualityAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -300,7 +301,8 @@
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 97px;" :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
+                    <td style="width: 97px;"
+                        :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
                         <span v-if="0 == material.purchaseStatus">未完善</span>
                         <span v-if="1 == material.purchaseStatus">已完善</span>
                     </td>
@@ -380,24 +382,29 @@
                         </select>
                     </td>
                     <td style="width: 180px">
-                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)" style="width: 163px">
+                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)"
+                                style="width: 163px">
                             <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
                     <td style="width: 180px">
-                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)" style="width: 163px">
+                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)"
+                                style="width: 163px">
                             <option value="null" disabled>请选择</option>
                             <option value="Y">Y</option>
                             <option value="N">N</option>
                         </select>
                     </td>
                     <td style="width: 180px">
-                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime" style="width: 163px"/>
+                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"
+                               style="width: 163px"/>
                     </td>
                     <td style="width: 117px;">
-                        <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)" :disabled="isSaveDisabled">保存</button>
+                        <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -420,7 +427,8 @@
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 100px;" :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
+                    <td style="width: 100px;"
+                        :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
                         <span v-if="0 == material.assemblyStatus">未完善</span>
                         <span v-if="1 == material.assemblyStatus">已完善</span>
                     </td>
@@ -442,7 +450,9 @@
                         </select>
                     </td>
                     <td style="width: 100px;">
-                        <button class="btn-link" type="button" @click="saveAssemblyAttr(material, index)" :disabled="isSaveDisabled">保存</button>
+                        <button class="btn-link" type="button" @click="saveAssemblyAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -467,7 +477,8 @@
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
                     <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 80px;" :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
+                    <td style="width: 80px;"
+                        :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
                         <span v-if="0 == material.produceStatus">未完善</span>
                         <span v-if="1 == material.produceStatus">已完善</span>
                     </td>
@@ -485,7 +496,9 @@
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                     </td>
                     <td style="width: 77px;">
-                        <button class="btn-link" type="button" @click="saveProduceAttr(material, index)" :disabled="isSaveDisabled">保存</button>
+                        <button class="btn-link" type="button" @click="saveProduceAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
                     </td>
                 </tr>
                 </tbody>
