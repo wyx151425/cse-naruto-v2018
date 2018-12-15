@@ -49,4 +49,20 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      */
     @Query(value = "select m from Material m where m.code like :materialCode")
     List<Material> findAllByCodeLike(@Param("materialCode") String materialCode);
+
+    /**
+     * 根据部套号查询物料
+     *
+     * @param structureNo 部套号
+     * @return 物料数据集合
+     */
+    List<Material> findAllByStructureNo(String structureNo);
+
+    /**
+     * 根据货源标记查询无聊
+     *
+     * @param resourceMark 货源标记
+     * @return 物料数据集合
+     */
+    List<Material> findAllByResourceMark(String resourceMark);
 }

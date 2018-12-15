@@ -99,4 +99,20 @@ public interface MaterialService {
      * @return 物料数据集合
      */
     List<Material> findMaterialListByCodeLike(String materialCode);
+
+    /**
+     * 根据部套号查询物料
+     *
+     * @param structureNo 部套号
+     * @return 物料数据集合
+     */
+    List<Material> findMaterialListByStructureNo(String structureNo);
+
+    /**
+     * 根据货源标记查询物料
+     *
+     * @param resourceMark 货源标记
+     * @return 物料数据集合
+     */
+    List<Material> findMaterialListByResourceMark(String resourceMark);
 }

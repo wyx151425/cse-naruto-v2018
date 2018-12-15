@@ -30,6 +30,8 @@ const container = new Vue({
         perfectStatus: 0,
         currentPage: "",
         materialCode: "",
+        structureNo: "",
+        resourceMark: "",
         user: {
             roles: {
                 ROLE_TECHNOLOGY_EMPLOYEE: false,
@@ -43,7 +45,7 @@ const container = new Vue({
             index: 1,
             size: 100,
             pageTotal: 0,
-            dataTotal: 0,
+            dataTotal: 0
         },
         materialList: [],
         responsibility: [
@@ -319,6 +321,56 @@ const container = new Vue({
             this.exportStatus = 3;
             this.perfectStatus = 2;
             axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let data = response.data.data;
+                        let pageContext = {index: 1, pageTotal: 1, dataTotal: data.length};
+                        container.setPageContext(pageContext);
+                        container.setMaterialList(data);
+                        if (0 === data.length) {
+                            popoverSpace.append("未查询到数据", true);
+                        }
+                    } else {
+                        popoverSpace.append("数据获取失败", false);
+                    }
+                    container.queryCallback();
+                })
+                .catch(function () {
+                    popoverSpace.append("服务器访问失败", false);
+                    container.queryCallback();
+                });
+        },
+        queryAllByStructureNo: function () {
+            this.isQueryDisabled = true;
+            this.exportStatus = 3;
+            this.perfectStatus = 2;
+            axios.get(requestContext + "api/materials/query2?structureNo=" + this.structureNo)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let data = response.data.data;
+                        let pageContext = {index: 1, pageTotal: 1, dataTotal: data.length};
+                        container.setPageContext(pageContext);
+                        container.setMaterialList(data);
+                        if (0 === data.length) {
+                            popoverSpace.append("未查询到数据", true);
+                        }
+                    } else {
+                        popoverSpace.append("数据获取失败", false);
+                    }
+                    container.queryCallback();
+                })
+                .catch(function () {
+                    popoverSpace.append("服务器访问失败", false);
+                    container.queryCallback();
+                });
+        },
+        queryAllByResourceMark: function () {
+            this.isQueryDisabled = true;
+            this.exportStatus = 3;
+            this.perfectStatus = 2;
+            axios.get(requestContext + "api/materials/query3?resourceMark=" + this.resourceMark)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {

@@ -116,4 +116,20 @@ public class MaterialController extends NarutoFacade {
         List<Material> materialList = materialService.findMaterialListByCodeLike(materialCode);
         return new Response<>(materialList);
     }
+
+    @GetMapping(value = "materials/query2")
+    public Response<List<Material>> actionQueryMaterialListByStructureNo(
+            @RequestParam("structureNo") String structureNo
+    ) {
+        List<Material> materialList = materialService.findMaterialListByStructureNo(structureNo);
+        return new Response<>(materialList);
+    }
+
+    @GetMapping(value = "materials/query3")
+    public Response<List<Material>> actionQueryMaterialListByResourceMark(
+            @RequestParam("resourceMark") String resourceMark
+    ) {
+        List<Material> materialList = materialService.findMaterialListByResourceMark(resourceMark);
+        return new Response<>(materialList);
+    }
 }

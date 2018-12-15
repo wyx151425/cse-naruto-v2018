@@ -46,15 +46,25 @@
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
                     v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>导入
             </button>
-            <div class="query-group pull-right">
-                <input class="query-control" type="text" v-model="materialCode" placeholder="查询物料"/>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
+                <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="materialCode" placeholder="物料查询"/>
                 <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right">
+                <input class="query-control" type="text" v-model="structureNo" placeholder="部套查询"/>
+                <p class="query-btn" @click="queryAllByStructureNo" :disabled="isQueryDisabled">
                     <span class="icon icon-search"></span></p>
             </div>
         </div>
         <div id="table-space" class="table-wrap">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2797px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 2820px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th class="table-fixed" style="width: 100px;">部套号</th>
@@ -76,7 +86,7 @@
                     <th style="width: 160px;">责任公司</th>
                     <th style="width: 160px;">虚拟件标记</th>
                     <th style="width: 100px;">完善状态</th>
-                    <th style="width: 117px;">操作</th>
+                    <th style="width: 100px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -225,7 +235,7 @@
                         <span v-if="0 == material.technologyStatus">未完善</span>
                         <span v-if="1 == material.technologyStatus">已完善</span>
                     </td>
-                    <td style="width: 117px;">
+                    <td style="width: 100px;">
                         <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)"
                                 :disabled="isSaveDisabled">保存
                         </button>

@@ -91,10 +91,10 @@ public class MaterialServiceImpl implements MaterialService {
                         material.setSpecification(row.getCell(8).toString().trim());
                     }
                     if (null != row.getCell(9)) {
-                        material.setSpecification(row.getCell(9).toString().trim());
+                        material.setModel(row.getCell(9).toString().trim());
                     }
-                    if (null != row.getCell(18)) {
-                        material.setDescription(row.getCell(18).toString().trim());
+                    if (null != row.getCell(17)) {
+                        material.setDescription(row.getCell(17).toString().trim());
                     }
                     if (code.startsWith("EN")) {
                         material.setQualifiedMark("Y");
@@ -137,6 +137,9 @@ public class MaterialServiceImpl implements MaterialService {
                         }
                     }
                     material.setRespCompany("03");
+                    material.setRespDept("6202");
+                    material.setInventoryUnit("025");
+                    material.setKeyPartMark("Y");
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
                 }
@@ -504,5 +507,15 @@ public class MaterialServiceImpl implements MaterialService {
     public List<com.cse.naruto.model.Material> findMaterialListByCodeLike(String queryStr) {
         String str = queryStr + "%";
         return materialRepository.findAllByCodeLike(str);
+    }
+
+    @Override
+    public List<Material> findMaterialListByStructureNo(String structureNo) {
+        return materialRepository.findAllByStructureNo(structureNo);
+    }
+
+    @Override
+    public List<Material> findMaterialListByResourceMark(String resourceMark) {
+        return materialRepository.findAllByResourceMark(resourceMark);
     }
 }
