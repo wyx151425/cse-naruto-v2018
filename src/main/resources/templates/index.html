@@ -244,12 +244,11 @@
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_QUALITY_EMPLOYEE"
-                   style="width: 1080px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 880px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px">物料编码</th>
                     <th style="width: 200px">物料名称</th>
-                    <th style="width: 200px">物料简称</th>
                     <th style="width: 100px">完善状态</th>
                     <!-- 质量合规 -->
                     <th style="width: 160px">质检标记</th>
@@ -261,7 +260,6 @@
                 <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
-                    <td style="width: 200px">{{material.shortName}}</td>
                     <td style="width: 100px;"
                         :class="{error: 0 == material.qualityStatus, success: 1 == material.qualityStatus}">
                         <span v-if="0 == material.qualityStatus">未完善</span>
@@ -290,28 +288,26 @@
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE"
-                   style="width: 1674px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 1500px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px" class="table-fixed">物料编码</th>
                     <th style="width: 200px" class="table-fixed">物料名称</th>
-                    <th style="width: 200px">物料简称</th>
-                    <th style="width: 97px">完善状态</th>
+                    <th style="width: 100px">完善状态</th>
                     <!-- 战略采购 -->
                     <th style="width: 180px">采购分类</th>
                     <th style="width: 180px">可采购标记</th>
                     <th style="width: 180px">可集采标记</th>
                     <th style="width: 180px">可自采标记</th>
                     <th style="width: 180px">固定提前期</th>
-                    <th style="width: 117px">操作</th>
+                    <th style="width: 120px">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
-                    <td style="width: 200px">{{material.shortName}}</td>
-                    <td style="width: 97px;"
+                    <td style="width: 100px;"
                         :class="{error: 0 == material.purchaseStatus, success: 1 == material.purchaseStatus}">
                         <span v-if="0 == material.purchaseStatus">未完善</span>
                         <span v-if="1 == material.purchaseStatus">已完善</span>
@@ -411,7 +407,7 @@
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"
                                style="width: 163px"/>
                     </td>
-                    <td style="width: 117px;">
+                    <td style="width: 120px;">
                         <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)"
                                 :disabled="isSaveDisabled">保存
                         </button>
@@ -420,12 +416,11 @@
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_ASSEMBLY_EMPLOYEE"
-                   style="width: 920px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 720px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px">物料编码</th>
                     <th style="width: 200px">物料名称</th>
-                    <th style="width: 200px">物料简称</th>
                     <th style="width: 100px">完善状态</th>
                     <!-- 集配中心 -->
                     <th style="width: 160px">默认仓库</th>
@@ -436,7 +431,6 @@
                 <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px">{{material.code}}</td>
                     <td style="width: 200px">{{material.name}}</td>
-                    <td style="width: 200px">{{material.shortName}}</td>
                     <td style="width: 100px;"
                         :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
                         <span v-if="0 == material.assemblyStatus">未完善</span>
@@ -468,25 +462,23 @@
                 </tbody>
             </table>
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PRODUCE_EMPLOYEE"
-                   style="width: 1197px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 1000px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th style="width: 160px" class="table-fixed">物料编码</th>
                     <th style="width: 200px" class="table-fixed">物料名称</th>
-                    <th style="width: 200px">物料简称</th>
                     <th style="width: 80px">完善状态</th>
                     <!-- 生产运行 -->
                     <th style="width: 160px">外协标记</th>
                     <th style="width: 160px">计划员</th>
                     <th style="width: 160px">固定提前期</th>
-                    <th style="width: 77px">操作</th>
+                    <th style="width: 80px">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(material, index) in materialList" v-cloak>
                     <td style="width: 160px" class="table-fixed">{{material.code}}</td>
                     <td style="width: 200px" class="table-fixed">{{material.name}}</td>
-                    <td style="width: 200px">{{material.shortName}}</td>
                     <td style="width: 80px;"
                         :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
                         <span v-if="0 == material.produceStatus">未完善</span>
@@ -505,7 +497,7 @@
                     <td style="width: 160px">
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
                     </td>
-                    <td style="width: 77px;">
+                    <td style="width: 80px;">
                         <button class="btn-link" type="button" @click="saveProduceAttr(material, index)"
                                 :disabled="isSaveDisabled">保存
                         </button>

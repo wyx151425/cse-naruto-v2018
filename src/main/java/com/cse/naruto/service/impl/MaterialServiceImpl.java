@@ -444,6 +444,8 @@ public class MaterialServiceImpl implements MaterialService {
             cell2.setCellValue(material.getCode());
             XSSFCell cell3 = row.createCell(2);
             cell3.setCellValue(material.getName());
+            XSSFCell cell4 = row.createCell(3);
+            cell4.setCellValue(material.getName());
             XSSFCell cell5 = row.createCell(4);
             cell5.setCellValue(material.getSpecification());
             XSSFCell cell6 = row.createCell(5);

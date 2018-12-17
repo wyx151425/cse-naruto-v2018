@@ -66,7 +66,7 @@ public class NarutoApplicationTests {
 //        user.setCreateAt(dateTime);
 //        user.setUpdateAt(dateTime);
 //        return user;
-//    }
+//    } 6110
 
     @Test
     public void contextLoads() {
@@ -111,36 +111,61 @@ public class NarutoApplicationTests {
 
 //    @Test
 //    public void addUser() {
-//        User user1 = createUser();
+//        User user1 = new User();
+//        user1.setObjectId(Generator.getObjectId());
+//        user1.setStatus(1);
+//        LocalDateTime dateTime1 = LocalDateTime.now();
+//        user1.setCreateAt(dateTime1);
+//        user1.setUpdateAt(dateTime1);
 //        user1.setCode("CSE1001");
 //        user1.setPassword("123456");
 //        user1.setName("技术中心");
 //        user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user1);
-//        User user2 = createUser();
-//        user2.setCode("CSE1002");
+//        User user1 = new User();
+//        user1.setObjectId(Generator.getObjectId());
+//        user1.setStatus(1);
+//        LocalDateTime dateTime1 = LocalDateTime.now();
+//        user1.setCreateAt(dateTime1);
+//        user1.setUpdateAt(dateTime1);
+//        user1.setCode("QD9910");
+//        user1.setPassword("123456");
+//        user1.setName("质量环保");
+//        user1.setRole("ROLE_USER,ROLE_QUALITY_EMPLOYEE");
+//        userRepository.save(user1);
+//        User user2 = new User();
+//        user2.setObjectId(Generator.getObjectId());
+//        user2.setStatus(1);
+//        LocalDateTime dateTime2 = LocalDateTime.now();
+//        user2.setCreateAt(dateTime2);
+//        user2.setUpdateAt(dateTime2);
+//        user2.setCode("QD9920");
 //        user2.setPassword("123456");
-//        user2.setName("质量环保");
-//        user2.setRole("ROLE_USER,ROLE_QUALITY_EMPLOYEE");
+//        user2.setName("战略采购");
+//        user2.setRole("ROLE_USER,ROLE_PURCHASE_EMPLOYEE");
 //        userRepository.save(user2);
-//        User user3 = createUser();
-//        user3.setCode("CSE1003");
+//        User user3 = new User();
+//        user3.setObjectId(Generator.getObjectId());
+//        user3.setStatus(1);
+//        LocalDateTime dateTime3 = LocalDateTime.now();
+//        user3.setCreateAt(dateTime3);
+//        user3.setUpdateAt(dateTime3);
+//        user3.setCode("QD9930");
 //        user3.setPassword("123456");
-//        user3.setName("采购");
-//        user3.setRole("ROLE_USER,ROLE_PURCHASE_EMPLOYEE");
+//        user3.setName("集配中心");
+//        user3.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
 //        userRepository.save(user3);
-//        User user4 = createUser();
-//        user4.setCode("CSE1004");
+//        User user4 = new User();
+//        user4.setObjectId(Generator.getObjectId());
+//        user4.setStatus(1);
+//        LocalDateTime dateTime4 = LocalDateTime.now();
+//        user4.setCreateAt(dateTime4);
+//        user4.setUpdateAt(dateTime4);
+//        user4.setCode("QD9940");
 //        user4.setPassword("123456");
-//        user4.setName("集配中心");
-//        user4.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
+//        user4.setName("生产运行");
+//        user4.setRole("ROLE_USER,ROLE_PRODUCE_EMPLOYEE");
 //        userRepository.save(user4);
-//        User user5 = createUser();
-//        user5.setCode("CSE1005");
-//        user5.setPassword("123456");
-//        user5.setName("生产运行");
-//        user5.setRole("ROLE_USER,ROLE_PRODUCE_EMPLOYEE");
-//        userRepository.save(user5);
 //    }
 
 //    @Test
