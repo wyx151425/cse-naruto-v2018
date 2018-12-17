@@ -111,25 +111,28 @@ public class MaterialController extends NarutoFacade {
 
     @GetMapping(value = "materials/query")
     public Response<List<Material>> actionQueryMaterialListByCodeLike(
-            @RequestParam("materialCode") String materialCode
+            @RequestParam("materialCode") String materialCode,
+            @RequestParam("perfectStatus") Integer perfectStatus
     ) {
-        List<Material> materialList = materialService.findMaterialListByCodeLike(materialCode);
+        List<Material> materialList = materialService.findMaterialListByCodeLike(materialCode, perfectStatus, getCurrentUser());
         return new Response<>(materialList);
     }
 
     @GetMapping(value = "materials/query2")
     public Response<List<Material>> actionQueryMaterialListByStructureNo(
-            @RequestParam("structureNo") String structureNo
+            @RequestParam("structureNo") String structureNo,
+            @RequestParam("perfectStatus") Integer perfectStatus
     ) {
-        List<Material> materialList = materialService.findMaterialListByStructureNo(structureNo);
+        List<Material> materialList = materialService.findMaterialListByStructureNo(structureNo, perfectStatus, getCurrentUser());
         return new Response<>(materialList);
     }
 
     @GetMapping(value = "materials/query3")
     public Response<List<Material>> actionQueryMaterialListByResourceMark(
-            @RequestParam("resourceMark") String resourceMark
+            @RequestParam("resourceMark") String resourceMark,
+            @RequestParam("perfectStatus") Integer perfectStatus
     ) {
-        List<Material> materialList = materialService.findMaterialListByResourceMark(resourceMark);
+        List<Material> materialList = materialService.findMaterialListByResourceMark(resourceMark, perfectStatus, getCurrentUser());
         return new Response<>(materialList);
     }
 }

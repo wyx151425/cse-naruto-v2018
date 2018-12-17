@@ -117,21 +117,10 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user1.setCreateAt(dateTime1);
 //        user1.setUpdateAt(dateTime1);
-//        user1.setCode("CSE1001");
+//        user1.setCode("A0000115");
 //        user1.setPassword("123456");
-//        user1.setName("技术中心");
+//        user1.setName("吕律");
 //        user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
-//        userRepository.save(user1);
-//        User user1 = new User();
-//        user1.setObjectId(Generator.getObjectId());
-//        user1.setStatus(1);
-//        LocalDateTime dateTime1 = LocalDateTime.now();
-//        user1.setCreateAt(dateTime1);
-//        user1.setUpdateAt(dateTime1);
-//        user1.setCode("QD9910");
-//        user1.setPassword("123456");
-//        user1.setName("质量环保");
-//        user1.setRole("ROLE_USER,ROLE_QUALITY_EMPLOYEE");
 //        userRepository.save(user1);
 //        User user2 = new User();
 //        user2.setObjectId(Generator.getObjectId());
@@ -139,9 +128,9 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime2 = LocalDateTime.now();
 //        user2.setCreateAt(dateTime2);
 //        user2.setUpdateAt(dateTime2);
-//        user2.setCode("QD9920");
+//        user2.setCode("QD0081");
 //        user2.setPassword("123456");
-//        user2.setName("战略采购");
+//        user2.setName("王灿");
 //        user2.setRole("ROLE_USER,ROLE_PURCHASE_EMPLOYEE");
 //        userRepository.save(user2);
 //        User user3 = new User();
@@ -150,20 +139,31 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime3 = LocalDateTime.now();
 //        user3.setCreateAt(dateTime3);
 //        user3.setUpdateAt(dateTime3);
-//        user3.setCode("QD9930");
+//        user3.setCode("QD0837");
 //        user3.setPassword("123456");
-//        user3.setName("集配中心");
+//        user3.setName("张俊华");
 //        user3.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
 //        userRepository.save(user3);
+//        User user5 = new User();
+//        user5.setObjectId(Generator.getObjectId());
+//        user5.setStatus(1);
+//        LocalDateTime dateTime5 = LocalDateTime.now();
+//        user5.setCreateAt(dateTime5);
+//        user5.setUpdateAt(dateTime5);
+//        user5.setCode("QD0753");
+//        user5.setPassword("123456");
+//        user5.setName("刘义芳");
+//        user5.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
+//        userRepository.save(user5);
 //        User user4 = new User();
 //        user4.setObjectId(Generator.getObjectId());
 //        user4.setStatus(1);
 //        LocalDateTime dateTime4 = LocalDateTime.now();
 //        user4.setCreateAt(dateTime4);
 //        user4.setUpdateAt(dateTime4);
-//        user4.setCode("QD9940");
+//        user4.setCode("QD0624");
 //        user4.setPassword("123456");
-//        user4.setName("生产运行");
+//        user4.setName("宫美芳");
 //        user4.setRole("ROLE_USER,ROLE_PRODUCE_EMPLOYEE");
 //        userRepository.save(user4);
 //    }
@@ -339,4 +339,18 @@ public class NarutoApplicationTests {
 //        }
 //        materialRepository.saveAll(materials);
 //    }
+
+//    @Test
+//    public void updateCode() {
+//        User user = userRepository.findById(22).get();
+//        user.setCode(user.getCode().replace(".0", ""));
+//        userRepository.save(user);
+//    }
+
+    @Test
+    public void updateMater() {
+        Material material = materialRepository.findMaterialByCode("0979765-7.1");
+        material.setName("填料函");
+        materialRepository.save(material);
+    }
 }

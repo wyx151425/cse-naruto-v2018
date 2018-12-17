@@ -20,7 +20,7 @@
     </div>
 </header>
 <main id="container" class="container">
-    <div class="panel">
+    <div class="panel" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" style="width: 2382px;  margin-left: -491px">
         <div class="btn-list">
             <div class="pull-left">
                 <label class="select-label">完善状态</label>
@@ -30,7 +30,7 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
-            <div class="pull-left" style="margin-left: 16px" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>
+            <div class="pull-left" style="margin-left: 16px">
                 <label class="select-label">导出状态</label>
                 <select class="form-select" v-model="exportStatus" @change="queryAllByExportStatus">
                     <option value="3">全部</option>
@@ -40,11 +40,11 @@
                 </select>
             </div>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
-                    :disabled="isExportDisabled" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>
+                    :disabled="isExportDisabled">
                 {{exportAction}}
             </button>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
-                    v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" v-cloak>导入
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal">
+                导入
             </button>
             <div class="query-group pull-right" style="margin-left: 16px">
                 <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
@@ -62,31 +62,31 @@
                     <span class="icon icon-search"></span></p>
             </div>
         </div>
-        <div id="table-space" class="table-wrap">
+        <div id="table-space" class="table-wrap" style="width: 2300px">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2820px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 2900px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
-                    <th class="table-fixed" style="width: 100px;">部套号</th>
-                    <th class="table-fixed" style="width: 160px;">物料号</th>
-                    <th class="table-fixed" style="width: 160px;">图号</th>
-                    <th class="table-fixed" style="width: 160px;">物料名称</th>
-                    <th class="table-fixed" style="width: 80px;">货源</th>
+                    <th class="table-fixed" style="width: 100px; background-color: #ff0000; color: #fff;">部套号</th>
+                    <th class="table-fixed" style="width: 160px; background-color: #ff0000; color: #fff;">物料号</th>
+                    <th class="table-fixed" style="width: 160px; background-color: #ff0000; color: #fff;">图号</th>
+                    <th class="table-fixed" style="width: 160px; background-color: #ff0000; color: #fff;">物料名称</th>
+                    <th class="table-fixed" style="width: 80px; background-color: #00b0f0; color: #fff;">货源</th>
                     <!-- 技术中心 -->
-                    <th style="width: 160px;">具体描述</th>
-                    <th style="width: 160px;">库存单位</th>
-                    <th style="width: 160px;">采购自制标记</th>
-                    <th style="width: 160px;">责任部门</th>
-                    <th style="width: 160px;">普通分类</th>
-                    <th style="width: 160px;">关键件标记</th>
-                    <th style="width: 160px;">关键件大类</th>
-                    <th style="width: 160px;">合批标记</th>
-                    <th style="width: 160px;">规格</th>
-                    <th style="width: 160px;">型号</th>
-                    <th style="width: 160px;">责任公司</th>
-                    <th style="width: 160px;">虚拟件标记</th>
-                    <th style="width: 100px;">完善状态</th>
-                    <th style="width: 100px;">操作</th>
+                    <th style="width: 160px; background-color: #00b0f0; color: #fff;">具体描述</th>
+                    <th style="width: 160px; background-color: #92d050; color: #fff;">库存单位</th>
+                    <th style="width: 160px; background-color: #00b0f0; color: #fff;">采购自制标记</th>
+                    <th style="width: 160px; background-color: #92d050; color: #fff;">责任部门</th>
+                    <th style="width: 160px; background-color: #92d050; color: #fff;">普通分类</th>
+                    <th style="width: 160px; background-color: #92d050; color: #fff;">关键件标记</th>
+                    <th style="width: 160px; background-color: #92d050; color: #fff;">关键件大类</th>
+                    <th style="width: 160px; background-color: #00b0f0; color: #fff;">合批标记</th>
+                    <th style="width: 160px; background-color: #ff0000; color: #fff;">规格</th>
+                    <th style="width: 160px; background-color: #ff0000; color: #fff;">型号</th>
+                    <th style="width: 160px; background-color: #ff0000; color: #fff;">责任公司</th>
+                    <th style="width: 160px; background-color: #ff0000; color: #fff;">虚拟件标记</th>
+                    <th style="width: 100px; background-color: #ff0000; color: #fff;">完善状态</th>
+                    <th style="width: 100px; background-color: #92d050; color: #fff;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -243,6 +243,54 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="page-panel">
+            <ul class="pagination pull-left">
+                <li :class="{disabled: 1 == pageContext.index}">
+                    <span @click="queryAllByPreviousPage"><span class="icon icon-menu-left"></span></span></li>
+                <li><span>{{pageContext.index}}</span></li>
+                <li :class="{disabled: pageContext.pageTotal == pageContext.index || 0 == pageContext.pageTotal}">
+                    <span @click="queryAllByNextPage"><span class="icon icon-menu-right"></span></span>
+                </li>
+            </ul>
+            <div class="pull-right">
+                <div class="page-group">
+                    <input class="page-control" type="text" v-model="currentPage"/>
+                    <p class="page-query" @click="queryAllByPage">
+                        <span class="icon icon-search"></span>
+                    </p>
+                    <p class="page-total">共{{pageContext.pageTotal}}页</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" v-if="!user.roles.ROLE_TECHNOLOGY_EMPLOYEE && !user.roles.ROLE_PURCHASE_EMPLOYEE">
+        <div class="btn-list">
+            <div class="pull-left">
+                <label class="select-label">完善状态</label>
+                <select class="form-select" v-model="perfectStatus" @change="queryAllByPerfectStatus">
+                    <option value="2">全部</option>
+                    <option value="0">未完善</option>
+                    <option value="1">已完善</option>
+                </select>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
+                <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="materialCode" placeholder="物料查询"/>
+                <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right">
+                <input class="query-control" type="text" v-model="structureNo" placeholder="部套查询"/>
+                <p class="query-btn" @click="queryAllByStructureNo" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+        </div>
+        <div class="table-wrap">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_QUALITY_EMPLOYEE"
                    style="width: 880px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
@@ -287,6 +335,144 @@
                 </tr>
                 </tbody>
             </table>
+            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_ASSEMBLY_EMPLOYEE"
+                   style="width: 720px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                <thead>
+                <tr>
+                    <th style="width: 160px">物料编码</th>
+                    <th style="width: 200px">物料名称</th>
+                    <th style="width: 100px">完善状态</th>
+                    <!-- 集配中心 -->
+                    <th style="width: 160px">默认仓库</th>
+                    <th style="width: 100px">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(material, index) in materialList" v-cloak>
+                    <td style="width: 160px">{{material.code}}</td>
+                    <td style="width: 200px">{{material.name}}</td>
+                    <td style="width: 100px;"
+                        :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
+                        <span v-if="0 == material.assemblyStatus">未完善</span>
+                        <span v-if="1 == material.assemblyStatus">已完善</span>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.defRepository">
+                            <option disabled selected>请选择</option>
+                            <option value="01">01 - 成品库</option>
+                            <option value="10">10 - 原料</option>
+                            <option value="19">19 - 工装材料</option>
+                            <option value="20">20 - 毛坯件</option>
+                            <option value="30">30 - 零部件</option>
+                            <option value="39">39 - 零部件（进口件）</option>
+                            <option value="40">40 - 问题物料</option>
+                            <option value="50">50 - 消耗品</option>
+                            <option value="59">59 - 设备备品备件</option>
+                            <option value="60">60 - 主机备件</option>
+                            <option value="70">70 - 系统润滑油</option>
+                            <option value="80">80 - 自制半成品</option>
+                        </select>
+                    </td>
+                    <td style="width: 100px;">
+                        <button class="btn-link" type="button" @click="saveAssemblyAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PRODUCE_EMPLOYEE"
+                   style="width: 1000px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                <thead>
+                <tr>
+                    <th style="width: 160px" class="table-fixed">物料编码</th>
+                    <th style="width: 200px" class="table-fixed">物料名称</th>
+                    <th style="width: 80px">完善状态</th>
+                    <!-- 生产运行 -->
+                    <th style="width: 160px">外协标记</th>
+                    <th style="width: 160px">计划员</th>
+                    <th style="width: 160px">固定提前期</th>
+                    <th style="width: 80px">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(material, index) in materialList" v-cloak>
+                    <td style="width: 160px" class="table-fixed">{{material.code}}</td>
+                    <td style="width: 200px" class="table-fixed">{{material.name}}</td>
+                    <td style="width: 80px;"
+                        :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
+                        <span v-if="0 == material.produceStatus">未完善</span>
+                        <span v-if="1 == material.produceStatus">已完善</span>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.outSource">
+                            <option disabled selected>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <input class="form-input" type="text" placeholder="请输入" v-model="material.planner"/>
+                    </td>
+                    <td style="width: 160px">
+                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
+                    </td>
+                    <td style="width: 80px;">
+                        <button class="btn-link" type="button" @click="saveProduceAttr(material, index)"
+                                :disabled="isSaveDisabled">保存
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="page-panel">
+            <ul class="pagination pull-left">
+                <li :class="{disabled: 1 == pageContext.index}">
+                    <span @click="queryAllByPreviousPage"><span class="icon icon-menu-left"></span></span></li>
+                <li><span>{{pageContext.index}}</span></li>
+                <li :class="{disabled: pageContext.pageTotal == pageContext.index || 0 == pageContext.pageTotal}">
+                    <span @click="queryAllByNextPage"><span class="icon icon-menu-right"></span></span>
+                </li>
+            </ul>
+            <div class="pull-right">
+                <div class="page-group">
+                    <input class="page-control" type="text" v-model="currentPage"/>
+                    <p class="page-query" @click="queryAllByPage">
+                        <span class="icon icon-search"></span>
+                    </p>
+                    <p class="page-total">共{{pageContext.pageTotal}}页</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE" style="width: 1602px; margin-left: -91px">
+        <div class="btn-list">
+            <div class="pull-left">
+                <label class="select-label">完善状态</label>
+                <select class="form-select" v-model="perfectStatus" @change="queryAllByPerfectStatus">
+                    <option value="2">全部</option>
+                    <option value="0">未完善</option>
+                    <option value="1">已完善</option>
+                </select>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
+                <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="materialCode" placeholder="物料查询"/>
+                <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right">
+                <input class="query-control" type="text" v-model="structureNo" placeholder="部套查询"/>
+                <p class="query-btn" @click="queryAllByStructureNo" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+        </div>
+        <div class="table-wrap" style="width: 1520px">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE"
                    style="width: 1500px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
@@ -409,96 +595,6 @@
                     </td>
                     <td style="width: 120px;">
                         <button class="btn-link" type="button" @click="savePurchaseAttr(material, index)"
-                                :disabled="isSaveDisabled">保存
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_ASSEMBLY_EMPLOYEE"
-                   style="width: 720px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
-                <thead>
-                <tr>
-                    <th style="width: 160px">物料编码</th>
-                    <th style="width: 200px">物料名称</th>
-                    <th style="width: 100px">完善状态</th>
-                    <!-- 集配中心 -->
-                    <th style="width: 160px">默认仓库</th>
-                    <th style="width: 100px">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(material, index) in materialList" v-cloak>
-                    <td style="width: 160px">{{material.code}}</td>
-                    <td style="width: 200px">{{material.name}}</td>
-                    <td style="width: 100px;"
-                        :class="{error: 0 == material.assemblyStatus, success: 1 == material.assemblyStatus}">
-                        <span v-if="0 == material.assemblyStatus">未完善</span>
-                        <span v-if="1 == material.assemblyStatus">已完善</span>
-                    </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.defRepository">
-                            <option disabled selected>请选择</option>
-                            <option value="01">01 - 成品库</option>
-                            <option value="10">10 - 原料</option>
-                            <option value="19">19 - 工装材料</option>
-                            <option value="20">20 - 毛坯件</option>
-                            <option value="30">30 - 零部件</option>
-                            <option value="39">39 - 零部件（进口件）</option>
-                            <option value="40">40 - 问题物料</option>
-                            <option value="50">50 - 消耗品</option>
-                            <option value="59">59 - 设备备品备件</option>
-                            <option value="60">60 - 主机备件</option>
-                            <option value="70">70 - 系统润滑油</option>
-                            <option value="80">80 - 自制半成品</option>
-                        </select>
-                    </td>
-                    <td style="width: 100px;">
-                        <button class="btn-link" type="button" @click="saveAssemblyAttr(material, index)"
-                                :disabled="isSaveDisabled">保存
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PRODUCE_EMPLOYEE"
-                   style="width: 1000px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
-                <thead>
-                <tr>
-                    <th style="width: 160px" class="table-fixed">物料编码</th>
-                    <th style="width: 200px" class="table-fixed">物料名称</th>
-                    <th style="width: 80px">完善状态</th>
-                    <!-- 生产运行 -->
-                    <th style="width: 160px">外协标记</th>
-                    <th style="width: 160px">计划员</th>
-                    <th style="width: 160px">固定提前期</th>
-                    <th style="width: 80px">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(material, index) in materialList" v-cloak>
-                    <td style="width: 160px" class="table-fixed">{{material.code}}</td>
-                    <td style="width: 200px" class="table-fixed">{{material.name}}</td>
-                    <td style="width: 80px;"
-                        :class="{error: 0 == material.produceStatus, success: 1 == material.produceStatus}">
-                        <span v-if="0 == material.produceStatus">未完善</span>
-                        <span v-if="1 == material.produceStatus">已完善</span>
-                    </td>
-                    <td style="width: 160px">
-                        <select class="form-input" v-model="material.outSource">
-                            <option disabled selected>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
-                    </td>
-                    <td style="width: 160px">
-                        <input class="form-input" type="text" placeholder="请输入" v-model="material.planner"/>
-                    </td>
-                    <td style="width: 160px">
-                        <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"/>
-                    </td>
-                    <td style="width: 80px;">
-                        <button class="btn-link" type="button" @click="saveProduceAttr(material, index)"
                                 :disabled="isSaveDisabled">保存
                         </button>
                     </td>

@@ -30,7 +30,7 @@ a:link, a:hover, a:active, a:visited {
 }
 
 .container {
-    width: 1600px;
+    width: 1400px;
     margin: 0 auto;
 }
 
@@ -181,11 +181,11 @@ th, td {
 }
 
 .table-wrap {
-    width: 1518px;
-    height: 662px;
+    width: 1318px;
+    height: 865px;
     border: 2px solid #dedfe0;
     box-sizing: border-box;
-    overflow: scroll;
+    overflow-X: scroll;
 }
 
 .table {
@@ -326,7 +326,7 @@ th, td {
 }
 
 .panel {
-    width: 1600px;
+    width: 1400px;
     min-height: 800px;
     padding: 40px;
     overflow: hidden;

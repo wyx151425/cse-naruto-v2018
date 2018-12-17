@@ -43,7 +43,7 @@ const container = new Vue({
         },
         pageContext: {
             index: 1,
-            size: 100,
+            size: 20,
             pageTotal: 0,
             dataTotal: 0
         },
@@ -238,9 +238,6 @@ const container = new Vue({
             this.pageContext.pageTotal = pageContext.pageTotal;
             this.pageContext.dataTotal = pageContext.dataTotal;
         },
-        removePerfectMaterial: function (index) {
-            this.materialList.splice(index, 1);
-        },
         queryMaterialList: function (index, size, exportStatus, perfectStatus) {
             axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
                 + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
@@ -319,8 +316,11 @@ const container = new Vue({
             }
             this.isQueryDisabled = true;
             this.exportStatus = 3;
-            this.perfectStatus = 2;
-            axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode)
+            if (!this.user.roles.ROLE_TECHNOLOGY_EMPLOYEE) {
+                this.perfectStatus = 2;
+            }
+            axios.get(requestContext + "api/materials/query?materialCode=" + this.materialCode
+                + "&perfectStatus=" + this.perfectStatus)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
@@ -344,8 +344,11 @@ const container = new Vue({
         queryAllByStructureNo: function () {
             this.isQueryDisabled = true;
             this.exportStatus = 3;
-            this.perfectStatus = 2;
-            axios.get(requestContext + "api/materials/query2?structureNo=" + this.structureNo)
+            if (!this.user.roles.ROLE_TECHNOLOGY_EMPLOYEE) {
+                this.perfectStatus = 2;
+            }
+            axios.get(requestContext + "api/materials/query2?structureNo=" + this.structureNo
+                + "&perfectStatus=" + this.perfectStatus)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
@@ -369,8 +372,11 @@ const container = new Vue({
         queryAllByResourceMark: function () {
             this.isQueryDisabled = true;
             this.exportStatus = 3;
-            this.perfectStatus = 2;
-            axios.get(requestContext + "api/materials/query3?resourceMark=" + this.resourceMark)
+            if (!this.user.roles.ROLE_TECHNOLOGY_EMPLOYEE) {
+                this.perfectStatus = 2;
+            }
+            axios.get(requestContext + "api/materials/query3?resourceMark=" + this.resourceMark
+                + "&perfectStatus=" + this.perfectStatus)
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
@@ -472,7 +478,7 @@ const container = new Vue({
             this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/technology", material)
                 .then(function (response) {
-                    container.saveSuccessCallback(response.data.statusCode, index);
+                    container.saveSuccessCallback(response.data.statusCode);
                 }).catch(function () {
                 container.saveErrorCallback();
             });
@@ -489,7 +495,7 @@ const container = new Vue({
             this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/quality", material)
                 .then(function (response) {
-                    container.saveSuccessCallback(response.data.statusCode, index);
+                    container.saveSuccessCallback(response.data.statusCode);
                 }).catch(function () {
                 container.saveErrorCallback();
             });
@@ -518,7 +524,7 @@ const container = new Vue({
             this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/purchase", material)
                 .then(function (response) {
-                    container.saveSuccessCallback(response.data.statusCode, index);
+                    container.saveSuccessCallback(response.data.statusCode);
                 }).catch(function () {
                 container.saveErrorCallback();
             });
@@ -531,7 +537,7 @@ const container = new Vue({
             this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/assembly", material)
                 .then(function (response) {
-                    container.saveSuccessCallback(response.data.statusCode, index);
+                    container.saveSuccessCallback(response.data.statusCode);
                 }).catch(function () {
                 container.saveErrorCallback();
             });
@@ -552,15 +558,14 @@ const container = new Vue({
             this.isSaveDisabled = true;
             axios.put(requestContext + "api/materials/produce", material)
                 .then(function (response) {
-                    container.saveSuccessCallback(response.data.statusCode, index);
+                    container.saveSuccessCallback(response.data.statusCode);
                 }).catch(function () {
                 container.saveErrorCallback();
             });
         },
-        saveSuccessCallback: function (statusCode, index) {
+        saveSuccessCallback: function (statusCode) {
             if (200 === statusCode) {
                 popoverSpace.append("保存成功", true);
-                container.removePerfectMaterial(index);
             } else {
                 let message = getMessage(statusCode);
                 popoverSpace.append(message, false);

@@ -44,6 +44,33 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
     /**
      * 根据物料编码模糊查询物料数据
      *
+     * @param materialCode  模糊查询匹配字符串
+     * @param perfectStatus 完善状态
+     * @return 物料数据集合
+     */
+    List<Material> findAllByCodeLikeAndTechnologyStatus(String materialCode, Integer perfectStatus);
+
+    /**
+     * 根据部套号查询物料
+     *
+     * @param structureNo   部套号
+     * @param perfectStatus 完善状态
+     * @return 物料数据集合
+     */
+    List<Material> findAllByStructureNoAndTechnologyStatus(String structureNo, Integer perfectStatus);
+
+    /**
+     * 根据货源标记查询无聊
+     *
+     * @param resourceMark  货源标记
+     * @param perfectStatus 完善状态
+     * @return 物料数据集合
+     */
+    List<Material> findAllByResourceMarkAndTechnologyStatus(String resourceMark, Integer perfectStatus);
+
+    /**
+     * 根据物料编码模糊查询物料数据
+     *
      * @param materialCode 模糊查询匹配字符串
      * @return 物料数据集合
      */

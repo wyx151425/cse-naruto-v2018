@@ -95,24 +95,30 @@ public interface MaterialService {
     /**
      * 模糊查询物料
      *
-     * @param materialCode 查询字符串
+     * @param materialCode  查询字符串
+     * @param perfectStatus 完善状态
+     * @param user          用户
      * @return 物料数据集合
      */
-    List<Material> findMaterialListByCodeLike(String materialCode);
+    List<Material> findMaterialListByCodeLike(String materialCode, Integer perfectStatus, User user);
 
     /**
      * 根据部套号查询物料
      *
-     * @param structureNo 部套号
+     * @param structureNo   部套号
+     * @param perfectStatus 完善状态
+     * @param user          用户
      * @return 物料数据集合
      */
-    List<Material> findMaterialListByStructureNo(String structureNo);
+    List<Material> findMaterialListByStructureNo(String structureNo, Integer perfectStatus, User user);
 
     /**
      * 根据货源标记查询物料
      *
-     * @param resourceMark 货源标记
+     * @param resourceMark  货源标记
+     * @param perfectStatus 完善状态
+     * @param user          用户
      * @return 物料数据集合
      */
-    List<Material> findMaterialListByResourceMark(String resourceMark);
+    List<Material> findMaterialListByResourceMark(String resourceMark, Integer perfectStatus, User user);
 }

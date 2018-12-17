@@ -70,9 +70,7 @@ public class MaterialServiceImpl implements MaterialService {
             if (index < 3) {
                 index++;
             } else {
-                if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())
-                        || null == row.getCell(12) || "".equals(row.getCell(12).toString().trim())
-                        || "*".equals(row.getCell(12).toString().trim())) {
+                if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
                     continue;
                 }
                 Material material = Material.newInstance();
@@ -101,7 +99,10 @@ public class MaterialServiceImpl implements MaterialService {
                     } else {
                         material.setQualifiedMark("N");
                     }
-                    String source = row.getCell(12).toString().trim();
+                    String source = "";
+                    if (null != row.getCell(12)) {
+                        source = row.getCell(12).toString().trim();
+                    }
                     material.setResourceMark(source);
                     /*
                      * 检查货源是否为*
@@ -506,18 +507,32 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
-    public List<com.cse.naruto.model.Material> findMaterialListByCodeLike(String queryStr) {
+    public List<Material> findMaterialListByCodeLike(String queryStr, Integer perfectStatus, User user) {
         String str = queryStr + "%";
-        return materialRepository.findAllByCodeLike(str);
+        if (2 != perfectStatus && user.getRoles().getOrDefault(Constant.UserRoles.TECHNOLOGY_EMPLOYEE, false)) {
+            return materialRepository.findAllByCodeLikeAndTechnologyStatus(str, perfectStatus);
+        } else {
+            return materialRepository.findAllByCodeLike(str);
+        }
     }
 
     @Override
-    public List<Material> findMaterialListByStructureNo(String structureNo) {
-        return materialRepository.findAllByStructureNo(structureNo);
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public List<Material> findMaterialListByStructureNo(String structureNo, Integer perfectStatus, User user) {
+        if (2 != perfectStatus && user.getRoles().getOrDefault(Constant.UserRoles.TECHNOLOGY_EMPLOYEE, false)) {
+            return materialRepository.findAllByStructureNoAndTechnologyStatus(structureNo, perfectStatus);
+        } else {
+            return materialRepository.findAllByStructureNo(structureNo);
+        }
     }
 
     @Override
-    public List<Material> findMaterialListByResourceMark(String resourceMark) {
-        return materialRepository.findAllByResourceMark(resourceMark);
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public List<Material> findMaterialListByResourceMark(String resourceMark, Integer perfectStatus, User user) {
+        if (2 != perfectStatus && user.getRoles().getOrDefault(Constant.UserRoles.TECHNOLOGY_EMPLOYEE, false)) {
+            return materialRepository.findAllByResourceMarkAndTechnologyStatus(resourceMark, perfectStatus);
+        } else {
+            return materialRepository.findAllByResourceMark(resourceMark);
+        }
     }
 }
