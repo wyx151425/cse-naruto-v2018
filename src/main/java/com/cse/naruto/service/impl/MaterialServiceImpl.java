@@ -96,8 +96,10 @@ public class MaterialServiceImpl implements MaterialService {
                     }
                     if (code.startsWith("EN")) {
                         material.setQualifiedMark("Y");
+                        material.setBatchMark("N");
                     } else {
                         material.setQualifiedMark("N");
+                        material.setBatchMark("Y");
                     }
                     String source = "";
                     if (null != row.getCell(12)) {
@@ -141,6 +143,7 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setRespDept("6202");
                     material.setInventoryUnit("025");
                     material.setKeyPartMark("Y");
+                    material.setInspectMark("Y");
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
                 }

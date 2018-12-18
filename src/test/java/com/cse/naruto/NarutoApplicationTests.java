@@ -66,7 +66,7 @@ public class NarutoApplicationTests {
 //        user.setCreateAt(dateTime);
 //        user.setUpdateAt(dateTime);
 //        return user;
-//    } 6110
+//    }
 
     @Test
     public void contextLoads() {
@@ -117,9 +117,9 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user1.setCreateAt(dateTime1);
 //        user1.setUpdateAt(dateTime1);
-//        user1.setCode("A0000115");
+//        user1.setCode("QD0689");
 //        user1.setPassword("123456");
-//        user1.setName("吕律");
+//        user1.setName("王文强");
 //        user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user1);
 //        User user2 = new User();
@@ -347,10 +347,48 @@ public class NarutoApplicationTests {
 //        userRepository.save(user);
 //    }
 
-    @Test
-    public void updateMater() {
-        Material material = materialRepository.findMaterialByCode("0979765-7.1");
-        material.setName("填料函");
-        materialRepository.save(material);
-    }
+//    @Test
+//    public void updateMater() {
+//        Material material = materialRepository.findMaterialByCode("0979765-7.1");
+//        material.setName("填料函");
+//        materialRepository.save(material);
+//    }
+
+//    @Test
+//    public void updateInspectMark() {
+//        List<Material> materialList = materialRepository.findAll();
+//        for (Material material : materialList) {
+//            material.setInspectMark("Y");
+//        }
+//        materialRepository.saveAll(materialList);
+//    }
+
+//    @Test
+//    public void updateBatchMark() {
+//        List<Material> materialList = materialRepository.findAll();
+//        for (Material material : materialList) {
+//            if (material.getCode().startsWith("EN")) {
+//                material.setBatchMark("N");
+//            } else {
+//                material.setBatchMark("Y");
+//            }
+//        }
+//        materialRepository.saveAll(materialList);
+//    }
+
+//    @Test
+//    public void updateStatue() {
+//        List<Material> materialList = materialRepository.findAll();
+//        for (Material material : materialList) {
+//            material.setQualityStatus(1);
+//            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
+//                material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
+//            }
+//        }
+//        materialRepository.saveAll(materialList);
+//    }
 }
