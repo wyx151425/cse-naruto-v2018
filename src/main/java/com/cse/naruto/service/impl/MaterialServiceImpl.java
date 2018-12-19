@@ -191,7 +191,7 @@ public class MaterialServiceImpl implements MaterialService {
         List<Material> materialList = materialRepository.findAllToPerfectByPurchase();
 
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet();
+        XSSFSheet sheet = workbook.createSheet("data");
 
         int rowIndex = 0;
 
@@ -248,7 +248,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importPerfectedMaterialsByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException {
-        Sheet sheet = formatExcelBOM(file, sheetName);
+        Sheet sheet = formatExcelBOM(file, "data");
         int rowIndex = 0;
         for (Row row : sheet) {
             if (0 == rowIndex) {
@@ -278,6 +278,7 @@ public class MaterialServiceImpl implements MaterialService {
                 } else {
                     perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
                 }
+                material.setUpdateAt(LocalDateTime.now());
                 material.setPurchaseStatus(perfectStatus);
                 checkExportStatus(material);
                 materialRepository.save(material);

@@ -1,4 +1,4 @@
-let requestContext = "http://localhost:8080/";
+let requestContext = "http://10.10.20.102:8080/csebmt/";
 
 function getUrlParam(url, name) {
     let pattern = new RegExp("[?&]" + name + "\=([^&]+)", "g");

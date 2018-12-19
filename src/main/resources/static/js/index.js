@@ -271,6 +271,9 @@ const container = new Vue({
         showFileImportModal: function () {
             fileImportModal.visible();
         },
+        showDataFileImportModal: function () {
+            dataFileImportModal.visible();
+        },
         queryAllByExportStatus: function () {
             this.perfectStatus = 2;
             this.queryMaterialList(1, this.pageContext.size, this.exportStatus, this.perfectStatus);
@@ -288,6 +291,22 @@ const container = new Vue({
                 responseType: "blob"
             }).then(function (response) {
                 download(response, "基础数据.xlsx");
+                container.exportCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                container.exportCallback();
+            });
+        },
+        exportDataFile: function () {
+            this.exportAction = "正在导出";
+            this.isExportDisabled = true;
+            axios({
+                method: "post",
+                params: {deptMark: 3},
+                url: requestContext + "api/materials/imperfect",
+                responseType: "blob"
+            }).then(function (response) {
+                download(response, "基础数据-采购部-未完善.xlsx");
                 container.exportCallback();
             }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
@@ -435,18 +454,6 @@ const container = new Vue({
             }
         },
         saveTechnologyAttr: function (material, index) {
-            if (null === material.name || "" === material.name) {
-                popoverSpace.append("请填写物料名称", false);
-                return;
-            }
-            if (null === material.shortName || "" === material.shortName) {
-                popoverSpace.append("请填写物料简称", false);
-                return;
-            }
-            if (null === material.drawingNo || "" === material.drawingNo) {
-                popoverSpace.append("请填写图号", false);
-                return;
-            }
             if (null === material.generalSort || "" === material.generalSort) {
                 popoverSpace.append("请选择普通分类", false);
                 return;
@@ -623,6 +630,59 @@ const fileImportModal = new Vue({
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
                 fileImportModal.importCallback();
+            })
+        },
+        importCallback: function () {
+            this.action = "导入";
+            this.isDisabled = false;
+        }
+    }
+});
+
+const dataFileImportModal = new Vue({
+    el: "#dataFileImportModal",
+    data: {
+        sheetName: "data",
+        deptMark: "3",
+        isVisible: false,
+        isDisabled: false,
+        action: "导入"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        importFile: function () {
+            if ("" === document.getElementById("dataFile").value) {
+                popoverSpace.append("请选择基础数据文件", true);
+                return;
+            }
+            this.isDisabled = true;
+            this.action = "正在导入";
+            let file = document.getElementById("dataFile").files[0];
+            let param = new FormData();  //创建form对象
+            param.append("file", file, file.name);  //通过append向form对象添加数据
+            param.append("sheetName", this.sheetName);
+            param.append("deptMark", this.deptMark);
+            let config = {
+                headers: {"Content-Type": "multipart/form-data"}
+            };  //添加请求头
+            axios.post(requestContext + "api/materials/perfect", param, config)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        window.location.reload();
+                    } else {
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
+                        fileImportModal.importCallback();
+                    }
+                }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                dataFileImportModal.importCallback();
             })
         },
         importCallback: function () {

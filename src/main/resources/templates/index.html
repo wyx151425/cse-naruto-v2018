@@ -474,6 +474,13 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFile"
+                    :disabled="isExportDisabled">
+                {{exportAction}}
+            </button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showDataFileImportModal">
+                导入
+            </button>
             <div class="query-group pull-right" style="margin-left: 16px">
                 <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
                 <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
@@ -660,6 +667,21 @@
             <div class="form-group">
                 <label class="form-label">文件</label>
                 <input id="file" class="form-file" type="file"/>
+            </div>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+        </div>
+    </div>
+</div>
+<div id="dataFileImportModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">导入文件</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">文件</label>
+                <input id="dataFile" class="form-file" type="file"/>
             </div>
             <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
         </div>

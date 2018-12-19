@@ -153,7 +153,7 @@ public class MaterialController extends NarutoFacade {
         return new Response<>();
     }
 
-    @GetMapping(value = "materials/imperfect")
+    @PostMapping(value = "materials/imperfect")
     public void actionExportImperfectMaterials(@RequestParam("deptMark") Integer deptMark) throws IOException {
         Workbook workbook = materialService.exportImperfectMaterialsByDepartment(deptMark);
         getResponse().reset();

@@ -1,8 +1,10 @@
 package com.cse.naruto;
 
+import com.cse.naruto.model.Material;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
+import com.cse.naruto.util.Constant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -373,5 +375,15 @@ public class NarutoApplicationTests {
 //            }
 //        }
 //        materialRepository.saveAll(materialList);
+//    }
+//
+//    @Test
+//    public void updateStatus() {
+//        Material material = materialRepository.findMaterialByCode("5643841-5.0");
+//        material.setPurchaseStatus(0);
+//        material.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
+//        material.setPurchaseSort("");
+//        material.setFixedAdvTime("");
+//        materialRepository.save(material);
 //    }
 }
