@@ -7,10 +7,7 @@ import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.service.MaterialService;
 import com.cse.naruto.util.Constant;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -45,6 +42,33 @@ public class MaterialServiceImpl implements MaterialService {
     @Autowired
     public MaterialServiceImpl(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;
+    }
+
+    /**
+     * 将Excel的每一个单元格格式化为文本格式
+     *
+     * @param file       文件
+     * @param sheetName  工作簿名称
+     * @return 工作簿
+     * @throws InvalidFormatException 文件格式错误
+     * @throws IOException            输入输出异常
+     */
+    private Sheet formatExcelBOM(MultipartFile file, String sheetName) throws InvalidFormatException, IOException {
+        // 获取工作簿
+        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        // 获取BOM的Sheet
+        Sheet sheet = workbook.getSheet(sheetName);
+        // 创建统一风格，格式化每一个单元格
+        CellStyle cellStyle = workbook.createCellStyle();
+        DataFormat format = workbook.createDataFormat();
+        cellStyle.setDataFormat(format.getFormat("@"));
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                cell.setCellStyle(cellStyle);
+                cell.setCellType(XSSFCell.CELL_TYPE_STRING);
+            }
+        }
+        return sheet;
     }
 
     /**
@@ -154,6 +178,17 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public Workbook exportMaterialListToPerfectByDepartment(Integer deptMark) {
+        return null;
+    }
+
+    @Override
+    public void importPerfectMaterialListByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException {
+        Sheet sheet = formatExcelBOM(file, sheetName);
+
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public Workbook exportMaterialList() {
         List<Material> materialList = materialRepository.findAllByExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
@@ -164,7 +199,6 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.saveAll(materialList);
         return workbook;
     }
-
 
     private void checkExportStatus(Material material) {
         if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
