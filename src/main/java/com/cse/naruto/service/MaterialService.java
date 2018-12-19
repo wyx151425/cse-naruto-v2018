@@ -36,7 +36,7 @@ public interface MaterialService {
      * @param deptMark 部门标记
      * @return 工作表
      */
-    Workbook exportMaterialListToPerfectByDepartment(Integer deptMark);
+    Workbook exportImperfectMaterialsByDepartment(Integer deptMark);
 
     /**
      * 导入修改完成的Excel
@@ -47,7 +47,7 @@ public interface MaterialService {
      * @throws IOException            输入输出异常
      * @throws InvalidFormatException 文件格式错误异常
      */
-    void importPerfectMaterialListByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException;
+    void importPerfectedMaterialsByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException;
 
     /**
      * 导出物料基础数据

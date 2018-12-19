@@ -86,10 +86,18 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
     List<Material> findAllByStructureNo(String structureNo);
 
     /**
-     * 根据货源标记查询无聊
+     * 根据货源标记查询物料
      *
      * @param resourceMark 货源标记
      * @return 物料数据集合
      */
     List<Material> findAllByResourceMark(String resourceMark);
+
+    /**
+     * 查询需要采购部编辑的基础数据
+     *
+     * @return 物料数据集合
+     */
+    @Query("select m from Material m where m.sourceMark = 'P' and m.purchaseStatus = 0")
+    List<Material> findAllToPerfectByPurchase();
 }

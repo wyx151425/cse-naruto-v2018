@@ -178,14 +178,111 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public Workbook exportMaterialListToPerfectByDepartment(Integer deptMark) {
-        return null;
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public Workbook exportImperfectMaterialsByDepartment(Integer deptMark) {
+        Workbook workbook = null;
+        if (3 == deptMark) {
+            workbook = buildPurchaseWorkbookToPrefect();
+        }
+        return workbook;
+    }
+
+    private Workbook buildPurchaseWorkbookToPrefect() {
+        List<Material> materialList = materialRepository.findAllToPerfectByPurchase();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+
+        int rowIndex = 0;
+
+        XSSFRow row0 = sheet.createRow(rowIndex);
+        XSSFCell cell00 = row0.createCell(0);
+        cell00.setCellValue("部套号");
+        XSSFCell cell01 = row0.createCell(1);
+        cell01.setCellValue("物料号");
+        XSSFCell cell02 = row0.createCell(2);
+        cell02.setCellValue("图号");
+        XSSFCell cell03 = row0.createCell(3);
+        cell03.setCellValue("物料名称");
+        XSSFCell cell04 = row0.createCell(4);
+        cell04.setCellValue("货源");
+        XSSFCell cell05 = row0.createCell(5);
+        cell05.setCellValue("采购分类");
+        XSSFCell cell06 = row0.createCell(6);
+        cell06.setCellValue("可采购标记");
+        XSSFCell cell07 = row0.createCell(7);
+        cell07.setCellValue("可集采标记");
+        XSSFCell cell08 = row0.createCell(8);
+        cell08.setCellValue("可自采标记");
+        XSSFCell cell09 = row0.createCell(9);
+        cell09.setCellValue("固定提前期");
+
+        for (Material material : materialList) {
+            rowIndex++;
+            XSSFRow row = sheet.createRow(rowIndex);
+            XSSFCell cell0 = row.createCell(0);
+            cell0.setCellValue(material.getStructureNo());
+            XSSFCell cell1 = row.createCell(1);
+            cell1.setCellValue(material.getCode());
+            XSSFCell cell2 = row.createCell(2);
+            cell2.setCellValue(material.getDrawingNo());
+            XSSFCell cell3 = row.createCell(3);
+            cell3.setCellValue(material.getName());
+            XSSFCell cell4 = row.createCell(4);
+            cell4.setCellValue(material.getResourceMark());
+            XSSFCell cell5 = row.createCell(5);
+            cell5.setCellValue(material.getPurchaseSort());
+            XSSFCell cell6 = row.createCell(6);
+            cell6.setCellValue(material.getPurchaseMark());
+            XSSFCell cell7 = row.createCell(7);
+            cell7.setCellValue(material.getGroupPurMark());
+            XSSFCell cell8 = row.createCell(8);
+            cell8.setCellValue(material.getOwnPurMark());
+            XSSFCell cell9 = row.createCell(9);
+            cell9.setCellValue(material.getFixedAdvTime());
+        }
+
+        return workbook;
     }
 
     @Override
-    public void importPerfectMaterialListByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException {
+    @Transactional(rollbackFor = Exception.class)
+    public void importPerfectedMaterialsByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException {
         Sheet sheet = formatExcelBOM(file, sheetName);
-
+        int rowIndex = 0;
+        for (Row row : sheet) {
+            if (0 == rowIndex) {
+                rowIndex++;
+            } else {
+                int perfectStatus = Constant.Material.PerfectStatus.PERFECTED;
+                String code = row.getCell(1).toString().trim();
+                Material material = materialRepository.findMaterialByCode(code);
+                material.setPurchaseMark("Y");
+                if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+                    material.setPurchaseSort(row.getCell(5).toString().trim());
+                } else {
+                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                }
+                if (null != row.getCell(7) && !"".equals(row.getCell(7).toString().trim())) {
+                    material.setGroupPurMark(row.getCell(7).toString().trim());
+                } else {
+                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                }
+                if (null != row.getCell(8) && !"".equals(row.getCell(8).toString().trim())) {
+                    material.setOwnPurMark(row.getCell(8).toString().trim());
+                } else {
+                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                }
+                if (null != row.getCell(9) && !"".equals(row.getCell(9).toString().trim())) {
+                    material.setFixedAdvTime(row.getCell(9).toString().trim());
+                } else {
+                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                }
+                material.setPurchaseStatus(perfectStatus);
+                checkExportStatus(material);
+                materialRepository.save(material);
+            }
+        }
     }
 
     @Override
