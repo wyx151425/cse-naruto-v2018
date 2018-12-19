@@ -1,10 +1,8 @@
 package com.cse.naruto;
 
-import com.cse.naruto.model.Material;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
-import com.cse.naruto.util.Constant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,143 +22,23 @@ public class NarutoApplicationTests {
     @Autowired
     private MaterialRepository materialRepository;
 
-//    @Test
-//    public void demos() {
-//        List<Material> materialList = materialRepository.findAll();
-//        for (Material material : materialList) {
-//            material.setStatus(2);
-//        }
-//        materialRepository.saveAll(materialList);
-//    }
-
-//    private Permission createPermission() {
-//        Permission permission = new Permission();
-//        permission.setObjectId(Generator.getObjectId());
-//        permission.setStatus(Constant.PermissionStatus.GENERAL);
-//        LocalDateTime dateTime = LocalDateTime.now();
-//        permission.setCreateAt(dateTime);
-//        permission.setUpdateAt(dateTime);
-//        return permission;
-//    }
-//
-//    private User createUser() {
-//        User user = new User();
-//        user.setObjectId(Generator.getObjectId());
-//        user.setStatus(Constant.UserStatus.GENERAL);
-//        LocalDateTime dateTime = LocalDateTime.now();
-//        user.setCreateAt(dateTime);
-//        user.setUpdateAt(dateTime);
-//        return user;
-//    }
-
     @Test
     public void contextLoads() {
     }
 
 //    @Test
-//    public void addPermission() {
-//        List<Permission> permissionList = new ArrayList<>();
-//
-//        Permission permission1 = createPermission();
-//        permission1.setRole("ROLE_USER");
-//        permission1.setName("MATERIAL_STANDARD");
-//        permissionList.add(permission1);
-//
-//        Permission permission2 = createPermission();
-//        permission2.setRole("ROLE_TECHNOLOGY_EMPLOYEE");
-//        permission2.setName("MATERIAL_EDIT_TECH_PART");
-//        permissionList.add(permission2);
-//
-//        Permission permission3 = createPermission();
-//        permission3.setRole("ROLE_QUALITY_EMPLOYEE");
-//        permission3.setName("MATERIAL_EDIT_QA_ENV_PART");
-//        permissionList.add(permission3);
-//
-//        Permission permission4 = createPermission();
-//        permission4.setRole("ROLE_PURCHASE_EMPLOYEE");
-//        permission4.setName("MATERIAL_EDIT_PURCHASE_PART");
-//        permissionList.add(permission4);
-//
-//        Permission permission5 = createPermission();
-//        permission5.setRole("ROLE_ASSEMBLY_EMPLOYEE");
-//        permission5.setName("MATERIAL_EDIT_ASSEMBLY_PART");
-//        permissionList.add(permission5);
-//
-//        Permission permission6 = createPermission();
-//        permission6.setRole("ROLE_PRODUCE_EMPLOYEE");
-//        permission6.setName("MATERIAL_PRO_OPE_PART");
-//        permissionList.add(permission6);
-//
-//        permissionRepository.saveAll(permissionList);
-//    }
-
-//    @Test
 //    public void addUser() {
-//        User user1 = new User();
-//        user1.setObjectId(Generator.getObjectId());
-//        user1.setStatus(1);
+//        User user = new User();
+//        user.setObjectId(Generator.getObjectId());
+//        user.setStatus(Constant.Status.GENERAL);
 //        LocalDateTime dateTime1 = LocalDateTime.now();
-//        user1.setCreateAt(dateTime1);
-//        user1.setUpdateAt(dateTime1);
-//        user1.setCode("QD0689");
-//        user1.setPassword("123456");
-//        user1.setName("王文强");
-//        user1.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
-//        userRepository.save(user1);
-//        User user2 = new User();
-//        user2.setObjectId(Generator.getObjectId());
-//        user2.setStatus(1);
-//        LocalDateTime dateTime2 = LocalDateTime.now();
-//        user2.setCreateAt(dateTime2);
-//        user2.setUpdateAt(dateTime2);
-//        user2.setCode("QD0081");
-//        user2.setPassword("123456");
-//        user2.setName("王灿");
-//        user2.setRole("ROLE_USER,ROLE_PURCHASE_EMPLOYEE");
-//        userRepository.save(user2);
-//        User user3 = new User();
-//        user3.setObjectId(Generator.getObjectId());
-//        user3.setStatus(1);
-//        LocalDateTime dateTime3 = LocalDateTime.now();
-//        user3.setCreateAt(dateTime3);
-//        user3.setUpdateAt(dateTime3);
-//        user3.setCode("QD0837");
-//        user3.setPassword("123456");
-//        user3.setName("张俊华");
-//        user3.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
-//        userRepository.save(user3);
-//        User user5 = new User();
-//        user5.setObjectId(Generator.getObjectId());
-//        user5.setStatus(1);
-//        LocalDateTime dateTime5 = LocalDateTime.now();
-//        user5.setCreateAt(dateTime5);
-//        user5.setUpdateAt(dateTime5);
-//        user5.setCode("QD0753");
-//        user5.setPassword("123456");
-//        user5.setName("刘义芳");
-//        user5.setRole("ROLE_USER,ROLE_ASSEMBLY_EMPLOYEE");
-//        userRepository.save(user5);
-//        User user4 = new User();
-//        user4.setObjectId(Generator.getObjectId());
-//        user4.setStatus(1);
-//        LocalDateTime dateTime4 = LocalDateTime.now();
-//        user4.setCreateAt(dateTime4);
-//        user4.setUpdateAt(dateTime4);
-//        user4.setCode("QD0624");
-//        user4.setPassword("123456");
-//        user4.setName("宫美芳");
-//        user4.setRole("ROLE_USER,ROLE_PRODUCE_EMPLOYEE");
-//        userRepository.save(user4);
-//    }
-
-//    @Test
-//    public void addAdmin() {
-//        User admin = createUser();
-//        admin.setCode("admin");
-//        admin.setPassword("151425");
-//        admin.setName("admin");
-//        admin.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE,ROLE_QUALITY_EMPLOYEE,ROLE_PURCHASE_EMPLOYEE,ROLE_ASSEMBLY_EMPLOYEE,ROLE_PRODUCE_EMPLOYEE");
-//        userRepository.save(admin);
+//        user.setCreateAt(dateTime1);
+//        user.setUpdateAt(dateTime1);
+//        user.setCode("");
+//        user.setPassword("123456");
+//        user.setName("");
+//        user.setRole("ROLE_USER");
+//        userRepository.save(user);
 //    }
 
 //    @Test
@@ -240,20 +118,6 @@ public class NarutoApplicationTests {
 //    }
 
 //    @Test
-//    public void cnm() {
-//        List<Material> materials = materialRepository.findAll();
-//        for (Material material : materials) {
-////            material.setTechnologyStatus(0);
-////            material.setQualityStatus(0);
-////            material.setPurchaseStatus(0);
-////            material.setAssemblyStatus(0);
-////            material.setProduceStatus(0);
-//            material.setExportStatus(0);
-//        }
-//        materialRepository.saveAll(materials);
-//    }
-
-//    @Test
 //    public void addUserList() {
 //        InputStream in = null;
 //        try {
@@ -314,76 +178,5 @@ public class NarutoApplicationTests {
 //
 //            }
 //        }
-//    }
-
-//    @Test
-//    public void updateCompany() {
-//        List<Material> materials = materialRepository.findAll();
-//        for (Material material : materials) {
-//            material.setRespCompany("03");
-//        }
-//        materialRepository.saveAll(materials);
-//    }
-
-//    @Test
-//    public void updateCode() {
-//        User user = userRepository.findById(22).get();
-//        user.setCode(user.getCode().replace(".0", ""));
-//        userRepository.save(user);
-//    }
-
-//    @Test
-//    public void updateMater() {
-//        Material material = materialRepository.findMaterialByCode("0979765-7.1");
-//        material.setName("填料函");
-//        materialRepository.save(material);
-//    }
-
-//    @Test
-//    public void updateInspectMark() {
-//        List<Material> materialList = materialRepository.findAll();
-//        for (Material material : materialList) {
-//            material.setInspectMark("Y");
-//        }
-//        materialRepository.saveAll(materialList);
-//    }
-
-//    @Test
-//    public void updateBatchMark() {
-//        List<Material> materialList = materialRepository.findAll();
-//        for (Material material : materialList) {
-//            if (material.getCode().startsWith("EN")) {
-//                material.setBatchMark("N");
-//            } else {
-//                material.setBatchMark("Y");
-//            }
-//        }
-//        materialRepository.saveAll(materialList);
-//    }
-
-//    @Test
-//    public void updateStatue() {
-//        List<Material> materialList = materialRepository.findAll();
-//        for (Material material : materialList) {
-//            material.setQualityStatus(1);
-//            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
-//                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
-//                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
-//                    && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
-//                    && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
-//                material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
-//            }
-//        }
-//        materialRepository.saveAll(materialList);
-//    }
-//
-//    @Test
-//    public void updateStatus() {
-//        Material material = materialRepository.findMaterialByCode("5643841-5.0");
-//        material.setPurchaseStatus(0);
-//        material.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
-//        material.setPurchaseSort("");
-//        material.setFixedAdvTime("");
-//        materialRepository.save(material);
 //    }
 }
