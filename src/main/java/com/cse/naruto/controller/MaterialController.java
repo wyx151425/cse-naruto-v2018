@@ -135,4 +135,35 @@ public class MaterialController extends NarutoFacade {
         List<Material> materialList = materialService.findMaterialListByResourceMark(resourceMark, perfectStatus, getCurrentUser());
         return new Response<>(materialList);
     }
+
+    @PostMapping(value = "materials/perfect")
+    public Response<Material> actionImportPerfectedMaterials(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("sheetName") String sheetName,
+            @RequestParam("deptMark") Integer deptMark
+    ) {
+        if (!Constant.DocType.XLSX.equals(file.getContentType())) {
+            throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
+        }
+        try {
+            materialService.importPerfectedMaterialsByDepartment(file, sheetName, deptMark);
+        } catch (InvalidFormatException | IOException e) {
+            throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
+        }
+        return new Response<>();
+    }
+
+    @GetMapping(value = "materials/imperfect")
+    public void actionExportImperfectMaterials(@RequestParam("deptMark") Integer deptMark) throws IOException {
+        Workbook workbook = materialService.exportImperfectMaterialsByDepartment(deptMark);
+        getResponse().reset();
+        getResponse().setHeader("Content-Disposition", "attachment;filename=file.xlsx");
+        getResponse().setContentType("application/octet-stream");
+        OutputStream out = getResponse().getOutputStream();
+        BufferedOutputStream buffer = new BufferedOutputStream(out);
+        buffer.flush();
+        workbook.write(buffer);
+        buffer.close();
+    }
+
 }
