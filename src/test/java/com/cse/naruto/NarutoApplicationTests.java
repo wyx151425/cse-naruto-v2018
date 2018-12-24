@@ -1,13 +1,19 @@
 package com.cse.naruto;
 
+import com.cse.naruto.model.Material;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
+import com.cse.naruto.util.Constant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -178,5 +184,21 @@ public class NarutoApplicationTests {
 //
 //            }
 //        }
+//    }
+//
+//    @Test
+//    public void updateStatue() {
+//        List<Material> materialList = materialRepository.findAllByAssemblyStatus(0);
+//        for (Material material : materialList) {
+//            material.setAssemblyStatus(1);
+//            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
+//                material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
+//            }
+//        }
+//        materialRepository.saveAll(materialList);
 //    }
 }

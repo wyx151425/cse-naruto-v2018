@@ -47,8 +47,8 @@ public class MaterialServiceImpl implements MaterialService {
     /**
      * 将Excel的每一个单元格格式化为文本格式
      *
-     * @param file       文件
-     * @param sheetName  工作簿名称
+     * @param file      文件
+     * @param sheetName 工作簿名称
      * @return 工作簿
      * @throws InvalidFormatException 文件格式错误
      * @throws IOException            输入输出异常
@@ -254,34 +254,40 @@ public class MaterialServiceImpl implements MaterialService {
             if (0 == rowIndex) {
                 rowIndex++;
             } else {
-                int perfectStatus = Constant.Material.PerfectStatus.PERFECTED;
-                String code = row.getCell(1).toString().trim();
-                Material material = materialRepository.findMaterialByCode(code);
-                material.setPurchaseMark("Y");
-                if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
-                    material.setPurchaseSort(row.getCell(5).toString().trim());
-                } else {
-                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+
+                if (null != row.getCell(1) && !"".equals(row.getCell(1).toString().trim())) {
+
+                    String code = row.getCell(1).toString().trim();
+
+                    int perfectStatus = Constant.Material.PerfectStatus.PERFECTED;
+
+                    Material material = materialRepository.findMaterialByCode(code);
+                    material.setPurchaseMark("Y");
+                    if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+                        material.setPurchaseSort(row.getCell(5).toString().trim());
+                    } else {
+                        perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                    }
+                    if (null != row.getCell(7) && !"".equals(row.getCell(7).toString().trim())) {
+                        material.setGroupPurMark(row.getCell(7).toString().trim());
+                    } else {
+                        perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                    }
+                    if (null != row.getCell(8) && !"".equals(row.getCell(8).toString().trim())) {
+                        material.setOwnPurMark(row.getCell(8).toString().trim());
+                    } else {
+                        perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                    }
+                    if (null != row.getCell(9) && !"".equals(row.getCell(9).toString().trim())) {
+                        material.setFixedAdvTime(row.getCell(9).toString().trim());
+                    } else {
+                        perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                    }
+                    material.setUpdateAt(LocalDateTime.now());
+                    material.setPurchaseStatus(perfectStatus);
+                    checkExportStatus(material);
+                    materialRepository.save(material);
                 }
-                if (null != row.getCell(7) && !"".equals(row.getCell(7).toString().trim())) {
-                    material.setGroupPurMark(row.getCell(7).toString().trim());
-                } else {
-                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
-                }
-                if (null != row.getCell(8) && !"".equals(row.getCell(8).toString().trim())) {
-                    material.setOwnPurMark(row.getCell(8).toString().trim());
-                } else {
-                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
-                }
-                if (null != row.getCell(9) && !"".equals(row.getCell(9).toString().trim())) {
-                    material.setFixedAdvTime(row.getCell(9).toString().trim());
-                } else {
-                    perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
-                }
-                material.setUpdateAt(LocalDateTime.now());
-                material.setPurchaseStatus(perfectStatus);
-                checkExportStatus(material);
-                materialRepository.save(material);
             }
         }
     }
@@ -547,7 +553,7 @@ public class MaterialServiceImpl implements MaterialService {
         XSSFCell cell017 = row0.createCell(16);
         cell017.setCellValue("关键件大类");
         XSSFCell cell018 = row0.createCell(17);
-        cell018.setCellValue("虚拟标记");
+        cell018.setCellValue("虚拟件标记");
         XSSFCell cell019 = row0.createCell(18);
         cell019.setCellValue("合批标记");
         XSSFCell cell020 = row0.createCell(19);
@@ -563,7 +569,7 @@ public class MaterialServiceImpl implements MaterialService {
         XSSFCell cell025 = row0.createCell(24);
         cell025.setCellValue("可自采标记");
         XSSFCell cell026 = row0.createCell(25);
-        cell026.setCellValue("默认仓库");
+        cell026.setCellValue("默认仓库编码");
         XSSFCell cell027 = row0.createCell(26);
         cell027.setCellValue("外协标记");
         XSSFCell cell028 = row0.createCell(27);
