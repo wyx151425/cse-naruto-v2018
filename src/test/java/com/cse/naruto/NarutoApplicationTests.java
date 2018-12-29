@@ -188,12 +188,13 @@ public class NarutoApplicationTests {
 //            }
 //        }
 //    }
-//
+
 //    @Test
 //    public void updateStatue() {
-//        List<Material> materialList = materialRepository.findAllByQualityStatus(0);
+//        List<Material> materialList = materialRepository.findAllByProduce();
 //        for (Material material : materialList) {
-//            material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
+//            material.setProduceStatus(Constant.Material.PerfectStatus.IMPERFECT);
+//            material.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
 //            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
@@ -203,12 +204,5 @@ public class NarutoApplicationTests {
 //            }
 //        }
 //        materialRepository.saveAll(materialList);
-//    }
-
-//    @Test
-//    public void updateCode() {
-//        Material material = materialRepository.findMaterialByCode("CB.008.130.030");
-//        material.setResourceMark("ZQ");
-//        materialRepository.save(material);
 //    }
 }

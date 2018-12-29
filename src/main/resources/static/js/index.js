@@ -241,6 +241,9 @@ const container = new Vue({
         exportDataFileModalVisible: function () {
             dataFileExportModal.visible();
         },
+        importProduceDataFileModalVisible: function () {
+            produceDataFileImportModal.visible();
+        },
         queryMaterialList: function (index, size, exportStatus, perfectStatus) {
             axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
                 + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
@@ -294,6 +297,26 @@ const container = new Vue({
                 responseType: "blob"
             }).then(function (response) {
                 download(response, "基础数据.xlsx");
+                container.exportCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                container.exportCallback();
+            });
+        },
+        exportProduceDataFile: function () {
+            this.exportAction = "正在导出";
+            this.isExportDisabled = true;
+            let name = "基础数据-生产部-未完善.xlsx";
+            axios({
+                method: "post",
+                params: {
+                    deptMark: 5,
+                    perfectStatus: 0
+                },
+                url: requestContext + "api/materials/export/dept",
+                responseType: "blob"
+            }).then(function (response) {
+                download(response, name);
                 container.exportCallback();
             }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
@@ -650,6 +673,59 @@ const dataFileImportModal = new Vue({
             this.isDisabled = true;
             this.action = "正在导入";
             let file = document.getElementById("dataFile").files[0];
+            let param = new FormData();  //创建form对象
+            param.append("file", file, file.name);  //通过append向form对象添加数据
+            param.append("sheetName", this.sheetName);
+            param.append("deptMark", this.deptMark);
+            let config = {
+                headers: {"Content-Type": "multipart/form-data"}
+            };  //添加请求头
+            axios.post(requestContext + "api/materials/perfect", param, config)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        window.location.reload();
+                    } else {
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
+                        fileImportModal.importCallback();
+                    }
+                }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                dataFileImportModal.importCallback();
+            })
+        },
+        importCallback: function () {
+            this.action = "导入";
+            this.isDisabled = false;
+        }
+    }
+});
+
+const produceDataFileImportModal = new Vue({
+    el: "#produceDataFileImportModal",
+    data: {
+        sheetName: "data",
+        deptMark: "5",
+        isVisible: false,
+        isDisabled: false,
+        action: "导入"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        importFile: function () {
+            if ("" === document.getElementById("produceFile").value) {
+                popoverSpace.append("请选择基础数据文件", true);
+                return;
+            }
+            this.isDisabled = true;
+            this.action = "正在导入";
+            let file = document.getElementById("produceFile").files[0];
             let param = new FormData();  //创建form对象
             param.append("file", file, file.name);  //通过append向form对象添加数据
             param.append("sheetName", this.sheetName);

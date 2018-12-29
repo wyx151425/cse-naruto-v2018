@@ -111,4 +111,74 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      */
     @Query("select m from Material m where m.sourceMark = 'P'")
     List<Material> findAllByPurchase();
+
+    /**
+     * 查询需要采购部编辑的基础数据
+     *
+     * @param perfectStatus 完善状态
+     * @return 物料数据集合
+     */
+    @Query("select m from Material m where m.sourceMark = 'M' and m.produceStatus = ?1")
+    List<Material> findAllByProduceAndPerfectStatus(Integer perfectStatus);
+
+    /**
+     * 查询需要采购部编辑的基础数据
+     *
+     * @return 物料数据集合
+     */
+    @Query("select m from Material m where m.sourceMark = 'M'")
+    List<Material> findAllByProduce();
+
+    /**
+     * 查询基础数据数量
+     *
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m")
+    Integer findCountOfMaterial();
+
+    /**
+     * 技术中心查询基础数据数量
+     *
+     * @param status 完善状态
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m where m.technologyStatus = :status")
+    Integer findCountOfTechnology(@Param("status") Integer status);
+
+    /**
+     * 质量合规部查询基础数据数量
+     *
+     * @param status 完善状态
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m where m.qualityStatus = :status")
+    Integer findCountOfQuality(@Param("status") Integer status);
+
+    /**
+     * 采购部查询基础数据数量
+     *
+     * @param status 完善状态
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m where m.purchaseStatus = :status")
+    Integer findCountOfPurchase(@Param("status") Integer status);
+
+    /**
+     * 集配中心查询基础数据数量
+     *
+     * @param status 完善状态
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m where m.assemblyStatus = :status")
+    Integer findCountOfAssembly(@Param("status") Integer status);
+
+    /**
+     * 生产部查询基础数据数量
+     *
+     * @param status 完善状态
+     * @return 数量
+     */
+    @Query(" select count(m) from Material m where m.produceStatus = :status")
+    Integer findCountOfProduce(@Param("status") Integer status);
 }

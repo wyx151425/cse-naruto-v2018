@@ -3,6 +3,7 @@ package com.cse.naruto.controller;
 import com.cse.naruto.context.exception.NarutoException;
 import com.cse.naruto.model.Material;
 import com.cse.naruto.model.PageContext;
+import com.cse.naruto.model.Perfect;
 import com.cse.naruto.model.Response;
 import com.cse.naruto.service.MaterialService;
 import com.cse.naruto.util.Constant;
@@ -51,7 +52,7 @@ public class MaterialController extends NarutoFacade {
 
     @PostMapping(value = "materials/export")
     public void actionExportMaterialListToExcel() throws IOException {
-        Workbook workbook = materialService.exportMaterialList();
+        Workbook workbook = materialService.exportAll();
         getResponse().reset();
         getResponse().setHeader("Content-Disposition", "attachment;filename=data.xlsx");
         getResponse().setContentType("application/octet-stream");
@@ -169,4 +170,22 @@ public class MaterialController extends NarutoFacade {
         buffer.close();
     }
 
+    @PostMapping(value = "materials/export/all")
+    public void actionExportAllMaterials() throws IOException {
+        Workbook workbook = materialService.exportAll();
+        getResponse().reset();
+        getResponse().setHeader("Content-Disposition", "attachment;filename=file.xlsx");
+        getResponse().setContentType("application/octet-stream");
+        OutputStream out = getResponse().getOutputStream();
+        BufferedOutputStream buffer = new BufferedOutputStream(out);
+        buffer.flush();
+        workbook.write(buffer);
+        buffer.close();
+    }
+
+    @GetMapping(value = "materials/count")
+    public Response<Perfect> actionStatisticCount() {
+        Perfect perfect = materialService.statisticCount();
+        return new Response<>(perfect);
+    }
 }

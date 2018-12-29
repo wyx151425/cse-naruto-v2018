@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>基础数据管理工具</title>
+    <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
+    <link rel="stylesheet" th:href="@{/css/material-edit.css}"/>
+</head>
+<body>
+<header id="header" class="header">
+    <div class="header-fixed">
+        <div class="container">
+            <a th:href="@{/index}"><img class="logo" th:src="@{/images/CSE.png}" alt=""/></a>
+            <div class="account">
+                <span>{{user.name}}</span>
+                <a class="icon icon-off" th:href="@{/logout}"></a>
+            </div>
+        </div>
+    </div>
+</header>
+<main id="main" class="container">
+    <div class="panel">
+        <div class="btn-list">
+            <p class="form-label">总数量 {{perfect.count}}</p>
+            <button class="btn pull-right" type="button">导出全部</button>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>部门</th>
+                <th>已完善</th>
+                <th>未完善</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="deptPerfect in perfect.dept">
+                <td>{{deptPerfect.name}}</td>
+                <td>{{deptPerfect.perfected}}</td>
+                <td>{{deptPerfect.imperfect}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer class="footer">
+    <span>&copy;2018 中国船舶重工集团柴油机有限公司</span>
+</footer>
+<div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
+    <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
+</div>
+<div id="mask" class="mask" v-if="loading">
+    <p class="mask-prompt">数据获取中...</p>
+</div>
+<script th:src="@{/js/vue.min.js}"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script th:src="@{/js/naruto.js}"></script>
+</body>
+</html>

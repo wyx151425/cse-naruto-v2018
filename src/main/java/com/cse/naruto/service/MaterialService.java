@@ -2,6 +2,7 @@ package com.cse.naruto.service;
 
 import com.cse.naruto.model.Material;
 import com.cse.naruto.model.PageContext;
+import com.cse.naruto.model.Perfect;
 import com.cse.naruto.model.User;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -56,6 +57,14 @@ public interface MaterialService {
      * @return 处理完成的EXCEL表
      */
     Workbook exportMaterialList();
+
+
+    /**
+     * 导出所有物料基础数据
+     *
+     * @return 处理完成的EXCEL表
+     */
+    Workbook exportAll();
 
     /**
      * 更新物料基础数据的技术信息
@@ -141,4 +150,11 @@ public interface MaterialService {
      * @return 物料数据集合
      */
     List<Material> findMaterialListByResourceMark(String resourceMark, Integer perfectStatus, User user);
+
+    /**
+     * 统计数据完善情况
+     *
+     * @return 完善情况对象
+     */
+    Perfect statisticCount();
 }
