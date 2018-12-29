@@ -43,10 +43,10 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user.setCreateAt(dateTime1);
 //        user.setUpdateAt(dateTime1);
-//        user.setCode("QD0959");
+//        user.setCode("admin");
 //        user.setPassword("123456");
-//        user.setName("魏汉雄");
-//        user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
+//        user.setName("管理员");
+//        user.setRole("ROLE_USER,ROLE_ADMIN");
 //        userRepository.save(user);
 //    }
 

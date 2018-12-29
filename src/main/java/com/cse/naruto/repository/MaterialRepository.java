@@ -161,7 +161,7 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @param status 完善状态
      * @return 数量
      */
-    @Query(" select count(m) from Material m where m.purchaseStatus = :status")
+    @Query(" select count(m) from Material m where m.purchaseStatus = :status and m.sourceMark = 'P'")
     Integer findCountOfPurchase(@Param("status") Integer status);
 
     /**
@@ -179,6 +179,6 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @param status 完善状态
      * @return 数量
      */
-    @Query(" select count(m) from Material m where m.produceStatus = :status")
+    @Query(" select count(m) from Material m where m.produceStatus = :status and m.sourceMark = 'M'")
     Integer findCountOfProduce(@Param("status") Integer status);
 }

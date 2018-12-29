@@ -21,6 +21,7 @@ public class NarutoWebConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("")
                 .addPathPatterns("/")
                 .addPathPatterns("/index")
+                .addPathPatterns("/admin")
                 .addPathPatterns("/material/**")
                 .addPathPatterns("/api/**");
     }
@@ -31,6 +32,7 @@ public class NarutoWebConfigurer implements WebMvcConfigurer {
         registry.addViewController("").setViewName("index");
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/index").setViewName("index");
+        registry.addViewController("/admin").setViewName("admin");
         registry.addViewController("/material/edit").setViewName("material-edit");
     }
 }

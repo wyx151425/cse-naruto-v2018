@@ -39,8 +39,13 @@ const container = new Vue({
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
-                        localStorage.setItem("user", JSON.stringify(response.data.data));
-                        window.location.href = requestContext + "index";
+                        let user = response.data.data;
+                        localStorage.setItem("user", JSON.stringify(user));
+                        if ("admin" === user.code) {
+                            window.location.href = requestContext + "admin";
+                        } else {
+                            window.location.href = requestContext + "index";
+                        }
                     } else {
                         let message = getMessage(statusCode);
                         popoverSpace.append(message, false);
