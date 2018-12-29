@@ -153,9 +153,12 @@ public class MaterialController extends NarutoFacade {
         return new Response<>();
     }
 
-    @PostMapping(value = "materials/imperfect")
-    public void actionExportImperfectMaterials(@RequestParam("deptMark") Integer deptMark) throws IOException {
-        Workbook workbook = materialService.exportImperfectMaterialsByDepartment(deptMark);
+    @PostMapping(value = "materials/export/dept")
+    public void actionExportImperfectMaterials(
+            @RequestParam("deptMark") Integer deptMark,
+            @RequestParam("perfectStatus") Integer perfectStatus
+    ) throws IOException {
+        Workbook workbook = materialService.exportMaterialsByDepartment(deptMark, perfectStatus);
         getResponse().reset();
         getResponse().setHeader("Content-Disposition", "attachment;filename=file.xlsx");
         getResponse().setContentType("application/octet-stream");

@@ -98,8 +98,17 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
     /**
      * 查询需要采购部编辑的基础数据
      *
+     * @param perfectStatus 完善状态
      * @return 物料数据集合
      */
-    @Query("select m from Material m where m.sourceMark = 'P' and m.purchaseStatus = 0")
-    List<Material> findAllToPerfectByPurchase();
+    @Query("select m from Material m where m.sourceMark = 'P' and m.purchaseStatus = ?1")
+    List<Material> findAllByPurchaseAndPerfectStatus(Integer perfectStatus);
+
+    /**
+     * 查询需要采购部编辑的基础数据
+     *
+     * @return 物料数据集合
+     */
+    @Query("select m from Material m where m.sourceMark = 'P'")
+    List<Material> findAllByPurchase();
 }

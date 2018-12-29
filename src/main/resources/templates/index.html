@@ -474,7 +474,7 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFile"
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFileModalVisible"
                     :disabled="isExportDisabled">
                 {{exportAction}}
             </button>
@@ -683,7 +683,30 @@
                 <label class="form-label">文件</label>
                 <input id="dataFile" class="form-file" type="file"/>
             </div>
-            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">
+                <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isDisabled"></span>{{action}}
+            </button>
+        </div>
+    </div>
+</div>
+<div id="dataFileExportModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">导出数据</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">类型</label>
+                <select class="form-control" v-model="perfectStatus">
+                    <option value="0">未完善</option>
+                    <option value="1">已完善</option>
+                    <option value="2">全部</option>
+                </select>
+            </div>
+            <button class="btn btn-picker" type="button" @click="exportDataFile" :disabled="isDisabled">
+                <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isDisabled"></span>{{action}}
+            </button>
         </div>
     </div>
 </div>

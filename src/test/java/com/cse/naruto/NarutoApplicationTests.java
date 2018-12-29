@@ -1,10 +1,12 @@
 package com.cse.naruto;
 
 import com.cse.naruto.model.Material;
+import com.cse.naruto.model.User;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
 import com.cse.naruto.util.Constant;
+import com.cse.naruto.util.Generator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +43,10 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user.setCreateAt(dateTime1);
 //        user.setUpdateAt(dateTime1);
-//        user.setCode("");
+//        user.setCode("QD0959");
 //        user.setPassword("123456");
-//        user.setName("");
-//        user.setRole("ROLE_USER");
+//        user.setName("魏汉雄");
+//        user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user);
 //    }
 
@@ -188,9 +191,9 @@ public class NarutoApplicationTests {
 //
 //    @Test
 //    public void updateStatue() {
-//        List<Material> materialList = materialRepository.findAllByAssemblyStatus(0);
+//        List<Material> materialList = materialRepository.findAllByQualityStatus(0);
 //        for (Material material : materialList) {
-//            material.setAssemblyStatus(1);
+//            material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
 //            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
@@ -200,5 +203,12 @@ public class NarutoApplicationTests {
 //            }
 //        }
 //        materialRepository.saveAll(materialList);
+//    }
+
+//    @Test
+//    public void updateCode() {
+//        Material material = materialRepository.findMaterialByCode("CB.008.130.030");
+//        material.setResourceMark("ZQ");
+//        materialRepository.save(material);
 //    }
 }

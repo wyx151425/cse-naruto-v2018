@@ -33,10 +33,11 @@ public interface MaterialService {
     /**
      * 导出需要通过Excel表编辑的物料基础数据
      *
-     * @param deptMark 部门标记
+     * @param deptMark      部门标记
+     * @param perfectStatus 完善状态
      * @return 工作表
      */
-    Workbook exportImperfectMaterialsByDepartment(Integer deptMark);
+    Workbook exportMaterialsByDepartment(Integer deptMark, Integer perfectStatus);
 
     /**
      * 导入修改完成的Excel

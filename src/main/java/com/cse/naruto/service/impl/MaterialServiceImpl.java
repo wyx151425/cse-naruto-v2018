@@ -179,16 +179,21 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
-    public Workbook exportImperfectMaterialsByDepartment(Integer deptMark) {
+    public Workbook exportMaterialsByDepartment(Integer deptMark, Integer perfectStatus) {
         Workbook workbook = null;
         if (3 == deptMark) {
-            workbook = buildPurchaseWorkbookToPrefect();
+            workbook = buildPurchaseWorkbookToPrefect(perfectStatus);
         }
         return workbook;
     }
 
-    private Workbook buildPurchaseWorkbookToPrefect() {
-        List<Material> materialList = materialRepository.findAllToPerfectByPurchase();
+    private Workbook buildPurchaseWorkbookToPrefect(int perfectStatus) {
+        List<Material> materialList;
+        if (2 == perfectStatus) {
+            materialList = materialRepository.findAllByPurchase();
+        } else {
+            materialList = materialRepository.findAllByPurchaseAndPerfectStatus(perfectStatus);
+        }
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("data");

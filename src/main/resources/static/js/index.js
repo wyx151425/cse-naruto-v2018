@@ -238,6 +238,9 @@ const container = new Vue({
             this.pageContext.pageTotal = pageContext.pageTotal;
             this.pageContext.dataTotal = pageContext.dataTotal;
         },
+        exportDataFileModalVisible: function () {
+            dataFileExportModal.visible();
+        },
         queryMaterialList: function (index, size, exportStatus, perfectStatus) {
             axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
                 + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
@@ -291,22 +294,6 @@ const container = new Vue({
                 responseType: "blob"
             }).then(function (response) {
                 download(response, "基础数据.xlsx");
-                container.exportCallback();
-            }).catch(function () {
-                popoverSpace.append("服务器访问失败", false);
-                container.exportCallback();
-            });
-        },
-        exportDataFile: function () {
-            this.exportAction = "正在导出";
-            this.isExportDisabled = true;
-            axios({
-                method: "post",
-                params: {deptMark: 3},
-                url: requestContext + "api/materials/imperfect",
-                responseType: "blob"
-            }).then(function (response) {
-                download(response, "基础数据-采购部-未完善.xlsx");
                 container.exportCallback();
             }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
@@ -689,5 +676,55 @@ const dataFileImportModal = new Vue({
             this.action = "导入";
             this.isDisabled = false;
         }
+    }
+});
+
+const dataFileExportModal = new Vue({
+    el: "#dataFileExportModal",
+    data: {
+        deptMark: "3",
+        isVisible: false,
+        isDisabled: false,
+        action: "导出",
+        perfectStatus: "0"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        exportDataFile: function () {
+            this.action = "正在导出";
+            this.isDisabled = true;
+            let name = "基础数据-采购部-";
+            if ("0" == this.perfectStatus) {
+                name += "未完善";
+            } else if ("1" == this.perfectStatus) {
+                name += "已完善";
+            }
+            name += ".xlsx";
+            let perfectStatus = this.perfectStatus;
+            axios({
+                method: "post",
+                params: {
+                    deptMark: 3,
+                    perfectStatus: perfectStatus
+                },
+                url: requestContext + "api/materials/export/dept",
+                responseType: "blob"
+            }).then(function (response) {
+                download(response, name);
+                dataFileExportModal.exportCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                dataFileExportModal.exportCallback();
+            });
+        },
+        exportCallback: function () {
+            this.action = "导出";
+            this.isDisabled = false;
+        },
     }
 });
