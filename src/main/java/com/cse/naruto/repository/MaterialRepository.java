@@ -181,4 +181,12 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      */
     @Query(" select count(m) from Material m where m.produceStatus = :status and m.sourceMark = 'M' and m.technologyStatus = 1")
     Integer findCountOfProduce(@Param("status") Integer status);
+
+    /**
+     * 根据完善状态查询质量合规部负责的数据
+     *
+     * @param status 完善状态
+     * @return 基础数据集合
+     */
+    List<Material> findAllByQualityStatus(Integer status);
 }
