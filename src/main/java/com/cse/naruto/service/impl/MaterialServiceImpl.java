@@ -175,6 +175,61 @@ public class MaterialServiceImpl implements MaterialService {
         materialRepository.saveAll(materialList);
     }
 
+    /**
+     * 通过BOM导入物料数据列表
+     *
+     * @param file 前端提交的柴油机BOM
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误引起的异常
+     */
+    @Override
+    public void importOriginMaterialList(MultipartFile file) throws IOException, InvalidFormatException {
+        Workbook workbook = WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheet("整机BOM");
+        List<Material> materialList = new ArrayList<>(128);
+        List<String> codeList = materialRepository.findAllMaterialCode();
+        List<String> targetCodeList = new ArrayList<>();
+
+        // Workbook行索引
+        int index = 0;
+        for (Row row : sheet) {
+            // 前三行数据为机器信息及字段的批注，所以不予解析
+            if (index < 3) {
+                index++;
+            } else {
+                if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
+                    continue;
+                }
+                Material material = Material.newInstance();
+                String code = row.getCell(3).toString().trim();
+                if (!codeList.contains(code) && !targetCodeList.contains(code)) {
+                    material.setOriginCode(code);
+                    material.setDrawingNo(code);
+                    if (null != row.getCell(7)) {
+                        material.setName(row.getCell(7).toString().trim());
+                    }
+                    if (null != row.getCell(8)) {
+                        material.setSpecification(row.getCell(8).toString().trim());
+                    }
+                    if (null != row.getCell(9)) {
+                        material.setModel(row.getCell(9).toString().trim());
+                    }
+                    if (null != row.getCell(17)) {
+                        material.setDescription(row.getCell(17).toString().trim());
+                    }
+                    material.setRespCompany("03");
+                    material.setRespDept("6202");
+                    material.setInventoryUnit("025");
+                    material.setKeyPartMark("Y");
+                    material.setInspectMark("Y");
+                    materialList.add(material);
+                    targetCodeList.add(material.getCode());
+                }
+            }
+        }
+        materialRepository.saveAll(materialList);
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Workbook exportMaterialsByDepartment(Integer deptMark, Integer perfectStatus) {

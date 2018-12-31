@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -189,4 +190,12 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @return 基础数据集合
      */
     List<Material> findAllByQualityStatus(Integer status);
+
+    /**
+     * 根据完善状态查询集配中心负责的数据
+     *
+     * @param status 完善状态
+     * @return 基础数据集合
+     */
+    List<Material> findAllByAssemblyStatus(Integer status);
 }

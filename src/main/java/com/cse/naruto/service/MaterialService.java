@@ -32,6 +32,15 @@ public interface MaterialService {
     void importMaterialList(MultipartFile file) throws IOException, InvalidFormatException;
 
     /**
+     * 通过BOM导入物料基础数据
+     *
+     * @param file BOM文件
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误异常
+     */
+    void importOriginMaterialList(MultipartFile file) throws IOException, InvalidFormatException;
+
+    /**
      * 导出需要通过Excel表编辑的物料基础数据
      *
      * @param deptMark      部门标记

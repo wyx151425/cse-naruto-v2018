@@ -204,4 +204,29 @@ public class NarutoApplicationTests {
 //        }
 //        materialRepository.saveAll(materialList);
 //    }
+
+//    @Test
+//    public void updateStatue() {
+//        List<Material> materials = materialRepository.findAllByCodeIsNull();
+//        for (Material material : materials) {
+//            material.setCode(material.getOriginCode());
+//        }
+//        materialRepository.saveAll(materials);
+//    }
+
+//    @Test
+//    public void updateStatus() {
+//        List<Material> materialList = materialRepository.findAllByQualityStatusAndIdLessThanEqual(0, 17291);
+//        for (Material material : materialList) {
+//            material.setQualityStatus(1);
+//            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getAssemblyStatus()
+//                    && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
+//                material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
+//            }
+//        }
+//        materialRepository.saveAll(materialList);
+//    }
 }
