@@ -33,6 +33,10 @@ public class Material extends NarutoEntity {
      */
     private String code;
     /**
+     * 兼容旧编码
+     */
+    private String originCode;
+    /**
      * 物料名称
      */
     private String name;
@@ -204,6 +208,14 @@ public class Material extends NarutoEntity {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOriginCode() {
+        return originCode;
+    }
+
+    public void setOriginCode(String originCode) {
+        this.originCode = originCode;
     }
 
     public String getName() {
