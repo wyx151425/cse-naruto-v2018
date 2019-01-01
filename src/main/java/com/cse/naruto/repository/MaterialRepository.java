@@ -198,4 +198,11 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
      * @return 基础数据集合
      */
     List<Material> findAllByAssemblyStatus(Integer status);
+
+    /**
+     * 查找数据
+     * @return 数据集合
+     */
+    @Query(value = "select m from Material m order by m.id asc")
+    List<Material> findAllAndOrderById();
 }

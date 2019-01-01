@@ -244,6 +244,9 @@ const container = new Vue({
         importProduceDataFileModalVisible: function () {
             produceDataFileImportModal.visible();
         },
+        importAssemblyDataFileModalVisible: function () {
+            assemblyDataFileImportModal.visible();
+        },
         queryMaterialList: function (index, size, exportStatus, perfectStatus) {
             axios.get(requestContext + "api/materials?pageIndex=" + index + "&pageSize=" + size
                 + "&exportStatus=" + exportStatus + "&perfectStatus=" + perfectStatus)
@@ -323,6 +326,26 @@ const container = new Vue({
                 container.exportCallback();
             });
         },
+        exportAssemblyDataFile: function () {
+            this.exportAction = "正在导出";
+            this.isExportDisabled = true;
+            let name = "基础数据-集配中心-未完善.xlsx";
+            axios({
+                method: "post",
+                params: {
+                    deptMark: 4,
+                    perfectStatus: 0
+                },
+                url: requestContext + "api/materials/export/dept",
+                responseType: "blob"
+            }).then(function (response) {
+                download(response, name);
+                container.exportCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                container.exportCallback();
+            });
+        },
         exportCallback: function () {
             this.exportAction = "导出";
             this.isExportDisabled = false;
@@ -339,7 +362,7 @@ const container = new Vue({
             this.queryMaterialList(this.currentPage, this.pageContext.size, this.exportStatus, this.perfectStatus);
         },
         queryAllByMaterialCode: function () {
-            if (this.materialCode.length < 4) {
+            if (this.materialCode.length < 1) {
                 popoverSpace.append("模糊查询的物料号至少输入4位", false);
                 return;
             }
@@ -726,6 +749,59 @@ const produceDataFileImportModal = new Vue({
             this.isDisabled = true;
             this.action = "正在导入";
             let file = document.getElementById("produceFile").files[0];
+            let param = new FormData();  //创建form对象
+            param.append("file", file, file.name);  //通过append向form对象添加数据
+            param.append("sheetName", this.sheetName);
+            param.append("deptMark", this.deptMark);
+            let config = {
+                headers: {"Content-Type": "multipart/form-data"}
+            };  //添加请求头
+            axios.post(requestContext + "api/materials/perfect", param, config)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        window.location.reload();
+                    } else {
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
+                        fileImportModal.importCallback();
+                    }
+                }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                dataFileImportModal.importCallback();
+            })
+        },
+        importCallback: function () {
+            this.action = "导入";
+            this.isDisabled = false;
+        }
+    }
+});
+
+const assemblyDataFileImportModal = new Vue({
+    el: "#assemblyDataFileImportModal",
+    data: {
+        sheetName: "data",
+        deptMark: "4",
+        isVisible: false,
+        isDisabled: false,
+        action: "导入"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        importFile: function () {
+            if ("" === document.getElementById("assemblyFile").value) {
+                popoverSpace.append("请选择基础数据文件", true);
+                return;
+            }
+            this.isDisabled = true;
+            this.action = "正在导入";
+            let file = document.getElementById("assemblyFile").files[0];
             let param = new FormData();  //创建form对象
             param.append("file", file, file.name);  //通过append向form对象添加数据
             param.append("sheetName", this.sheetName);

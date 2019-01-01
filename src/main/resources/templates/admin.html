@@ -25,9 +25,12 @@
             <button class="btn pull-right" type="button" @click="exportFile" :disabled="isExportDisabled" style="margin-left: 14px">
                 <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isExportDisabled"></span>{{exportAction}}
             </button>
-            <button class="btn pull-right" type="button" @click="fileImportModalVisible">
-                导入
-            </button>
+            <!--<button class="btn pull-right" type="button" @click="fileImportModalVisible" style="margin-left: 14px">-->
+                <!--导入缺省-->
+            <!--</button>-->
+            <!--<button class="btn pull-right" type="button" @click="dataPerfectModalVisible">-->
+                <!--完善数据-->
+            <!--</button>-->
         </div>
         <table class="table table-bordered table-hover">
             <thead>
@@ -50,6 +53,21 @@
 <footer class="footer">
     <span>&copy;2018 中国船舶重工集团柴油机有限公司</span>
 </footer>
+<div id="dataPerfectModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-box">
+        <div class="modal-header">
+            <p class="modal-title">完善备品备件</p>
+            <div class="modal-dismiss"><span class="icon icon-remove" @click="invisible"></span></div>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label" style="width: 30px; margin-right: 10px">文件</label>
+                <input id="dataFile" class="form-control" type="file" style="width: 325px"/>
+            </div>
+            <button class="btn pull-right" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+        </div>
+    </div>
+</div>
 <div id="fileImportModal" class="modal" v-if="isVisible" v-cloak>
     <div class="modal-box">
         <div class="modal-header">
@@ -89,6 +107,9 @@
             fileImportModalVisible: function () {
                 fileImportModal.visible();
             },
+            dataPerfectModalVisible: function () {
+                dataPerfectModal.visible();
+            },
             exportFile: function () {
                 this.exportAction = "正在导出";
                 this.isExportDisabled = true;
@@ -119,6 +140,55 @@
                     }
                     loadModal.loadCallback();
                 });
+        }
+    });
+
+    const dataPerfectModal = new Vue({
+        el: "#dataPerfectModal",
+        data: {
+            isVisible: false,
+            isDisabled: false,
+            action: "导入"
+        },
+        methods: {
+            visible: function () {
+                this.isVisible = true;
+            },
+            invisible: function () {
+                this.isVisible = false;
+            },
+            importFile: function () {
+                if ("" === document.getElementById("dataFile").value) {
+                    popoverSpace.append("请选择BOM文件", true);
+                    return;
+                }
+                this.isDisabled = true;
+                this.action = "正在导入";
+                let file = document.getElementById("dataFile").files[0];
+                let param = new FormData();  //创建form对象
+                param.append("file", file, file.name);  //通过append向form对象添加数据
+                let config = {
+                    headers: {"Content-Type": "multipart/form-data"}
+                };  //添加请求头
+                axios.post(requestContext + "api/materials/import/structure", param, config)
+                    .then(function (response) {
+                        let statusCode = response.data.statusCode;
+                        if (200 === statusCode) {
+                            window.location.reload();
+                        } else {
+                            let message = getMessage(statusCode);
+                            popoverSpace.append(message, false);
+                            fileImportModal.importCallback();
+                        }
+                    }).catch(function () {
+                    popoverSpace.append("服务器访问失败", false);
+                    fileImportModal.importCallback();
+                })
+            },
+            importCallback: function () {
+                this.action = "导入";
+                this.isDisabled = false;
+            }
         }
     });
 

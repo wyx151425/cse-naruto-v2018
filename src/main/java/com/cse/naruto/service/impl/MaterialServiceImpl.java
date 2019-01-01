@@ -231,6 +231,198 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public void importStructureInfo(MultipartFile file) throws IOException, InvalidFormatException {
+        Sheet sheet = formatExcelBOM(file, "BasicData");
+        List<Material> materialList = new ArrayList<>(3000);
+        List<Material> updateMaterialList = new ArrayList<>(3000);
+        List<String> codeList = materialRepository.findAllMaterialCode();
+
+        int rowIndex = 0;
+        for (Row row : sheet) {
+            if (rowIndex < 1) {
+                rowIndex++;
+            } else {
+                if (null == row.getCell(1) || "".equals(row.getCell(1).toString().trim())) {
+                    continue;
+                }
+                Material material;
+                String code = row.getCell(1).toString().trim();
+                if (!codeList.contains(code)) {
+                    material = Material.newInstance();
+                    material.setCode(code);
+                    if (null != row.getCell(2) && !"".equals(row.getCell(2).toString().trim())) {
+                        material.setName(row.getCell(2).toString().trim());
+                    }
+                    if (null != row.getCell(4) && !"".equals(row.getCell(4).toString().trim())) {
+                        material.setSpecification(row.getCell(4).toString().trim());
+                    }
+                    if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+                        material.setModel(row.getCell(5).toString().trim());
+                    }
+                    if (null != row.getCell(6) && !"".equals(row.getCell(6).toString().trim())) {
+                        material.setInternational(row.getCell(6).toString().trim());
+                    }
+                    if (null != row.getCell(7) && !"".equals(row.getCell(7).toString().trim())) {
+                        material.setDrawingNo(row.getCell(7).toString().trim());
+                    }
+                    if (null != row.getCell(8) && !"".equals(row.getCell(8).toString().trim())) {
+                        material.setReference(row.getCell(8).toString().trim());
+                    }
+                    if (null != row.getCell(9) && !"".equals(row.getCell(9).toString().trim())) {
+                        material.setGeneralSort(row.getCell(9).toString().trim());
+                    }
+                    if (null != row.getCell(10) && !"".equals(row.getCell(10).toString().trim())) {
+                        material.setInspectMark(row.getCell(10).toString().trim());
+                    }
+                    if (null != row.getCell(11) && !"".equals(row.getCell(11).toString().trim())) {
+                        material.setBatchMark(row.getCell(11).toString().trim());
+                    }
+                    if (null != row.getCell(12) && !"".equals(row.getCell(12).toString().trim())) {
+                        material.setInventoryUnit(row.getCell(12).toString().trim());
+                    }
+                    if (null != row.getCell(13) && !"".equals(row.getCell(13).toString().trim())) {
+                        material.setDefRepository(row.getCell(13).toString().trim());
+                    }
+                    if (null != row.getCell(14) && !"".equals(row.getCell(14).toString().trim())) {
+                        material.setVirtualPartMark(row.getCell(14).toString().trim());
+                    }
+                    if (null != row.getCell(15) && !"".equals(row.getCell(15).toString().trim())) {
+                        material.setSourceMark(row.getCell(15).toString().trim());
+                    }
+                    if (null != row.getCell(16) && !"".equals(row.getCell(16).toString().trim())) {
+                        material.setOutSource(row.getCell(16).toString().trim());
+                    }
+                    if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
+                        material.setRespDept(row.getCell(17).toString().trim());
+                    }
+                    if (null != row.getCell(18) && !"".equals(row.getCell(18).toString().trim())) {
+                        material.setRespCompany(row.getCell(18).toString().trim());
+                    }
+                    if (null != row.getCell(19) && !"".equals(row.getCell(19).toString().trim())) {
+                        material.setKeyPartSort(row.getCell(19).toString().trim());
+                    }
+                    if (null != row.getCell(20) && !"".equals(row.getCell(20).toString().trim())) {
+                        material.setKeyPartMark(row.getCell(20).toString().trim());
+                    }
+                    if (null != row.getCell(21) && !"".equals(row.getCell(21).toString().trim())) {
+                        material.setPurchaseSort(row.getCell(21).toString().trim());
+                    }
+                    if (null != row.getCell(22) && !"".equals(row.getCell(22).toString().trim())) {
+                        material.setFixedAdvTime(row.getCell(22).toString().trim());
+                    }
+                    if (null != row.getCell(23) && !"".equals(row.getCell(23).toString().trim())) {
+                        material.setDescription(row.getCell(23).toString().trim());
+                    }
+                    if (null != row.getCell(24) && !"".equals(row.getCell(24).toString().trim())) {
+                        material.setQualifiedMark(row.getCell(24).toString().trim());
+                    }
+                    if (null != row.getCell(25) && !"".equals(row.getCell(25).toString().trim())) {
+                        material.setPurchaseMark(row.getCell(25).toString().trim());
+                    } else {
+                        material.setPurchaseMark("Y");
+                    }
+                    if (null != row.getCell(26) && !"".equals(row.getCell(26).toString().trim())) {
+                        material.setGroupPurMark(row.getCell(26).toString().trim());
+                    }
+                    if (null != row.getCell(27) && !"".equals(row.getCell(27).toString().trim())) {
+                        material.setOwnPurMark(row.getCell(27).toString().trim());
+                    }
+                    if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
+                        material.setPlanner(row.getCell(28).toString().trim());
+                    }
+                    materialList.add(material);
+                } else {
+                    material = materialRepository.findMaterialByCode(code);
+//                    if (null != row.getCell(2) && !"".equals(row.getCell(2).toString().trim())) {
+//                        material.setName(row.getCell(2).toString().trim());
+//                    }
+//                    if (null != row.getCell(4) && !"".equals(row.getCell(4).toString().trim())) {
+//                        material.setSpecification(row.getCell(4).toString().trim());
+//                    }
+//                    if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+//                        material.setModel(row.getCell(5).toString().trim());
+//                    }
+//                    if (null != row.getCell(6) && !"".equals(row.getCell(6).toString().trim())) {
+//                        material.setInternational(row.getCell(6).toString().trim());
+//                    }
+//                    if (null != row.getCell(7) && !"".equals(row.getCell(7).toString().trim())) {
+//                        material.setDrawingNo(row.getCell(7).toString().trim());
+//                    }
+//                    if (null != row.getCell(8) && !"".equals(row.getCell(8).toString().trim())) {
+//                        material.setReference(row.getCell(8).toString().trim());
+//                    }
+//                    if (null != row.getCell(9) && !"".equals(row.getCell(9).toString().trim())) {
+//                        material.setGeneralSort(row.getCell(9).toString().trim());
+//                    }
+                    if (null != row.getCell(10) && !"".equals(row.getCell(10).toString().trim())) {
+                        material.setInspectMark(row.getCell(10).toString().trim());
+                    }
+//                    if (null != row.getCell(11) && !"".equals(row.getCell(11).toString().trim())) {
+//                        material.setBatchMark(row.getCell(11).toString().trim());
+//                    }
+//                    if (null != row.getCell(12) && !"".equals(row.getCell(12).toString().trim())) {
+//                        material.setInventoryUnit(row.getCell(12).toString().trim());
+//                    }
+                    if (null != row.getCell(13) && !"".equals(row.getCell(13).toString().trim())) {
+                        material.setDefRepository(row.getCell(13).toString().trim());
+                    }
+//                    if (null != row.getCell(14) && !"".equals(row.getCell(14).toString().trim())) {
+//                        material.setVirtualPartMark(row.getCell(14).toString().trim());
+//                    }
+//                    if (null != row.getCell(15) && !"".equals(row.getCell(15).toString().trim())) {
+//                        material.setSourceMark(row.getCell(15).toString().trim());
+//                    }
+//                    if (null != row.getCell(16) && !"".equals(row.getCell(16).toString().trim())) {
+//                        material.setOutSource(row.getCell(16).toString().trim());
+//                    }
+//                    if (null != row.getCell(17) && !"".equals(row.getCell(17).toString().trim())) {
+//                        material.setRespDept(row.getCell(17).toString().trim());
+//                    }
+//                    if (null != row.getCell(18) && !"".equals(row.getCell(18).toString().trim())) {
+//                        material.setRespCompany(row.getCell(18).toString().trim());
+//                    }
+//                    if (null != row.getCell(19) && !"".equals(row.getCell(19).toString().trim())) {
+//                        material.setKeyPartSort(row.getCell(19).toString().trim());
+//                    }
+//                    if (null != row.getCell(20) && !"".equals(row.getCell(20).toString().trim())) {
+//                        material.setKeyPartMark(row.getCell(20).toString().trim());
+//                    }
+//                    if (null != row.getCell(21) && !"".equals(row.getCell(21).toString().trim())) {
+//                        material.setPurchaseSort(row.getCell(21).toString().trim());
+//                    }
+//                    if (null != row.getCell(22) && !"".equals(row.getCell(22).toString().trim())) {
+//                        material.setFixedAdvTime(row.getCell(22).toString().trim());
+//                    }
+//                    if (null != row.getCell(23) && !"".equals(row.getCell(23).toString().trim())) {
+//                        material.setDescription(row.getCell(23).toString().trim());
+//                    }
+//                    if (null != row.getCell(24) && !"".equals(row.getCell(24).toString().trim())) {
+//                        material.setQualifiedMark(row.getCell(24).toString().trim());
+//                    }
+//                    if (null != row.getCell(25) && !"".equals(row.getCell(25).toString().trim())) {
+//                        material.setPurchaseMark(row.getCell(25).toString().trim());
+//                    } else {
+//                        material.setPurchaseMark("Y");
+//                    }
+//                    if (null != row.getCell(26) && !"".equals(row.getCell(26).toString().trim())) {
+//                        material.setGroupPurMark(row.getCell(26).toString().trim());
+//                    }
+//                    if (null != row.getCell(27) && !"".equals(row.getCell(27).toString().trim())) {
+//                        material.setOwnPurMark(row.getCell(27).toString().trim());
+//                    }
+//                    if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
+//                        material.setPlanner(row.getCell(28).toString().trim());
+//                    }
+                    updateMaterialList.add(material);
+                }
+            }
+        }
+//        materialRepository.saveAll(materialList);
+        materialRepository.saveAll(updateMaterialList);
+        System.out.println("+++++++++++" + updateMaterialList.size() + "+++++++++++++++++++");
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Workbook exportMaterialsByDepartment(Integer deptMark, Integer perfectStatus) {
         Workbook workbook = null;
@@ -238,6 +430,8 @@ public class MaterialServiceImpl implements MaterialService {
             workbook = buildPurchaseWorkbookToPrefect(perfectStatus);
         } else if (5 == deptMark) {
             workbook = buildProduceWorkbookToPrefect();
+        } else if (4 == deptMark) {
+            workbook = buildAssemblyWorkbookToPrefect();
         }
         return workbook;
     }
@@ -355,6 +549,48 @@ public class MaterialServiceImpl implements MaterialService {
         return workbook;
     }
 
+    private Workbook buildAssemblyWorkbookToPrefect() {
+        List<Material> materialList = materialRepository.findAllByAssemblyStatus(0);
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("data");
+
+        int rowIndex = 0;
+
+        XSSFRow row0 = sheet.createRow(rowIndex);
+        XSSFCell cell00 = row0.createCell(0);
+        cell00.setCellValue("部套号");
+        XSSFCell cell01 = row0.createCell(1);
+        cell01.setCellValue("物料号");
+        XSSFCell cell02 = row0.createCell(2);
+        cell02.setCellValue("图号");
+        XSSFCell cell03 = row0.createCell(3);
+        cell03.setCellValue("物料名称");
+        XSSFCell cell04 = row0.createCell(4);
+        cell04.setCellValue("货源");
+        XSSFCell cell05 = row0.createCell(5);
+        cell05.setCellValue("默认仓库");
+
+        for (Material material : materialList) {
+            rowIndex++;
+            XSSFRow row = sheet.createRow(rowIndex);
+            XSSFCell cell0 = row.createCell(0);
+            cell0.setCellValue(material.getStructureNo());
+            XSSFCell cell1 = row.createCell(1);
+            cell1.setCellValue(material.getCode());
+            XSSFCell cell2 = row.createCell(2);
+            cell2.setCellValue(material.getDrawingNo());
+            XSSFCell cell3 = row.createCell(3);
+            cell3.setCellValue(material.getName());
+            XSSFCell cell4 = row.createCell(4);
+            cell4.setCellValue(material.getResourceMark());
+            XSSFCell cell5 = row.createCell(5);
+            cell5.setCellValue(material.getDefRepository());
+        }
+
+        return workbook;
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importPerfectedMaterialsByDepartment(MultipartFile file, String sheetName, Integer deptMark) throws IOException, InvalidFormatException {
@@ -406,7 +642,6 @@ public class MaterialServiceImpl implements MaterialService {
                 if (0 == rowIndex) {
                     rowIndex++;
                 } else {
-
                     if (null != row.getCell(1) && !"".equals(row.getCell(1).toString().trim())) {
 
                         String code = row.getCell(1).toString().trim();
@@ -436,6 +671,30 @@ public class MaterialServiceImpl implements MaterialService {
                     }
                 }
             }
+        } else if (4 == deptMark) {
+            for (Row row : sheet) {
+                if (0 == rowIndex) {
+                    rowIndex++;
+                } else {
+                    if (null != row.getCell(1) && !"".equals(row.getCell(1).toString().trim())) {
+
+                        String code = row.getCell(1).toString().trim();
+
+                        int perfectStatus = Constant.Material.PerfectStatus.PERFECTED;
+
+                        Material material = materialRepository.findMaterialByCode(code);
+                        if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+                            material.setDefRepository(row.getCell(5).toString().trim());
+                        } else {
+                            perfectStatus = Constant.Material.PerfectStatus.IMPERFECT;
+                        }
+                        material.setUpdateAt(LocalDateTime.now());
+                        material.setAssemblyStatus(perfectStatus);
+                        checkExportStatus(material);
+                        materialRepository.save(material);
+                    }
+                }
+            }
         }
     }
 
@@ -454,7 +713,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Workbook exportAll() {
-        List<Material> materialList = materialRepository.findAll();
+        List<Material> materialList = materialRepository.findAllAndOrderById();
         return createWorkbook(materialList);
     }
 
@@ -730,6 +989,8 @@ public class MaterialServiceImpl implements MaterialService {
         cell025.setCellValue("可自采标记");
         XSSFCell cell028 = row0.createCell(28);
         cell028.setCellValue("计划员");
+        XSSFCell cell033 = row0.createCell(29);
+        cell033.setCellValue("货源");
 
         for (com.cse.naruto.model.Material material : materialList) {
             rowIndex++;
@@ -777,7 +1038,9 @@ public class MaterialServiceImpl implements MaterialService {
             XSSFCell cell16 = row.createCell(20);
             cell16.setCellValue(material.getKeyPartMark());
             XSSFCell cell22 = row.createCell(21);
-            cell22.setCellValue(material.getPurchaseSort());
+            if ("P".equals(material.getSourceMark())) {
+                cell22.setCellValue(material.getPurchaseSort());
+            }
             XSSFCell cell29 = row.createCell(22);
             cell29.setCellValue(material.getFixedAdvTime());
             XSSFCell cell7 = row.createCell(23);
@@ -799,6 +1062,8 @@ public class MaterialServiceImpl implements MaterialService {
             if ("M".equals(material.getSourceMark())) {
                 cell28.setCellValue(material.getPlanner());
             }
+            XSSFCell cell33 = row.createCell(29);
+            cell33.setCellValue(material.getResourceMark());
         }
 
         return workbook;

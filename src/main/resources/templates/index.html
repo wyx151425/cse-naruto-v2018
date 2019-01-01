@@ -39,10 +39,10 @@
                     <option value="2">已导出</option>
                 </select>
             </div>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
-                    :disabled="isExportDisabled">
-                {{exportAction}}
-            </button>
+            <!--<button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"-->
+                    <!--:disabled="isExportDisabled">-->
+                <!--{{exportAction}}-->
+            <!--</button>-->
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal">
                 导入
             </button>
@@ -185,6 +185,7 @@
                             <option value="G17">G17 - 工装材料</option>
                             <option value="G18">G18 - 自制半成品</option>
                             <option value="G19">G19 - 设备备品备件</option>
+                            <option value="G21">G21 - 期初未分类</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
@@ -264,7 +265,7 @@
             </div>
         </div>
     </div>
-    <div class="panel" v-if="user.roles.ROLE_QUALITY_EMPLOYEE || user.roles.ROLE_ASSEMBLY_EMPLOYEE">
+    <div class="panel" v-if="user.roles.ROLE_QUALITY_EMPLOYEE">
         <div class="btn-list">
             <div class="pull-left">
                 <label class="select-label">完善状态</label>
@@ -291,7 +292,7 @@
             </div>
         </div>
         <div class="table-wrap">
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_QUALITY_EMPLOYEE"
+            <table class="table table-bordered table-hover"
                    style="width: 1240px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
@@ -341,7 +342,63 @@
                 </tr>
                 </tbody>
             </table>
-            <table class="table table-bordered table-hover" v-if="user.roles.ROLE_ASSEMBLY_EMPLOYEE"
+        </div>
+        <div class="page-panel">
+            <ul class="pagination pull-left">
+                <li :class="{disabled: 1 == pageContext.index}">
+                    <span @click="queryAllByPreviousPage"><span class="icon icon-menu-left"></span></span></li>
+                <li><span>{{pageContext.index}}</span></li>
+                <li :class="{disabled: pageContext.pageTotal == pageContext.index || 0 == pageContext.pageTotal}">
+                    <span @click="queryAllByNextPage"><span class="icon icon-menu-right"></span></span>
+                </li>
+            </ul>
+            <div class="pull-right">
+                <div class="page-group">
+                    <input class="page-control" type="text" v-model="currentPage"/>
+                    <p class="page-query" @click="queryAllByPage">
+                        <span class="icon icon-search"></span>
+                    </p>
+                    <p class="page-total">共{{pageContext.pageTotal}}页</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" v-if="user.roles.ROLE_ASSEMBLY_EMPLOYEE">
+        <div class="btn-list">
+            <div class="pull-left">
+                <label class="select-label">完善状态</label>
+                <select class="form-select" v-model="perfectStatus" @change="queryAllByPerfectStatus">
+                    <option value="2">全部</option>
+                    <option value="0">未完善</option>
+                    <option value="1">已完善</option>
+                </select>
+            </div>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" :disabled="isExportDisabled"
+                    @click="exportAssemblyDataFile">
+                {{exportAction}}
+            </button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button"
+                    @click="importAssemblyDataFileModalVisible">
+                导入
+            </button>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
+                <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right" style="margin-left: 16px">
+                <input class="query-control" type="text" v-model="materialCode" placeholder="物料查询"/>
+                <p class="query-btn" @click="queryAllByMaterialCode" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+            <div class="query-group pull-right">
+                <input class="query-control" type="text" v-model="structureNo" placeholder="部套查询"/>
+                <p class="query-btn" @click="queryAllByStructureNo" :disabled="isQueryDisabled">
+                    <span class="icon icon-search"></span></p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="table table-bordered table-hover"
                    style="width: 1060px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
@@ -425,10 +482,11 @@
                 </select>
             </div>
             <button class="btn pull-right" style="margin-left: 16px" type="button" :disabled="isExportDisabled"
-            @click="exportProduceDataFile">
+                    @click="exportProduceDataFile">
                 {{exportAction}}
             </button>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="importProduceDataFileModalVisible">
+            <button class="btn pull-right" style="margin-left: 16px" type="button"
+                    @click="importProduceDataFileModalVisible">
                 导入
             </button>
             <div class="query-group pull-right" style="margin-left: 16px">
@@ -737,6 +795,23 @@
             <div class="form-group">
                 <label class="form-label">文件</label>
                 <input id="dataFile" class="form-file" type="file"/>
+            </div>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">
+                <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isDisabled"></span>{{action}}
+            </button>
+        </div>
+    </div>
+</div>
+<div id="assemblyDataFileImportModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">导入文件</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">文件</label>
+                <input id="assemblyFile" class="form-file" type="file"/>
             </div>
             <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">
                 <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isDisabled"></span>{{action}}

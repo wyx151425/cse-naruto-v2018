@@ -216,9 +216,10 @@ public class NarutoApplicationTests {
 
 //    @Test
 //    public void updateStatus() {
-//        List<Material> materialList = materialRepository.findAllByQualityStatusAndIdLessThanEqual(0, 17291);
+//        List<Material> materialList = materialRepository.findAllByAssemblyStatusAndIdLessThanEqual(0, 17291);
 //        for (Material material : materialList) {
-//            material.setQualityStatus(1);
+//            material.setDefRepository("30");
+//            material.setAssemblyStatus(1);
 //            if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
 //                    && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()

@@ -50,6 +50,19 @@ public class MaterialController extends NarutoFacade {
         return new Response<>();
     }
 
+    @PostMapping(value = "materials/import/structure")
+    public Response<Material> actionImportStructureInfoByBOM(@RequestParam(value = "file") MultipartFile file) {
+        if (!Constant.DocType.XLSX.equals(file.getContentType())) {
+            throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
+        }
+        try {
+            materialService.importStructureInfo(file);
+        } catch (InvalidFormatException | IOException e) {
+            throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
+        }
+        return new Response<>();
+    }
+
     @PostMapping(value = "materials/import/origin")
     public Response<Material> actionImportOriginMaterialListByBOM(@RequestParam(value = "file") MultipartFile file) {
         if (!Constant.DocType.XLSX.equals(file.getContentType())) {
