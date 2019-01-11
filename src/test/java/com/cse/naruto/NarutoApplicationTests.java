@@ -43,10 +43,10 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user.setCreateAt(dateTime1);
 //        user.setUpdateAt(dateTime1);
-//        user.setCode("admin");
+//        user.setCode("A037");
 //        user.setPassword("123456");
-//        user.setName("管理员");
-//        user.setRole("ROLE_USER,ROLE_ADMIN");
+//        user.setName("周伟");
+//        user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user);
 //    }
 
@@ -229,5 +229,23 @@ public class NarutoApplicationTests {
 //            }
 //        }
 //        materialRepository.saveAll(materialList);
+//    }
+
+//    @Test
+//    public void analyze() {
+//        List<Material> materialList = materialRepository.findAmazing();
+////        for (Material material : materialList) {
+////            String oldCode = material.getOriginCode();
+////            String[] codeArr = oldCode.split("-");
+////            String newCode;
+////            if (5 == codeArr.length) {
+////                newCode = codeArr[0] + "-" + codeArr[1] + "." + codeArr[2] + "." + codeArr[3]+ "." + codeArr[4];
+////            } else {
+////                newCode = codeArr[0] + "-" + codeArr[1] + "." + codeArr[2] + "." + codeArr[3];
+////            }
+////            material.setCode(newCode);
+////        }
+//        System.out.println(materialList);
+////        materialRepository.saveAll(materialList);
 //    }
 }

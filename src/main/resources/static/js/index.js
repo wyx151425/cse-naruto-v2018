@@ -549,14 +549,6 @@ const container = new Vue({
                 popoverSpace.append("请选择可采购标记", false);
                 return;
             }
-            if (null === material.groupPurMark || "" === material.groupPurMark) {
-                popoverSpace.append("请选择可集采标记", false);
-                return;
-            }
-            if (null === material.ownPurMark || "" === material.ownPurMark) {
-                popoverSpace.append("请选择自采标记", false);
-                return;
-            }
             if (null === material.fixedAdvTime || "" === material.fixedAdvTime) {
                 popoverSpace.append("请输入固定提前期", false);
                 return;

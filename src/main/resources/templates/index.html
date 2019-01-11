@@ -435,6 +435,20 @@
                             <option value="60">60 - 主机备件</option>
                             <option value="70">70 - 系统润滑油</option>
                             <option value="80">80 - 自制半成品</option>
+                            <option value="301">301 - 零部件（焊接件）</option>
+                            <option value="302">302 - 零部件（机加工件）</option>
+                            <option value="303">303 - 零部件（大件）</option>
+                            <option value="304">304 - 零部件（中件）</option>
+                            <option value="305">305 - 零部件（加工小件）</option>
+                            <option value="306">306 - 零部件（喷漆件、垫片）</option>
+                            <option value="307">307 - 零部件（管系、走台）</option>
+                            <option value="308">308 - 零部件（二级经营）</option>
+                            <option value="310">310 - 零部件（标准件）</option>
+                            <option value="311">311 - 零部件（呆滞料）</option>
+                            <option value="312">312 - 零部件（船厂返回件）</option>
+                            <option value="313">313 - 零部件（委外）</option>
+                            <option value="314">314 - 零部件（设计更改）</option>
+                            <option value="315">315 - 零部件（电器件）</option>
                         </select>
                     </td>
                     <td style="width: 80px;"
@@ -623,8 +637,8 @@
                     <!-- 战略采购 -->
                     <th style="width: 180px">采购分类</th>
                     <th style="width: 180px">可采购标记</th>
-                    <th style="width: 180px">可集采标记</th>
-                    <th style="width: 180px">可自采标记</th>
+                    <!--<th style="width: 180px">可集采标记</th>-->
+                    <!--<th style="width: 180px">可自采标记</th>-->
                     <th style="width: 180px">固定提前期</th>
                     <th style="width: 80px">完善状态</th>
                     <th style="width: 80px">操作</th>
@@ -712,22 +726,22 @@
                             <option value="Y">Y</option>
                         </select>
                     </td>
-                    <td style="width: 180px">
-                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)"
-                                style="width: 163px">
-                            <option value="null" disabled>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
-                    </td>
-                    <td style="width: 180px">
-                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)"
-                                style="width: 163px">
-                            <option value="null" disabled>请选择</option>
-                            <option value="Y">Y</option>
-                            <option value="N">N</option>
-                        </select>
-                    </td>
+                    <!--<td style="width: 180px">-->
+                        <!--<select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)"-->
+                                <!--style="width: 163px">-->
+                            <!--<option value="null" disabled>请选择</option>-->
+                            <!--<option value="Y">Y</option>-->
+                            <!--<option value="N">N</option>-->
+                        <!--</select>-->
+                    <!--</td>-->
+                    <!--<td style="width: 180px">-->
+                        <!--<select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)"-->
+                                <!--style="width: 163px">-->
+                            <!--<option value="null" disabled>请选择</option>-->
+                            <!--<option value="Y">Y</option>-->
+                            <!--<option value="N">N</option>-->
+                        <!--</select>-->
+                    <!--</td>-->
                     <td style="width: 180px">
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"
                                style="width: 163px"/>
