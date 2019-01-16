@@ -39,10 +39,10 @@
                     <option value="2">已导出</option>
                 </select>
             </div>
-            <!--<button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"-->
-                    <!--:disabled="isExportDisabled">-->
-                <!--{{exportAction}}-->
-            <!--</button>-->
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
+                    :disabled="isExportDisabled" v-if="'QD0910' == user.code">
+                {{exportAction}}
+            </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal">
                 导入
             </button>
