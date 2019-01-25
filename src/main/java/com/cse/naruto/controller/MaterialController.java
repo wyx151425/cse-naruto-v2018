@@ -78,7 +78,7 @@ public class MaterialController extends NarutoFacade {
 
     @PostMapping(value = "materials/export")
     public void actionExportMaterialListToExcel() throws IOException {
-        Workbook workbook = materialService.exportAll();
+        Workbook workbook = materialService.exportMaterialList();
         getResponse().reset();
         getResponse().setHeader("Content-Disposition", "attachment;filename=data.xlsx");
         getResponse().setContentType("application/octet-stream");

@@ -43,7 +43,8 @@
                     :disabled="isExportDisabled" v-if="'QD0910' == user.code">
                 {{exportAction}}
             </button>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal">
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
+                v-if="user.code == 'QD0902' || user.code == 'QD0910' || user.code == 'QD0947' || user.code == 'QD1022'">
                 导入
             </button>
             <div class="query-group pull-right" style="margin-left: 16px">

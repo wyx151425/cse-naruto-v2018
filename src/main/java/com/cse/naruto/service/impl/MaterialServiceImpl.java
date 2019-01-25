@@ -116,7 +116,7 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(17)) {
                         material.setDescription(row.getCell(17).toString().trim());
                     }
-                    if (code.startsWith("EN")) {
+                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
                         material.setQualifiedMark("Y");
                         material.setBatchMark("N");
                     } else {
@@ -166,6 +166,7 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setInventoryUnit("025");
                     material.setKeyPartMark("Y");
                     material.setInspectMark("Y");
+                    material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
                 }
@@ -330,6 +331,12 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
                         material.setPlanner(row.getCell(28).toString().trim());
                     }
+//                    material.setTechnologyStatus(1);
+//                    material.setQualityStatus(1);
+//                    material.setPurchaseStatus(1);
+//                    material.setAssemblyStatus(1);
+//                    material.setProduceStatus(1);
+//                    material.setExportStatus(1);
                     materialList.add(material);
                 } else {
                     material = materialRepository.findMaterialByCode(code);
