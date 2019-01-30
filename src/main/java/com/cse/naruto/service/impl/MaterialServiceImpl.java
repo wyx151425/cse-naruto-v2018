@@ -332,11 +332,16 @@ public class MaterialServiceImpl implements MaterialService {
                         material.setPlanner(row.getCell(28).toString().trim());
                     }
 //                    material.setTechnologyStatus(1);
-//                    material.setQualityStatus(1);
+                    material.setQualityStatus(1);
+                    if ("P".equals(material.getSourceMark())) {
+                        material.setProduceStatus(1);
+                    } else if ("M".equals(material.getSourceMark())) {
+                        material.setPurchaseStatus(1);
+                    }
 //                    material.setPurchaseStatus(1);
 //                    material.setAssemblyStatus(1);
 //                    material.setProduceStatus(1);
-//                    material.setExportStatus(1);
+//                    material.setExportStatus(2);
                     materialList.add(material);
                 } else {
                     material = materialRepository.findMaterialByCode(code);
