@@ -1,15 +1,13 @@
 package com.cse.naruto.controller;
 
 import com.cse.naruto.context.exception.NarutoException;
-import com.cse.naruto.model.Material;
-import com.cse.naruto.model.PageContext;
-import com.cse.naruto.model.Perfect;
-import com.cse.naruto.model.Response;
+import com.cse.naruto.model.*;
 import com.cse.naruto.service.MaterialService;
 import com.cse.naruto.util.Constant;
 import com.cse.naruto.util.StatusCode;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,16 +36,17 @@ public class MaterialController extends NarutoFacade {
     }
 
     @PostMapping(value = "materials/import")
-    public Response<Material> actionImportMaterialListByBOM(@RequestParam(value = "file") MultipartFile file) {
+    public Response<List<ImportResult>> actionImportMaterialListByBOM(@RequestParam(value = "file") MultipartFile file) {
         if (!Constant.DocType.XLSX.equals(file.getContentType())) {
             throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
         }
+        List<ImportResult> resultList;
         try {
-            materialService.importMaterialList(file);
+            resultList = materialService.importMaterialList(file, getCurrentUser());
         } catch (InvalidFormatException | IOException e) {
             throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
         }
-        return new Response<>();
+        return new Response<>(resultList);
     }
 
     @PostMapping(value = "materials/import/structure")
@@ -87,6 +86,12 @@ public class MaterialController extends NarutoFacade {
         buffer.flush();
         workbook.write(buffer);
         buffer.close();
+    }
+
+    @PutMapping(value = "materials")
+    public Response<Material> actionUpdateMaterial(@RequestBody Material material) {
+        materialService.updateMaterial(material);
+        return new Response<>();
     }
 
     @PutMapping(value = "materials/technology")

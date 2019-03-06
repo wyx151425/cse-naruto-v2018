@@ -173,6 +173,10 @@ public class Material extends NarutoEntity {
      * 导出状态（0-待完善/1-可导出/2-已导出）
      */
     private Integer exportStatus;
+    /**
+     * 负责人
+     */
+    private String principal;
 
 
     public Material() {
@@ -480,6 +484,14 @@ public class Material extends NarutoEntity {
 
     public void setExportStatus(Integer exportStatus) {
         this.exportStatus = exportStatus;
+    }
+
+    public String getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(String principal) {
+        this.principal = principal;
     }
 
     public static Material newInstance() {

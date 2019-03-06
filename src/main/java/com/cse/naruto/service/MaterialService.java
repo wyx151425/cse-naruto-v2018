@@ -1,14 +1,12 @@
 package com.cse.naruto.service;
 
-import com.cse.naruto.model.Material;
-import com.cse.naruto.model.PageContext;
-import com.cse.naruto.model.Perfect;
-import com.cse.naruto.model.User;
+import com.cse.naruto.model.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +27,7 @@ public interface MaterialService {
      * @throws IOException            输入输出异常
      * @throws InvalidFormatException 文件格式错误异常
      */
-    void importMaterialList(MultipartFile file) throws IOException, InvalidFormatException;
+    List<ImportResult> importMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException;
 
     /**
      * 通过BOM导入物料基础数据
@@ -83,6 +81,13 @@ public interface MaterialService {
      * @return 处理完成的EXCEL表
      */
     Workbook exportAll();
+
+    /**
+     * 更新物料基础数据的技术信息
+     *
+     * @param material 包含物料信息的物料对象
+     */
+    void updateMaterial(Material material);
 
     /**
      * 更新物料基础数据的技术信息

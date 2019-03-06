@@ -44,7 +44,7 @@
                 {{exportAction}}
             </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
-                v-if="user.code == 'QD0902' || user.code == 'QD0910' || user.code == 'QD0947' || user.code == 'QD1022'">
+                v-if="user.code == 'QD0962' || user.code == 'QD0910' || user.code == 'QD0947' || user.code == 'QD1022' || user.code == 'QD1010'">
                 导入
             </button>
             <div class="query-group pull-right" style="margin-left: 16px">
@@ -65,7 +65,7 @@
         </div>
         <div id="table-space" class="table-wrap" style="width: 2300px">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2900px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 2920px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th class="table-fixed" style="width: 100px; background-color: #ff0000; color: #fff;">部套号</th>
@@ -87,7 +87,7 @@
                     <th style="width: 160px; background-color: #ff0000; color: #fff;">责任公司</th>
                     <th style="width: 160px; background-color: #ff0000; color: #fff;">虚拟件标记</th>
                     <th style="width: 100px; background-color: #ff0000; color: #fff;">完善状态</th>
-                    <th style="width: 100px; background-color: #92d050; color: #fff;">操作</th>
+                    <th style="width: 120px; background-color: #92d050; color: #fff;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -237,10 +237,13 @@
                         <span v-if="0 == material.technologyStatus">未完善</span>
                         <span v-if="1 == material.technologyStatus">已完善</span>
                     </td>
-                    <td style="width: 100px;">
+                    <td style="width: 120px;">
                         <button class="btn-link" type="button" @click="saveTechnologyAttr(material, index)"
-                                :disabled="isSaveDisabled">保存
+                                :disabled="isSaveDisabled" style="margin-right: 16px">保存
                         </button>
+                        <a :href="'material?materialCode=' + material.code" v-if="user.code == material.principal">
+                            <button class="btn-link" type="button">货源</button>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
@@ -429,13 +432,6 @@
                             <option value="19">19 - 工装材料</option>
                             <option value="20">20 - 毛坯件</option>
                             <option value="30">30 - 零部件</option>
-                            <option value="39">39 - 零部件（进口件）</option>
-                            <option value="40">40 - 问题物料</option>
-                            <option value="50">50 - 消耗品</option>
-                            <option value="59">59 - 设备备品备件</option>
-                            <option value="60">60 - 主机备件</option>
-                            <option value="70">70 - 系统润滑油</option>
-                            <option value="80">80 - 自制半成品</option>
                             <option value="301">301 - 零部件（焊接件）</option>
                             <option value="302">302 - 零部件（机加工件）</option>
                             <option value="303">303 - 零部件（大件）</option>
@@ -450,6 +446,16 @@
                             <option value="313">313 - 零部件（委外）</option>
                             <option value="314">314 - 零部件（设计更改）</option>
                             <option value="315">315 - 零部件（电器件）</option>
+                            <option value="39">39 - 零部件（进口件）</option>
+                            <option value="40">40 - 问题物料</option>
+                            <option value="50">50 - 消耗品</option>
+                            <option value="59">59 - 设备备品备件</option>
+                            <option value="60">60 - 主机备件</option>
+                            <option value="70">70 - 系统润滑油</option>
+                            <option value="80">80 - 自制半成品</option>
+                            <option value="801">801 - 钢构厂二级库</option>
+                            <option value="802">802 - 机加厂二级库</option>
+                            <option value="803">803 - 总装厂二级库</option>
                         </select>
                     </td>
                     <td style="width: 80px;"

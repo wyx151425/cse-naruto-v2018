@@ -77,22 +77,35 @@ public class MaterialServiceImpl implements MaterialService {
      * @throws InvalidFormatException 文件格式错误引起的异常
      */
     @Override
-    public void importMaterialList(MultipartFile file) throws IOException, InvalidFormatException {
+    public List<ImportResult> importMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheet("整机BOM");
         List<Material> materialList = new ArrayList<>(128);
         List<String> codeList = materialRepository.findAllMaterialCode();
         List<String> targetCodeList = new ArrayList<>();
+        List<ImportResult> resultList = new ArrayList<>();
 
         // Workbook行索引
         int index = 0;
         String structureNo = null;
         for (Row row : sheet) {
+            index++;
             // 前三行数据为机器信息及字段的批注，所以不予解析
-            if (index < 3) {
-                index++;
-            } else {
+            if (index > 3) {
                 if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
+                    resultList.add(new ImportResult(index, "未填写物料号"));
+                    continue;
+                }
+                if (null == row.getCell(7) || "".equals(row.getCell(7).toString().trim())) {
+                    resultList.add(new ImportResult(index, "未填写物料名称"));
+                    continue;
+                }
+                if (null == row.getCell(12) || "".equals(row.getCell(12).toString().trim())) {
+                    resultList.add(new ImportResult(index, "未填写货源"));
+                    continue;
+                }
+                if (null == row.getCell(17) || "".equals(row.getCell(17).toString().trim())) {
+                    resultList.add(new ImportResult(index, "未填写喷涂防护"));
                     continue;
                 }
                 Material material = Material.newInstance();
@@ -117,10 +130,8 @@ public class MaterialServiceImpl implements MaterialService {
                         material.setDescription(row.getCell(17).toString().trim());
                     }
                     if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
-                        material.setQualifiedMark("Y");
                         material.setBatchMark("N");
                     } else {
-                        material.setQualifiedMark("N");
                         material.setBatchMark("Y");
                     }
                     String source = "";
@@ -136,36 +147,41 @@ public class MaterialServiceImpl implements MaterialService {
                      */
                     if (!"*".equals(source)) {
                         if (source.startsWith("B") || source.startsWith("P") || source.startsWith("K")) {
-                            if ("B".equals(source) || "P5".equals(source) || "P6".equals(source)) {
-                                material.setQualifiedMark("Y");
-                            } else {
-                                material.setQualifiedMark("N");
-                            }
-                            if (source.startsWith("K")) {
-                                material.setGroupPurMark("Y");
-                                material.setOwnPurMark("N");
-                            } else {
-                                material.setGroupPurMark("N");
-                                material.setOwnPurMark("Y");
-                            }
+
                             material.setSourceMark("P");
-                            material.setPurchaseMark("Y");
                             material.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
                         } else if (source.startsWith("Z")) {
                             // 货源标识以Z开始的，是自制，不合批，不采购，不集采，不自采，无采购分类
-                            material.setQualifiedMark("N");
                             material.setSourceMark("M");
-                            material.setPurchaseMark("N");
                             material.setGroupPurMark("N");
                             material.setOwnPurMark("N");
                             material.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
                         }
+
+                        if (source.startsWith("B") || source.startsWith("F")) {
+                            material.setQualifiedMark("Y");
+                        } else {
+                            material.setQualifiedMark("N");
+                        }
+
+                        if (source.startsWith("K")) {
+                            material.setGroupPurMark("Y");
+                            material.setOwnPurMark("N");
+                            material.setRespCompany("01");
+                            material.setRespDept("6004");
+                        } else {
+                            material.setGroupPurMark("N");
+                            material.setOwnPurMark("Y");
+                            material.setRespCompany("03");
+                            material.setRespDept("6202");
+                        }
                     }
-                    material.setRespCompany("03");
-                    material.setRespDept("6202");
+
                     material.setInventoryUnit("025");
                     material.setKeyPartMark("Y");
                     material.setInspectMark("Y");
+                    material.setPurchaseMark("Y");
+                    material.setPrincipal(user.getCode());
                     material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
@@ -174,6 +190,7 @@ public class MaterialServiceImpl implements MaterialService {
         }
 
         materialRepository.saveAll(materialList);
+        return resultList;
     }
 
     /**
@@ -427,8 +444,8 @@ public class MaterialServiceImpl implements MaterialService {
                 }
             }
         }
-        materialRepository.saveAll(materialList);
-        materialRepository.saveAll(updateMaterialList);
+//        materialRepository.saveAll(materialList);
+//        materialRepository.saveAll(updateMaterialList);
     }
 
     @Override
@@ -716,6 +733,12 @@ public class MaterialServiceImpl implements MaterialService {
                 && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateMaterial(Material material) {
+        materialRepository.save(material);
     }
 
     @Override

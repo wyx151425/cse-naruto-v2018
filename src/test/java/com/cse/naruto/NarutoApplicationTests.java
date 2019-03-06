@@ -43,9 +43,9 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user.setCreateAt(dateTime1);
 //        user.setUpdateAt(dateTime1);
-//        user.setCode("A037");
+//        user.setCode("QD1034");
 //        user.setPassword("123456");
-//        user.setName("周伟");
+//        user.setName("苏猛猛");
 //        user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
 //        userRepository.save(user);
 //    }

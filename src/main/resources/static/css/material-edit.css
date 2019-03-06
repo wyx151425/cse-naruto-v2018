@@ -129,3 +129,7 @@
     color: #000;
     border-bottom: solid 3px #dedfe0;
 }
+
+.btn-save {
+    margin-right: 168px;
+}

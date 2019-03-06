@@ -646,6 +646,13 @@ const fileImportModal = new Vue({
                 .then(function (response) {
                     let statusCode = response.data.statusCode;
                     if (200 === statusCode) {
+                        let content = "";
+                        for (let index = 0; index < response.data.data.length; index++) {
+                            content += "第 " + response.data.data[index].order + " 行 ";
+                            content += response.data.data[index].message;
+                            content += "\r\n";
+                        }
+                        createAndDownload(name + "导入备注.txt", content);
                         window.location.reload();
                     } else {
                         let message = getMessage(statusCode);

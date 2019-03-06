@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>基础数据管理工具</title>
+    <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
+    <link rel="stylesheet" th:href="@{/css/material-edit.css}"/>
+</head>
+<body>
+<header id="header" class="header">
+    <div class="header-fixed">
+        <div class="container">
+            <a th:href="@{/index}"><img class="logo" th:src="@{/images/CSE.png}" alt=""/></a>
+            <div class="account">
+                <span>{{user.name}}</span>
+                <a class="icon icon-off" th:href="@{/logout}"></a>
+            </div>
+        </div>
+    </div>
+</header>
+<main id="main" class="container">
+    <div class="panel">
+        <div class="form-group">
+            <label class="form-label">物料编码：</label>
+            <p class="form-text">{{material.code}}</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">公司号：</label>
+            <p class="form-text">{{material.companyNo}}</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">物料名称：</label>
+            <p class="form-text">{{material.name}}</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">物料简称：</label>
+            <p class="form-text">{{material.shortName}}</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">部套号：</label>
+            <input class="form-input" type="text" placeholder="请输入" v-model="material.structureNo"/>
+        </div>
+        <div class="form-group">
+            <label class="form-label">货源：</label>
+            <input class="form-input" type="text" placeholder="请输入" v-model="material.resourceMark"/>
+        </div>
+        <a class="btn btn-save" href="index">返回</a>
+        <button class="btn" type="button" @click="saveMaterialInfo" :disabled="isDisabled">{{action}}
+        </button>
+    </div>
+</main>
+<footer class="footer">
+    <span>&copy;2018 中国船舶重工集团柴油机有限公司</span>
+</footer>
+<div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
+    <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
+</div>
+<div id="loadModal" class="mask" v-if="loading">
+    <p class="mask-prompt">数据获取中...</p>
+</div>
+<script th:src="@{/js/vue.min.js}"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script th:src="@{/js/naruto.js}"></script>
+<script th:src="@{/js/material.js}"></script>
+</body>
+</html>

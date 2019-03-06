@@ -54,6 +54,21 @@ function download(data, fileName) {
     link.click();
 }
 
+function createAndDownload(filename, content, contentType, reload) {
+    if (!contentType) {
+        contentType = "application/octet-stream";
+    }
+    let a = document.createElement("a");
+    let blob = new Blob([content], {"type": contentType});
+    a.href = window.URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+
+    if (reload) {
+        window.location.reload();
+    }
+}
+
 Vue.component("popover", {
     props: ["prompt"],
     template: `
