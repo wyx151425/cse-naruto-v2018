@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
                 if (targetUser.getPassword().equals(user.getPassword())) {
                     // 根据用户角色获取用户权限
                     String[] roleArray = targetUser.getRole().split(",");
-                    Map<String, Boolean> roles = new HashMap<>(2);
+                    Map<String, Boolean> roles = new HashMap<>(3);
                     for (String role : roleArray) {
                         roles.put(role, true);
                     }

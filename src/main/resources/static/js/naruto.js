@@ -48,7 +48,23 @@ function download(data, fileName) {
     let link = document.createElement("a");
     link.style.display = "none";
     link.href = url;
-    link.download = fileName;
+    if (fileName) {
+        link.download = fileName;
+    }
+
+    document.body.appendChild(link);
+    link.click();
+}
+
+function downloadPBOM(data) {
+    if (!data) {
+        return;
+    }
+    let url = window.URL.createObjectURL(new Blob([data.data],
+        {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}));
+    let link = document.createElement("a");
+    link.style.display = "none";
+    link.href = url;
 
     document.body.appendChild(link);
     link.click();

@@ -7,6 +7,15 @@ import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
 import com.cse.naruto.util.Constant;
 import com.cse.naruto.util.Generator;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -248,5 +258,132 @@ public class NarutoApplicationTests {
 ////        }
 //        System.out.println(materialList);
 ////        materialRepository.saveAll(materialList);
+//    }
+
+//    @Test
+//    public void materialNoMatch() {
+//        InputStream in = null;
+//        try {
+//            in = new FileInputStream(new File("MAN.xlsx"));
+//            Workbook workbook = WorkbookFactory.create(in);
+//            Sheet sheet = workbook.getSheet("MAN");
+//            List<String> startList = new ArrayList<>();
+//            int index = 0;
+//            for (Row row : sheet) {
+//                if (index < 1) {
+//                    index++;
+//                } else {
+//                    if (null != row.getCell(1) && !"".equals(row.getCell(1).toString().trim())) {
+//                        startList.add(row.getCell(1).toString().trim());
+//                    }
+//                }
+//            }
+//            System.out.println(startList);
+//
+//            in = new FileInputStream(new File("BASIC.xlsx"));
+//            workbook = WorkbookFactory.create(in);
+//            sheet = workbook.getSheet("BASIC");
+//            List<String> materialNoList = new ArrayList<>();
+//            index = 0;
+//            for (Row row : sheet) {
+//                if (index < 1) {
+//                    index++;
+//                } else {
+//                    if (null != row.getCell(1) && !"".equals(row.getCell(1).toString().trim())) {
+//                        String materialNo = row.getCell(1).toString().trim();
+//                        for (String str : startList) {
+//                            if (materialNo.startsWith(str)) {
+//                                materialNoList.add(materialNo);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            System.out.println(materialNoList.size());
+//
+//            XSSFWorkbook outBook = new XSSFWorkbook();
+//            XSSFSheet outSheet = outBook.createSheet("sheet");
+//
+//            int rowIndex = 0;
+//
+//            XSSFRow row0 = outSheet.createRow(rowIndex);
+//            XSSFCell cell01 = row0.createCell(0);
+//            cell01.setCellValue("物料编码");
+//
+//            for (String str : materialNoList) {
+//                rowIndex++;
+//                XSSFRow row = outSheet.createRow(rowIndex);
+//                XSSFCell cell0 = row.createCell(0);
+//                cell0.setCellValue(str);
+//            }
+//
+//            OutputStream out = new FileOutputStream(new File("manb.xlsx"));
+//            BufferedOutputStream buffer = new BufferedOutputStream(out);
+//            buffer.flush();
+//            outBook.write(buffer);
+//            buffer.close();
+//        } catch (InvalidFormatException | IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (in != null) {
+//                    in.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+//    @Test
+//    public void prefectPBOM() throws IOException, InvalidFormatException {
+//        InputStream in = new FileInputStream(new File("Excel.xlsx"));
+//        Workbook workbook = WorkbookFactory.create(in);
+//        Sheet sheet = workbook.getSheet("整机BOM");
+//        int index = 0;
+//        for (Row row : sheet) {
+//            if (0 == index) {
+//                row.createCell(20).setCellValue("货源");
+//                row.createCell(21).setCellValue("具体描述（喷涂）");
+//                row.createCell(22).setCellValue("库存单位");
+//                row.createCell(23).setCellValue("采购自制标记");
+//                row.createCell(24).setCellValue("责任部门");
+//                row.createCell(25).setCellValue("普通分类");
+//                row.createCell(26).setCellValue("关键件大类");
+//                row.createCell(27).setCellValue("合批标记");
+//                row.createCell(28).setCellValue("规格");
+//                row.createCell(29).setCellValue("型号");
+//                row.createCell(30).setCellValue("责任公司");
+//            }
+//            if (index < 3) {
+//                index++;
+//            } else {
+//                String code = "";
+//                if (null != row.getCell(3)) {
+//                    code = row.getCell(3).toString().trim();
+//                }
+//                Material material = materialRepository.findMaterialByCode(code);
+//                if (null != material) {
+//                    if (null != material.getResourceMark()) {
+//                        row.createCell(20).setCellValue(material.getResourceMark());
+//                    }
+//                    row.createCell(21).setCellValue(material.getDescription());
+//                    row.createCell(22).setCellValue(material.getDefRepository());
+//                    row.createCell(23).setCellValue(material.getSourceMark());
+//                    row.createCell(24).setCellValue(material.getRespDept());
+//                    row.createCell(25).setCellValue(material.getGeneralSort());
+//                    row.createCell(26).setCellValue(material.getKeyPartSort());
+//                    row.createCell(27).setCellValue(material.getQualifiedMark());
+//                    row.createCell(28).setCellValue(material.getSpecification());
+//                    row.createCell(29).setCellValue(material.getModel());
+//                    row.createCell(30).setCellValue(material.getRespCompany());
+//                }
+//            }
+//        }
+//        OutputStream out = new FileOutputStream(new File("Excel.xlsx"));
+//        BufferedOutputStream buffer = new BufferedOutputStream(out);
+//        buffer.flush();
+//        workbook.write(buffer);
+//        buffer.close();
 //    }
 }

@@ -7,6 +7,7 @@ import com.cse.naruto.util.Constant;
 import com.cse.naruto.util.StatusCode;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,40 @@ public class MaterialController extends NarutoFacade {
             throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
         }
         return new Response<>(resultList);
+    }
+
+    @PostMapping(value = "materials/importpbom")
+    public Response<List<ImportResult>> actionImportPBOM(@RequestParam(value = "file") MultipartFile file) {
+        if (!Constant.DocType.XLSX.equals(file.getContentType())) {
+            throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
+        }
+        List<ImportResult> resultList;
+        try {
+            resultList = materialService.importPBOM(file, getCurrentUser());
+        } catch (InvalidFormatException | IOException e) {
+            throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
+        }
+        return new Response<>(resultList);
+    }
+
+    @PostMapping(value = "materials/perfectpbom")
+    public void actionPerfectPBOM(@RequestParam(value = "file") MultipartFile file) throws IOException {
+        if (!Constant.DocType.XLSX.equals(file.getContentType())) {
+            throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
+        }
+        XSSFWorkbook workbook;
+        try {
+            workbook = materialService.perfectPBOM(file);
+        } catch (InvalidFormatException | IOException e) {
+            throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
+        }
+        getResponse().reset();
+        getResponse().setContentType("application/octet-stream");
+        OutputStream out = getResponse().getOutputStream();
+        BufferedOutputStream buffer = new BufferedOutputStream(out);
+        buffer.flush();
+        workbook.write(buffer);
+        buffer.close();
     }
 
     @PostMapping(value = "materials/import/structure")

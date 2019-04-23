@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.Predicate;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,6 @@ public class MaterialServiceImpl implements MaterialService {
 
         // Workbook行索引
         int index = 0;
-        String structureNo = null;
         for (Row row : sheet) {
             index++;
             // 前三行数据为机器信息及字段的批注，所以不予解析
@@ -114,9 +113,8 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setCode(code);
                     material.setDrawingNo(code);
                     if (null != row.getCell(0) && !"".equals(row.getCell(0).toString().trim())) {
-                        structureNo = row.getCell(0).toString().trim();
+                        material.setStructureNo(row.getCell(0).toString().trim());
                     }
-                    material.setStructureNo(structureNo);
                     if (null != row.getCell(7)) {
                         material.setName(row.getCell(7).toString().trim());
                     }
@@ -181,6 +179,7 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setKeyPartMark("Y");
                     material.setInspectMark("Y");
                     material.setPurchaseMark("Y");
+                    material.setPurchaseSort("P01");
                     material.setPrincipal(user.getCode());
                     material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
                     materialList.add(material);
@@ -191,6 +190,222 @@ public class MaterialServiceImpl implements MaterialService {
 
         materialRepository.saveAll(materialList);
         return resultList;
+    }
+
+    @Override
+    public List<ImportResult> importPBOM(MultipartFile file, User user) throws IOException, InvalidFormatException {
+        XSSFWorkbook workbook = (XSSFWorkbook) WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheet("整机BOM");
+        List<Material> materialList = new ArrayList<>(128);
+        List<String> codeList = materialRepository.findAllMaterialCode();
+        List<String> targetCodeList = new ArrayList<>();
+
+        List<ImportResult> resultList = new ArrayList<>();
+
+        // Workbook行索引
+        int index = 0;
+        for (Row row : sheet) {
+            index++;
+            // 前三行数据为机器信息及字段的批注，所以不予解析
+            if (index > 3) {
+                if (null == row.getCell(3) || "".equals(row.getCell(3).toString().trim())) {
+                    continue;
+                }
+                Material material = Material.newInstance();
+                String code = row.getCell(3).toString().trim();
+                if (!codeList.contains(code) && !targetCodeList.contains(code)) {
+                    material.setCode(code);
+                    material.setDrawingNo(code);
+                    if (null != row.getCell(0) && !"".equals(row.getCell(0).toString().trim())) {
+                        material.setStructureNo(row.getCell(0).toString().trim());
+                    }
+                    if (null != row.getCell(7)) {
+                        material.setName(row.getCell(7).toString().trim());
+                    }
+                    if (null != row.getCell(8)) {
+                        material.setSpecification(row.getCell(8).toString().trim());
+                    }
+                    if (null != row.getCell(9)) {
+                        material.setModel(row.getCell(9).toString().trim());
+                    }
+                    if (null != row.getCell(17)) {
+                        material.setDescription(row.getCell(17).toString().trim());
+                    }
+                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
+                        material.setBatchMark("N");
+                    } else {
+                        material.setBatchMark("Y");
+                    }
+                    String source = "";
+                    if (null != row.getCell(12)) {
+                        source = row.getCell(12).toString().trim();
+                    }
+                    material.setResourceMark(source);
+                    /*
+                     * 检查货源是否为*
+                     * 以B P K开头的，都是采购件，
+                     * 货源是B P5 P6的都是合批的，其他的采购件均不合批
+                     * 以K开头的都是集采，其他的都是自采
+                     */
+                    if (!"*".equals(source)) {
+                        if (source.startsWith("B") || source.startsWith("P") || source.startsWith("K")) {
+
+                            material.setSourceMark("P");
+                            material.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
+                        } else if (source.startsWith("Z")) {
+                            // 货源标识以Z开始的，是自制，不合批，不采购，不集采，不自采，无采购分类
+                            material.setSourceMark("M");
+                            material.setGroupPurMark("N");
+                            material.setOwnPurMark("N");
+                            material.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
+                        }
+
+                        if (source.startsWith("B") || source.startsWith("F")) {
+                            material.setQualifiedMark("Y");
+                        } else {
+                            material.setQualifiedMark("N");
+                        }
+
+                        if (source.startsWith("K")) {
+                            material.setGroupPurMark("Y");
+                            material.setOwnPurMark("N");
+                            material.setRespCompany("01");
+                            material.setRespDept("6004");
+                        } else {
+                            material.setGroupPurMark("N");
+                            material.setOwnPurMark("Y");
+                            material.setRespCompany("03");
+                            material.setRespDept("6202");
+                        }
+                    }
+
+
+                    material.setInventoryUnit("025");
+                    material.setKeyPartMark("Y");
+                    material.setInspectMark("Y");
+                    material.setPurchaseMark("Y");
+                    material.setPurchaseSort("P01");
+                    material.setPrincipal(user.getCode());
+                    material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
+
+
+
+                    boolean flag = true;
+                    String result = " 导入成功，信息已完善";
+                    if (null != row.getCell(20) && !"".equals(row.getCell(20).toString().trim())) {
+                        material.setResourceMark(row.getCell(20).toString().trim());
+                    }
+                    if (null != row.getCell(21) && !"".equals(row.getCell(21).toString().trim())) {
+                        material.setDescription(row.getCell(21).toString().trim());
+                    }
+                    if (null != row.getCell(22) && !"".equals(row.getCell(22).toString().trim())) {
+                        material.setInventoryUnit(row.getCell(22).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(23) && !"".equals(row.getCell(23).toString().trim())) {
+                        material.setSourceMark(row.getCell(23).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(24) && !"".equals(row.getCell(24).toString().trim())) {
+                        material.setRespDept(row.getCell(24).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(25) && !"".equals(row.getCell(25).toString().trim())) {
+                        material.setGeneralSort(row.getCell(25).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(26) && !"".equals(row.getCell(26).toString().trim())) {
+                        material.setKeyPartSort(row.getCell(26).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(27) && !"".equals(row.getCell(27).toString().trim())) {
+                        material.setQualifiedMark(row.getCell(27).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+                    if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
+                        material.setSpecification(row.getCell(28).toString().trim());
+                    }
+                    if (null != row.getCell(29) && !"".equals(row.getCell(29).toString().trim())) {
+                        material.setModel(row.getCell(29).toString().trim());
+                    }
+                    if (null != row.getCell(30) && !"".equals(row.getCell(30).toString().trim())) {
+                        material.setRespCompany(row.getCell(30).toString().trim());
+                    } else {
+                        flag = false;
+                    }
+
+                    if (flag) {
+                        result = " 导入成功，信息未完善";
+                        material.setTechnologyStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    }
+
+                    result = code + result;
+
+                    resultList.add(new ImportResult(index, result));
+
+                    materialList.add(material);
+                    targetCodeList.add(material.getCode());
+
+                }
+            }
+        }
+
+        materialRepository.saveAll(materialList);
+        return resultList;
+
+    }
+
+    @Override
+    public XSSFWorkbook perfectPBOM(MultipartFile file) throws IOException, InvalidFormatException {
+        XSSFWorkbook workbook = (XSSFWorkbook) WorkbookFactory.create(file.getInputStream());
+        Sheet sheet = workbook.getSheet("整机BOM");
+        int index = 0;
+        for (Row row : sheet) {
+            if (0 == index) {
+                row.createCell(20).setCellValue("货源");
+                row.createCell(21).setCellValue("具体描述（喷涂）");
+                row.createCell(22).setCellValue("库存单位");
+                row.createCell(23).setCellValue("采购自制标记");
+                row.createCell(24).setCellValue("责任部门");
+                row.createCell(25).setCellValue("普通分类");
+                row.createCell(26).setCellValue("关键件大类");
+                row.createCell(27).setCellValue("合批标记");
+                row.createCell(28).setCellValue("规格");
+                row.createCell(29).setCellValue("型号");
+                row.createCell(30).setCellValue("责任公司");
+            }
+            if (index < 3) {
+                index++;
+            } else {
+                String code = "";
+                if (null != row.getCell(3)) {
+                    code = row.getCell(3).toString().trim();
+                }
+                Material material = materialRepository.findMaterialByCode(code);
+                if (null != material) {
+                    if (null != material.getResourceMark()) {
+                        row.createCell(20).setCellValue(material.getResourceMark());
+                    }
+                    row.createCell(21).setCellValue(material.getDescription());
+                    row.createCell(22).setCellValue(material.getInventoryUnit());
+                    row.createCell(23).setCellValue(material.getSourceMark());
+                    row.createCell(24).setCellValue(material.getRespDept());
+                    row.createCell(25).setCellValue(material.getGeneralSort());
+                    row.createCell(26).setCellValue(material.getKeyPartSort());
+                    row.createCell(27).setCellValue(material.getQualifiedMark());
+                    row.createCell(28).setCellValue(material.getSpecification());
+                    row.createCell(29).setCellValue(material.getModel());
+                    row.createCell(30).setCellValue(material.getRespCompany());
+                }
+            }
+        }
+        return workbook;
     }
 
     /**
@@ -348,17 +563,20 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
                         material.setPlanner(row.getCell(28).toString().trim());
                     }
-//                    material.setTechnologyStatus(1);
-                    material.setQualityStatus(1);
-                    if ("P".equals(material.getSourceMark())) {
-                        material.setProduceStatus(1);
-                    } else if ("M".equals(material.getSourceMark())) {
-                        material.setPurchaseStatus(1);
+                    if (null != row.getCell(29) && !"".equals(row.getCell(29).toString().trim())) {
+                        material.setResourceMark(row.getCell(29).toString().trim());
                     }
-//                    material.setPurchaseStatus(1);
-//                    material.setAssemblyStatus(1);
-//                    material.setProduceStatus(1);
-//                    material.setExportStatus(2);
+                    material.setTechnologyStatus(1);
+                    material.setQualityStatus(1);
+//                    if ("P".equals(material.getSourceMark())) {
+//                        material.setProduceStatus(1);
+//                    } else if ("M".equals(material.getSourceMark())) {
+//                        material.setPurchaseStatus(1);
+//                    }
+                    material.setPurchaseStatus(1);
+                    material.setAssemblyStatus(1);
+                    material.setProduceStatus(1);
+                    material.setExportStatus(2);
                     materialList.add(material);
                 } else {
                     material = materialRepository.findMaterialByCode(code);
@@ -440,11 +658,14 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(28) && !"".equals(row.getCell(28).toString().trim())) {
                         material.setPlanner(row.getCell(28).toString().trim());
                     }
+                    if (null != row.getCell(29) && !"".equals(row.getCell(29).toString().trim())) {
+                        material.setResourceMark(row.getCell(29).toString().trim());
+                    }
                     updateMaterialList.add(material);
                 }
             }
         }
-//        materialRepository.saveAll(materialList);
+        materialRepository.saveAll(materialList);
 //        materialRepository.saveAll(updateMaterialList);
     }
 

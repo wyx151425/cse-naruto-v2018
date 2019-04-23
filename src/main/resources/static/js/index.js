@@ -22,8 +22,10 @@ window.onload = function () {
 const container = new Vue({
     el: "#container",
     data: {
-        exportAction: "导出",
+        exportAction: "导出最新",
+        exportAllAction: "导出全部",
         isExportDisabled: false,
+        isExportAllDisabled: false,
         isQueryDisabled: false,
         isSaveDisabled: false,
         exportStatus: 3,
@@ -262,7 +264,7 @@ const container = new Vue({
                     }
                     loadModal.loadCallback();
                 }).catch(function (error) {
-                    console.log(error);
+                console.log(error);
                 popoverSpace.append("服务器访问失败", false);
                 loadModal.loadCallback();
             });
@@ -279,6 +281,12 @@ const container = new Vue({
         },
         showFileImportModal: function () {
             fileImportModal.visible();
+        },
+        showPBOMPerfectModal: function () {
+            perfectPBOMModal.visible();
+        },
+        showPBOMImportModal: function () {
+            importPBOMModal.visible();
         },
         showDataFileImportModal: function () {
             dataFileImportModal.visible();
@@ -347,7 +355,7 @@ const container = new Vue({
             });
         },
         exportCallback: function () {
-            this.exportAction = "导出";
+            this.exportAction = "导出最新";
             this.isExportDisabled = false;
         },
         queryAllByPage: function () {
@@ -607,6 +615,27 @@ const container = new Vue({
         saveErrorCallback: function () {
             popoverSpace.append("服务器访问失败", false);
             this.isSaveDisabled = false;
+        },
+        exportAllFile: function () {
+            this.exportAllAction = "正在导出";
+            this.isExportAllDisabled = true;
+            axios({
+                method: "post",
+                url: requestContext + "api/materials/export/all",
+                responseType: "blob"
+            }).then(function (response) {
+                let date = new Date();
+                download(response, "基础数据" + date + ".xlsx");
+                container.exportAllCallback();
+            }).catch(function (error) {
+                console.log(error);
+                popoverSpace.append("服务器访问失败", false);
+                container.exportAllCallback();
+            });
+        },
+        exportAllCallback: function () {
+            this.exportAllAction = "导出全部";
+            this.isExportAllDisabled = false;
         }
     },
     mounted: function () {
@@ -659,6 +688,110 @@ const fileImportModal = new Vue({
                         popoverSpace.append(message, false);
                         fileImportModal.importCallback();
                     }
+                }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                fileImportModal.importCallback();
+            })
+        },
+        importCallback: function () {
+            this.action = "导入";
+            this.isDisabled = false;
+        }
+    }
+});
+
+const perfectPBOMModal = new Vue({
+    el: "#perfectPBOMModal",
+    data: {
+        isVisible: false,
+        isDisabled: false,
+        action: "导入"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        importFile: function () {
+            if ("" === document.getElementById("toPerfectPBOM").value) {
+                popoverSpace.append("请选择BOM文件", true);
+                return;
+            }
+            this.isDisabled = true;
+            this.action = "正在完善";
+            let file = document.getElementById("toPerfectPBOM").files[0];
+            let param = new FormData();  //创建form对象
+            param.append("file", file, file.name);  //通过append向form对象添加数据
+
+            let fileName = document.getElementById("toPerfectPBOM").files[0].name;
+
+            axios({
+                method: "post",
+                url: requestContext + "api/materials/perfectpbom",
+                headers: {'Content-Type': "multipart/form-data"},  //定义响应头
+                responseType: 'blob',
+                data: param
+            }).then(function (response) {
+                download(response, fileName);
+                perfectPBOMModal.importCallback();
+            }).catch(function () {
+                popoverSpace.append("服务器访问失败", false);
+                perfectPBOMModal.importCallback();
+            });
+        },
+        importCallback: function () {
+            this.action = "导入";
+            this.isDisabled = false;
+        }
+    }
+});
+
+const importPBOMModal = new Vue({
+    el: "#importPBOMModal",
+    data: {
+        isVisible: false,
+        isDisabled: false,
+        action: "导入"
+    },
+    methods: {
+        visible: function () {
+            this.isVisible = true;
+        },
+        invisible: function () {
+            this.isVisible = false;
+        },
+        importFile: function () {
+            if ("" === document.getElementById("toImportPBOM").value) {
+                popoverSpace.append("请选择BOM文件", true);
+                return;
+            }
+            this.isDisabled = true;
+            this.action = "正在导入";
+            let file = document.getElementById("toImportPBOM").files[0];
+            let param = new FormData();  //创建form对象
+            param.append("file", file, file.name);  //通过append向form对象添加数据
+            let config = {
+                headers: {"Content-Type": "multipart/form-data"}
+            };  //添加请求头
+            axios.post(requestContext + "api/materials/importpbom", param, config)
+                .then(function (response) {
+                    let statusCode = response.data.statusCode;
+                    if (200 === statusCode) {
+                        let content = "";
+                        for (let index = 0; index < response.data.data.length; index++) {
+                            content += "第 " + response.data.data[index].order + " 行 ";
+                            content += response.data.data[index].message;
+                            content += "\r\n";
+                        }
+                        createAndDownload(name + "导入备注.txt", content);
+                        window.location.reload();
+                    } else {
+                        let message = getMessage(statusCode);
+                        popoverSpace.append(message, false);
+                    }
+                    fileImportModal.importCallback();
                 }).catch(function () {
                 popoverSpace.append("服务器访问失败", false);
                 fileImportModal.importCallback();

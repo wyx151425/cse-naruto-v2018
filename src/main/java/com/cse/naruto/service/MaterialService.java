@@ -3,6 +3,7 @@ package com.cse.naruto.service;
 import com.cse.naruto.model.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,25 @@ public interface MaterialService {
      * @throws InvalidFormatException 文件格式错误异常
      */
     List<ImportResult> importMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException;
+
+    /**
+     * 导入P-BOM中的数据
+     *
+     * @param file P-BOM文件
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误异常
+     */
+    List<ImportResult> importPBOM(MultipartFile file, User user) throws IOException, InvalidFormatException;
+
+    /**
+     * 完善PBOM
+     *
+     * @param file PBOM文件
+     * @return 完善后的PBOM
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误异常
+     */
+    XSSFWorkbook perfectPBOM(MultipartFile file) throws IOException, InvalidFormatException;
 
     /**
      * 通过BOM导入物料基础数据

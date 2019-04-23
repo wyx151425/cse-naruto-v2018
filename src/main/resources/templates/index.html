@@ -39,13 +39,24 @@
                     <option value="2">已导出</option>
                 </select>
             </div>
+            <button class="btn pull-right" type="button" @click="exportAllFile" :disabled="isExportAllDisabled" style="margin-left: 14px">
+                <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isExportDisabled"></span>{{exportAllAction}}
+            </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
-                    :disabled="isExportDisabled" v-if="'QD0910' == user.code">
+                    :disabled="isExportDisabled" v-if="user.roles.ROLE_MANAGE_P_BOM">
                 {{exportAction}}
             </button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showPBOMPerfectModal"
+                    v-if="user.roles.ROLE_MANAGE_P_BOM">
+                完善P-BOM
+            </button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showPBOMImportModal"
+                    v-if="user.roles.ROLE_MANAGE_P_BOM">
+                导入P-BOM
+            </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
-                v-if="user.code == 'QD0962' || user.code == 'QD0910' || user.code == 'QD0947' || user.code == 'QD1022' || user.code == 'QD1010'">
-                导入
+                    v-if="user.roles.ROLE_IMPORT_BOM">
+                导入新数据
             </button>
             <div class="query-group pull-right" style="margin-left: 16px">
                 <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
@@ -794,13 +805,43 @@
 <div id="fileImportModal" class="modal" v-if="isVisible" v-cloak>
     <div class="modal-dialog">
         <div class="modal-header">
-            <span class="modal-title">导入文件</span>
+            <span class="modal-title">导入新物料数据</span>
             <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
         </div>
         <div class="modal-content">
             <div class="form-group">
                 <label class="form-label">文件</label>
                 <input id="file" class="form-file" type="file"/>
+            </div>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+        </div>
+    </div>
+</div>
+<div id="importPBOMModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">导入P-BOM文件</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">文件</label>
+                <input id="toImportPBOM" class="form-file" type="file"/>
+            </div>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+        </div>
+    </div>
+</div>
+<div id="perfectPBOMModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">完善P-BOM文件</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">文件</label>
+                <input id="toPerfectPBOM" class="form-file" type="file"/>
             </div>
             <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
         </div>
@@ -884,7 +925,7 @@
 <div id="loadModal" class="mask" v-if="loading">
     <p class="mask-prompt">数据获取中...</p>
 </div>
-<script th:src="@{/js/vue.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script th:src="@{/js/axios.min.js}"></script>
 <script th:src="@{/js/naruto.js}"></script>
 <script th:src="@{/js/index.js}"></script>

@@ -517,9 +517,45 @@ public class Material extends NarutoEntity {
     @Override
     public String toString() {
         return "Material{" +
-                "code='" + code + '\'' +
-                ", oldCode='" + originCode + '\'' +
+                "id=" + id +
+                ", companyNo='" + companyNo + '\'' +
+                ", structureNo='" + structureNo + '\'' +
+                ", code='" + code + '\'' +
+                ", originCode='" + originCode + '\'' +
                 ", name='" + name + '\'' +
+                ", specification='" + specification + '\'' +
+                ", model='" + model + '\'' +
+                ", description='" + description + '\'' +
+                ", international='" + international + '\'' +
+                ", drawingNo='" + drawingNo + '\'' +
+                ", reference='" + reference + '\'' +
+                ", generalSort='" + generalSort + '\'' +
+                ", inventoryUnit='" + inventoryUnit + '\'' +
+                ", sourceMark='" + sourceMark + '\'' +
+                ", respDept='" + respDept + '\'' +
+                ", respCompany='" + respCompany + '\'' +
+                ", keyPartMark='" + keyPartMark + '\'' +
+                ", keyPartSort='" + keyPartSort + '\'' +
+                ", virtualPartMark='" + virtualPartMark + '\'' +
+                ", qualifiedMark='" + qualifiedMark + '\'' +
+                ", inspectMark='" + inspectMark + '\'' +
+                ", batchMark='" + batchMark + '\'' +
+                ", purchaseSort='" + purchaseSort + '\'' +
+                ", purchaseMark='" + purchaseMark + '\'' +
+                ", groupPurMark='" + groupPurMark + '\'' +
+                ", ownPurMark='" + ownPurMark + '\'' +
+                ", defRepository='" + defRepository + '\'' +
+                ", outSource='" + outSource + '\'' +
+                ", planner='" + planner + '\'' +
+                ", fixedAdvTime='" + fixedAdvTime + '\'' +
+                ", resourceMark='" + resourceMark + '\'' +
+                ", technologyStatus=" + technologyStatus +
+                ", qualityStatus=" + qualityStatus +
+                ", purchaseStatus=" + purchaseStatus +
+                ", assemblyStatus=" + assemblyStatus +
+                ", produceStatus=" + produceStatus +
+                ", exportStatus=" + exportStatus +
+                ", principal='" + principal + '\'' +
                 '}' + '\n';
     }
 }
