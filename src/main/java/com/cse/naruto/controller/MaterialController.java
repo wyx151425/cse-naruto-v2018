@@ -147,6 +147,14 @@ public class MaterialController extends NarutoFacade {
         return new Response<>();
     }
 
+    @PutMapping(value = "materials/purchaseAll")
+    public Response<Material> actionUpdateMaterialByPurchaseAll(@RequestBody List<Material> materialList) {
+        for (Material material : materialList) {
+            materialService.updateMaterialPurchase(material);
+        }
+        return new Response<>();
+    }
+
     @PutMapping(value = "materials/assembly")
     public Response<Material> actionUpdateMaterialByAssemblyCenter(@RequestBody Material material) {
         materialService.updateMaterialAssembly(material);

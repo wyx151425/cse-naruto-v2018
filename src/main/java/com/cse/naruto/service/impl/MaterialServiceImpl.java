@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.Predicate;
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -256,7 +257,7 @@ public class MaterialServiceImpl implements MaterialService {
                             // 货源标识以Z开始的，是自制，不合批，不采购，不集采，不自采，无采购分类
                             material.setSourceMark("M");
                             material.setGroupPurMark("N");
-                            material.setOwnPurMark("N");
+                            material.setOwnPurMark("Y");
                             material.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
                         }
 
@@ -1040,8 +1041,6 @@ public class MaterialServiceImpl implements MaterialService {
         Material targetMater = materialRepository.findMaterialByCode(material.getCode());
         targetMater.setPurchaseSort(material.getPurchaseSort());
         targetMater.setPurchaseMark(material.getPurchaseMark());
-        targetMater.setGroupPurMark(material.getGroupPurMark());
-        targetMater.setOwnPurMark(material.getOwnPurMark());
         targetMater.setFixedAdvTime(material.getFixedAdvTime());
         targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
@@ -1226,6 +1225,12 @@ public class MaterialServiceImpl implements MaterialService {
         cell028.setCellValue("计划员");
         XSSFCell cell033 = row0.createCell(29);
         cell033.setCellValue("货源");
+        XSSFCell cell034 = row0.createCell(30);
+        cell034.setCellValue("部套号");
+        XSSFCell cell035 = row0.createCell(31);
+        cell035.setCellValue("创建时间");
+        XSSFCell cell036 = row0.createCell(32);
+        cell036.setCellValue("完善时间");
 
         for (com.cse.naruto.model.Material material : materialList) {
             rowIndex++;
@@ -1303,6 +1308,12 @@ public class MaterialServiceImpl implements MaterialService {
             }
             XSSFCell cell33 = row.createCell(29);
             cell33.setCellValue(material.getResourceMark());
+            XSSFCell cell34 = row.createCell(30);
+            cell34.setCellValue(material.getStructureNo());
+            XSSFCell cell35 = row.createCell(31);
+            cell35.setCellValue(LocalDate.from(material.getCreateAt()).toString());
+            XSSFCell cell36 = row.createCell(32);
+            cell36.setCellValue(LocalDate.from(material.getUpdateAt()).toString());
         }
 
         return workbook;

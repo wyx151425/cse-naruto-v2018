@@ -603,6 +603,30 @@ const container = new Vue({
                 container.saveErrorCallback();
             });
         },
+        savePurchaseAll: function () {
+            for (let index = 0; index < this.materialList.length; index++) {
+                let material = this.materialList[index];
+                if (null === material.purchaseSort || "" === material.purchaseSort) {
+                    popoverSpace.append("第" + (index + 1) + "行请选择采购分类", false);
+                    return;
+                }
+                if (null === material.purchaseMark || "" === material.purchaseMark) {
+                    popoverSpace.append("第" + (index + 1) + "行请选择可采购标记", false);
+                    return;
+                }
+                if (null === material.fixedAdvTime || "" === material.fixedAdvTime) {
+                    popoverSpace.append("第" + (index + 1) + "行请输入固定提前期", false);
+                    return;
+                }
+            }
+            this.isSaveDisabled = true;
+            axios.put(requestContext + "api/materials/purchaseAll", this.materialList)
+                .then(function (response) {
+                    container.saveSuccessCallback(response.data.statusCode);
+                }).catch(function () {
+                container.saveErrorCallback();
+            });
+        },
         saveSuccessCallback: function (statusCode) {
             if (200 === statusCode) {
                 popoverSpace.append("保存成功", true);

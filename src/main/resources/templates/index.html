@@ -39,7 +39,8 @@
                     <option value="2">已导出</option>
                 </select>
             </div>
-            <button class="btn pull-right" type="button" @click="exportAllFile" :disabled="isExportAllDisabled" style="margin-left: 14px">
+            <button class="btn pull-right" type="button" @click="exportAllFile" :disabled="isExportAllDisabled"
+                    style="margin-left: 14px">
                 <span class="icon icon-cog rotate" style="margin-right: 4px" v-if="isExportDisabled"></span>{{exportAllAction}}
             </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportFile"
@@ -457,6 +458,7 @@
                             <option value="313">313 - 零部件（委外）</option>
                             <option value="314">314 - 零部件（设计更改）</option>
                             <option value="315">315 - 零部件（电器件）</option>
+                            <option value="316">316 - 零部件（传感器、压力表）</option>
                             <option value="39">39 - 零部件（进口件）</option>
                             <option value="40">40 - 问题物料</option>
                             <option value="50">50 - 消耗品</option>
@@ -609,7 +611,7 @@
             </div>
         </div>
     </div>
-    <div class="panel" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE" style="width: 1882px; margin-left: -241px">
+    <div class="panel" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE" style="width: 1540px; margin-left: -70px">
         <div class="btn-list">
             <div class="pull-left">
                 <label class="select-label">完善状态</label>
@@ -619,9 +621,9 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFileModalVisible"
-                    :disabled="isExportDisabled">
-                {{exportAction}}
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="savePurchaseAll" :disabled="isSaveDisabled">保存全部</button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFileModalVisible">
+                导出
             </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showDataFileImportModal">
                 导入
@@ -642,9 +644,9 @@
                     <span class="icon icon-search"></span></p>
             </div>
         </div>
-        <div class="table-wrap" style="width: 1800px">
+        <div class="table-wrap" style="width: 1458px">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_PURCHASE_EMPLOYEE"
-                   style="width: 1880px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 1450px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th class="table-fixed" style="width: 100px">部套号</th>
@@ -745,20 +747,20 @@
                         </select>
                     </td>
                     <!--<td style="width: 180px">-->
-                        <!--<select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)"-->
-                                <!--style="width: 163px">-->
-                            <!--<option value="null" disabled>请选择</option>-->
-                            <!--<option value="Y">Y</option>-->
-                            <!--<option value="N">N</option>-->
-                        <!--</select>-->
+                    <!--<select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)"-->
+                    <!--style="width: 163px">-->
+                    <!--<option value="null" disabled>请选择</option>-->
+                    <!--<option value="Y">Y</option>-->
+                    <!--<option value="N">N</option>-->
+                    <!--</select>-->
                     <!--</td>-->
                     <!--<td style="width: 180px">-->
-                        <!--<select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)"-->
-                                <!--style="width: 163px">-->
-                            <!--<option value="null" disabled>请选择</option>-->
-                            <!--<option value="Y">Y</option>-->
-                            <!--<option value="N">N</option>-->
-                        <!--</select>-->
+                    <!--<select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)"-->
+                    <!--style="width: 163px">-->
+                    <!--<option value="null" disabled>请选择</option>-->
+                    <!--<option value="Y">Y</option>-->
+                    <!--<option value="N">N</option>-->
+                    <!--</select>-->
                     <!--</td>-->
                     <td style="width: 180px">
                         <input class="form-input" type="text" placeholder="请输入" v-model="material.fixedAdvTime"
