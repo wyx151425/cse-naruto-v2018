@@ -3,6 +3,11 @@ create sequence sequence_user
   start with 1
   maxvalue 999999999;
 
+create sequence sequence_statistic
+  increment by 1
+  start with 1
+  maxvalue 999999999;
+
 create sequence sequence_permission
   increment by 1
   start with 1

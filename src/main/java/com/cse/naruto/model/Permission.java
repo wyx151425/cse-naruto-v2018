@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "cse_permission")
 public class Permission extends NarutoEntity {
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_permission")
     @SequenceGenerator(name = "generator_permission", sequenceName = "sequence_permission", allocationSize = 1)
     private Integer id;

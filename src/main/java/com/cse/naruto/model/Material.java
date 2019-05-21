@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "cse_material")
 public class Material extends NarutoEntity {
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_material")
     @SequenceGenerator(name = "generator_material", sequenceName = "sequence_material", allocationSize = 1)
     private Integer id;
@@ -177,6 +178,11 @@ public class Material extends NarutoEntity {
      * 负责人
      */
     private String principal;
+
+    /**
+     * 令牌
+     */
+    private String token;
 
 
     public Material() {
@@ -492,6 +498,14 @@ public class Material extends NarutoEntity {
 
     public void setPrincipal(String principal) {
         this.principal = principal;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public static Material newInstance() {

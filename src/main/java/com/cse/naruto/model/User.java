@@ -15,6 +15,7 @@ import java.util.Map;
 public class User extends NarutoEntity {
 
     @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "generator_user")
     @SequenceGenerator(name = "generator_user", sequenceName = "sequence_user", allocationSize = 1)
     private Integer id;

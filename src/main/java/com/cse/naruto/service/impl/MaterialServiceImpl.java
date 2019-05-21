@@ -2,6 +2,7 @@ package com.cse.naruto.service.impl;
 
 import com.cse.naruto.model.*;
 import com.cse.naruto.repository.MaterialRepository;
+import com.cse.naruto.repository.StatisticRepository;
 import com.cse.naruto.service.MaterialService;
 import com.cse.naruto.util.Constant;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -24,7 +25,9 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 物料业务逻辑
@@ -37,10 +40,12 @@ import java.util.List;
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository materialRepository;
+    private final StatisticRepository statisticRepository;
 
     @Autowired
-    public MaterialServiceImpl(MaterialRepository materialRepository) {
+    public MaterialServiceImpl(MaterialRepository materialRepository, StatisticRepository statisticRepository) {
         this.materialRepository = materialRepository;
+        this.statisticRepository = statisticRepository;
     }
 
     /**
@@ -85,6 +90,7 @@ public class MaterialServiceImpl implements MaterialService {
         List<String> codeList = materialRepository.findAllMaterialCode();
         List<String> targetCodeList = new ArrayList<>();
         List<ImportResult> resultList = new ArrayList<>();
+        Statistic statistic = Statistic.newInstance();
 
         // Workbook行索引
         int index = 0;
@@ -183,12 +189,14 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setPurchaseSort("P01");
                     material.setPrincipal(user.getCode());
                     material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setToken(statistic.getToken());
                     materialList.add(material);
                     targetCodeList.add(material.getCode());
                 }
             }
         }
 
+        statisticRepository.save(statistic);
         materialRepository.saveAll(materialList);
         return resultList;
     }
@@ -290,7 +298,6 @@ public class MaterialServiceImpl implements MaterialService {
                     material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
 
 
-
                     boolean flag = true;
                     String result = " 导入成功，信息已完善";
                     if (null != row.getCell(20) && !"".equals(row.getCell(20).toString().trim())) {
@@ -342,8 +349,10 @@ public class MaterialServiceImpl implements MaterialService {
                     }
 
                     if (flag) {
-                        result = " 导入成功，信息未完善";
                         material.setTechnologyStatus(Constant.Material.PerfectStatus.PERFECTED);
+                        checkExportStatus(material, 1);
+                    } else {
+                        result = " 导入成功，信息未完善";
                     }
 
                     result = code + result;
@@ -862,7 +871,7 @@ public class MaterialServiceImpl implements MaterialService {
                         }
                         material.setUpdateAt(LocalDateTime.now());
                         material.setPurchaseStatus(perfectStatus);
-                        checkExportStatus(material);
+                        checkExportStatus(material, 3);
                         materialRepository.save(material);
                     }
                 }
@@ -896,7 +905,7 @@ public class MaterialServiceImpl implements MaterialService {
                         }
                         material.setUpdateAt(LocalDateTime.now());
                         material.setProduceStatus(perfectStatus);
-                        checkExportStatus(material);
+                        checkExportStatus(material, 5);
                         materialRepository.save(material);
                     }
                 }
@@ -920,7 +929,7 @@ public class MaterialServiceImpl implements MaterialService {
                         }
                         material.setUpdateAt(LocalDateTime.now());
                         material.setAssemblyStatus(perfectStatus);
-                        checkExportStatus(material);
+                        checkExportStatus(material, 4);
                         materialRepository.save(material);
                     }
                 }
@@ -933,8 +942,16 @@ public class MaterialServiceImpl implements MaterialService {
     public Workbook exportMaterialList() {
         List<Material> materialList = materialRepository.findAllByExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         Workbook workbook = createWorkbook(materialList);
+        Set<String> tokenSet = new HashSet<>();
         for (Material material : materialList) {
+            tokenSet.add(material.getToken());
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTED);
+        }
+        LocalDateTime dateTime = LocalDateTime.now().withNano(0);
+        for (String token : tokenSet) {
+            Statistic statistic = statisticRepository.findOneByToken(token);
+            statistic.setExportAt(dateTime);
+            statisticRepository.save(statistic);
         }
         materialRepository.saveAll(materialList);
         return workbook;
@@ -947,7 +964,7 @@ public class MaterialServiceImpl implements MaterialService {
         return createWorkbook(materialList);
     }
 
-    private void checkExportStatus(Material material) {
+    private void checkExportStatus(Material material, Integer dept) {
         if (Constant.Material.PerfectStatus.PERFECTED == material.getTechnologyStatus()
                 && Constant.Material.PerfectStatus.PERFECTED == material.getQualityStatus()
                 && Constant.Material.PerfectStatus.PERFECTED == material.getPurchaseStatus()
@@ -955,6 +972,25 @@ public class MaterialServiceImpl implements MaterialService {
                 && Constant.Material.PerfectStatus.PERFECTED == material.getProduceStatus()) {
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         }
+        Statistic statistic = statisticRepository.findOneByToken(material.getToken());
+        LocalDateTime dateTime = LocalDateTime.now().withNano(0);
+        switch (dept) {
+            case 1:
+                statistic.setTechnologyCompleteAt(dateTime);
+                break;
+            case 3:
+                statistic.setPurchaseCompleteAt(dateTime);
+                break;
+            case 4:
+                statistic.setAssemblyCompleteAt(dateTime);
+                break;
+            case 5:
+                statistic.setProduceCompleteAt(dateTime);
+                break;
+            default:
+                break;
+        }
+        statisticRepository.save(statistic);
     }
 
     @Override
@@ -1019,7 +1055,7 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setQualifiedMark(material.getQualifiedMark());
         targetMater.setTechnologyStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        checkExportStatus(targetMater);
+        checkExportStatus(targetMater, 1);
         materialRepository.save(targetMater);
     }
 
@@ -1031,7 +1067,7 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setBatchMark(material.getBatchMark());
         targetMater.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        checkExportStatus(targetMater);
+        checkExportStatus(targetMater, 2);
         materialRepository.save(targetMater);
     }
 
@@ -1044,7 +1080,7 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setFixedAdvTime(material.getFixedAdvTime());
         targetMater.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        checkExportStatus(targetMater);
+        checkExportStatus(targetMater, 3);
         materialRepository.save(targetMater);
     }
 
@@ -1055,7 +1091,7 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setDefRepository(material.getDefRepository());
         targetMater.setAssemblyStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        checkExportStatus(targetMater);
+        checkExportStatus(targetMater, 4);
         materialRepository.save(targetMater);
     }
 
@@ -1068,7 +1104,7 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setFixedAdvTime(material.getFixedAdvTime());
         targetMater.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
         targetMater.setUpdateAt(LocalDateTime.now());
-        checkExportStatus(targetMater);
+        checkExportStatus(targetMater, 5);
         materialRepository.save(targetMater);
     }
 
