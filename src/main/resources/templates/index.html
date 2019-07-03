@@ -59,6 +59,9 @@
                     v-if="user.roles.ROLE_IMPORT_BOM">
                 导入新数据
             </button>
+            <a class="pull-right" th:href="@{/guarantee}" style="margin-left: 16px">
+                <button class="btn" type="button">售后数据</button>
+            </a>
             <div class="query-group pull-right" style="margin-left: 16px">
                 <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
                 <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
@@ -621,7 +624,9 @@
                     <option value="1">已完善</option>
                 </select>
             </div>
-            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="savePurchaseAll" :disabled="isSaveDisabled">保存全部</button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="savePurchaseAll"
+                    :disabled="isSaveDisabled">保存全部
+            </button>
             <button class="btn pull-right" style="margin-left: 16px" type="button" @click="exportDataFileModalVisible">
                 导出
             </button>

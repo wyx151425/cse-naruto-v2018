@@ -83,6 +83,7 @@ public class MaterialServiceImpl implements MaterialService {
      * @throws InvalidFormatException 文件格式错误引起的异常
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<ImportResult> importMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheet("整机BOM");
@@ -202,6 +203,74 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void importGuaranteeMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException {
+        Sheet sheet = formatExcelBOM(file, "sBasicData");
+        List<Material> materialList = new ArrayList<>(100);
+        List<String> codeList = materialRepository.findAllMaterialCode();
+        Statistic statistic = Statistic.newInstance();
+
+        int rowIndex = 0;
+        for (Row row : sheet) {
+            if (rowIndex < 1) {
+                rowIndex++;
+            } else {
+                if (null == row.getCell(0) || "".equals(row.getCell(0).toString().trim())) {
+                    continue;
+                }
+                Material material;
+                String code = row.getCell(0).toString().trim();
+                if (!codeList.contains(code)) {
+                    material = Material.newInstance();
+                    material.setCode(code);
+                    material.setDrawingNo(row.getCell(1).toString().trim());
+                    material.setName(row.getCell(2).toString().trim());
+                    if (null != row.getCell(3) && !"".equals(row.getCell(3).toString().trim())) {
+                        material.setSpecification(row.getCell(3).toString().trim());
+                    }
+                    if (null != row.getCell(4) && !"".equals(row.getCell(4).toString().trim())) {
+                        material.setModel(row.getCell(4).toString().trim());
+                    }
+                    if (null != row.getCell(5) && !"".equals(row.getCell(5).toString().trim())) {
+                        material.setDescription(row.getCell(5).toString().trim());
+                    }
+                    material.setStructureNo("SG-9999");
+                    material.setGeneralSort("G15");
+                    material.setInspectMark("Y");
+                    material.setBatchMark("Y");
+                    material.setInventoryUnit("025");
+                    material.setDefRepository("60");
+                    material.setVirtualPartMark("N");
+                    material.setSourceMark("P");
+                    material.setOutSource("N");
+                    material.setRespDept("6202");
+                    material.setRespCompany("03");
+                    material.setKeyPartSort("Y4");
+                    material.setKeyPartMark("Y");
+                    material.setPurchaseSort("P01");
+                    material.setFixedAdvTime("90");
+                    material.setQualifiedMark("N");
+                    material.setPurchaseMark("Y");
+                    material.setGroupPurMark("N");
+                    material.setOwnPurMark("Y");
+                    material.setResourceMark("P");
+                    material.setTechnologyStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setQualityStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setPurchaseStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setAssemblyStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setProduceStatus(Constant.Material.PerfectStatus.PERFECTED);
+                    material.setExportStatus(Constant.Material.ExportStatus.IMPERFECT);
+                    material.setToken(statistic.getToken());
+                    materialList.add(material);
+                }
+            }
+        }
+        materialRepository.saveAll(materialList);
+        statisticRepository.save(statistic);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<ImportResult> importPBOM(MultipartFile file, User user) throws IOException, InvalidFormatException {
         XSSFWorkbook workbook = (XSSFWorkbook) WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheet("整机BOM");
@@ -372,6 +441,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public XSSFWorkbook perfectPBOM(MultipartFile file) throws IOException, InvalidFormatException {
         XSSFWorkbook workbook = (XSSFWorkbook) WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheet("整机BOM");
@@ -426,6 +496,7 @@ public class MaterialServiceImpl implements MaterialService {
      * @throws InvalidFormatException 文件格式错误引起的异常
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void importOriginMaterialList(MultipartFile file) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(file.getInputStream());
         Sheet sheet = workbook.getSheet("整机BOM");
@@ -474,6 +545,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void importStructureInfo(MultipartFile file) throws IOException, InvalidFormatException {
         Sheet sheet = formatExcelBOM(file, "BasicData");
         List<Material> materialList = new ArrayList<>(3000);
@@ -973,24 +1045,26 @@ public class MaterialServiceImpl implements MaterialService {
             material.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
         }
         Statistic statistic = statisticRepository.findOneByToken(material.getToken());
-        LocalDateTime dateTime = LocalDateTime.now().withNano(0);
-        switch (dept) {
-            case 1:
-                statistic.setTechnologyCompleteAt(dateTime);
-                break;
-            case 3:
-                statistic.setPurchaseCompleteAt(dateTime);
-                break;
-            case 4:
-                statistic.setAssemblyCompleteAt(dateTime);
-                break;
-            case 5:
-                statistic.setProduceCompleteAt(dateTime);
-                break;
-            default:
-                break;
+        if (null != statistic) {
+            LocalDateTime dateTime = LocalDateTime.now().withNano(0);
+            switch (dept) {
+                case 1:
+                    statistic.setTechnologyCompleteAt(dateTime);
+                    break;
+                case 3:
+                    statistic.setPurchaseCompleteAt(dateTime);
+                    break;
+                case 4:
+                    statistic.setAssemblyCompleteAt(dateTime);
+                    break;
+                case 5:
+                    statistic.setProduceCompleteAt(dateTime);
+                    break;
+                default:
+                    break;
+            }
+            statisticRepository.save(statistic);
         }
-        statisticRepository.save(statistic);
     }
 
     @Override
@@ -1187,6 +1261,37 @@ public class MaterialServiceImpl implements MaterialService {
         PageContext<Material> pageContext = new PageContext<>();
         pageContext.setIndex(pageIndex);
         if (materialPage != null) {
+            pageContext.setDataTotal(materialPage.getTotalElements());
+            pageContext.setPageTotal(materialPage.getTotalPages());
+            pageContext.setData(materialPage.getContent());
+        }
+        return pageContext;
+    }
+
+    @Override
+    public PageContext<Material> findGuaranteeMaterialListByPagination(int pageIndex, int pageSize, User user) {
+        // 指定排序参数对象：根据id，进行升序查询
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        /*
+         * 封装分页实体 Pageable
+         * 参数一：pageIndex表示当前查询的第几页(默认从0开始，0表示第一页)
+         * 参数二：表示每页展示多少数据，现在设置每页展示100条数据
+         * 参数三：封装排序对象，根据该对象的参数指定根据id升序查询
+         * */
+        Page<Material> materialPage = null;
+
+        if (user.getRoles().getOrDefault(Constant.UserRoles.TECHNOLOGY_EMPLOYEE, false)
+                || user.getRoles().getOrDefault(Constant.UserRoles.GUARANTEE_EMPLOYEE, false)) {
+            materialPage = materialRepository.findAll((Specification<Material>) (root, criteriaQuery, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.EXPORT_STATUS), 0));
+                predicates.add(criteriaBuilder.equal(root.get(Constant.Material.STRUCTURE_NO), "SG-9999"));
+                return criteriaQuery.where(predicates.toArray(new Predicate[0])).getRestriction();
+            }, PageRequest.of(pageIndex - 1, pageSize, sort));
+        }
+        PageContext<Material> pageContext = new PageContext<>();
+        pageContext.setIndex(pageIndex);
+        if (null != materialPage) {
             pageContext.setDataTotal(materialPage.getTotalElements());
             pageContext.setPageTotal(materialPage.getTotalPages());
             pageContext.setData(materialPage.getContent());
@@ -1417,5 +1522,15 @@ public class MaterialServiceImpl implements MaterialService {
         perfect.setDeptPerfects(deptPerfects);
 
         return perfect;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void confirmGuaranteeMaterialList(List<Material> materialList) {
+        for (Material material : materialList) {
+            Material targetMaterial = materialRepository.findMaterialByCode(material.getCode());
+            targetMaterial.setExportStatus(Constant.Material.ExportStatus.EXPORTABLE);
+            materialRepository.save(targetMaterial);
+        }
     }
 }

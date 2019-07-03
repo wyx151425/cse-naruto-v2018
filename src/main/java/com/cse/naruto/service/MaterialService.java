@@ -31,6 +31,15 @@ public interface MaterialService {
     List<ImportResult> importMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException;
 
     /**
+     * 以标准格式导入服务保障中心的物料基础数据
+     *
+     * @param file BOM文件
+     * @throws IOException            输入输出异常
+     * @throws InvalidFormatException 文件格式错误异常
+     */
+    void importGuaranteeMaterialList(MultipartFile file, User user) throws IOException, InvalidFormatException;
+
+    /**
      * 导入P-BOM中的数据
      *
      * @param file P-BOM文件
@@ -165,6 +174,16 @@ public interface MaterialService {
     PageContext<Material> findMaterialListByPagination(int pageIndex, int pageSize, int exportStatus, int perfectStatus, User user);
 
     /**
+     * 分页查询服务保障中心的基础数据
+     *
+     * @param pageIndex 分页索引
+     * @param pageSize  分页数据量
+     * @param user      用户
+     * @return 带有分页信息和物料数据集合的对象
+     */
+    PageContext<Material> findGuaranteeMaterialListByPagination(int pageIndex, int pageSize, User user);
+
+    /**
      * 模糊查询物料
      *
      * @param materialCode  查询字符串
@@ -200,4 +219,10 @@ public interface MaterialService {
      * @return 完善情况对象
      */
     Perfect statisticCount();
+
+    /**
+     * 确认服务保障中心的物料
+     * @param materialList
+     */
+    void confirmGuaranteeMaterialList(List<Material> materialList);
 }

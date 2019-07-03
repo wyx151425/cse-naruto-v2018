@@ -43,6 +43,8 @@ const container = new Vue({
                         localStorage.setItem("user", JSON.stringify(user));
                         if ("admin" === user.code) {
                             window.location.href = requestContext + "admin";
+                        } else if (user.roles.ROLE_GUARANTEE_EMPLOYEE) {
+                            window.location.href = requestContext + "guarantee";
                         } else {
                             window.location.href = requestContext + "index";
                         }

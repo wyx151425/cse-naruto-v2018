@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>基础数据管理工具</title>
+    <link rel="shortcut icon" th:href="@{/images/CSE.png}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/naruto.css}"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+</head>
+<body>
+<header id="header" class="header">
+    <div class="header-fixed">
+        <div class="container">
+            <a th:href="@{/index}"><img class="logo" th:src="@{/images/CSE.png}" alt=""/></a>
+            <div class="account">
+                <span>{{user.name}}</span>
+                <a class="icon icon-off" th:href="@{/logout}"></a>
+            </div>
+        </div>
+    </div>
+</header>
+<main id="container" class="container">
+    <div class="panel">
+        <div class="btn-list" v-cloak>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showFileImportModal"
+                    v-if="user.roles.ROLE_GUARANTEE_EMPLOYEE">
+                导入数据
+            </button>
+            <button class="btn pull-right" style="margin-left: 16px" type="button" @click="showConfirmPageModal"
+                    v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE">
+                确认该页
+            </button>
+        </div>
+        <div id="table-space" class="table-wrap">
+            <table class="table table-bordered table-hover"
+                   style="width: 4320px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                <thead>
+                <tr>
+                    <th class="table-fixed" style="width: 100px;">部套号</th>
+                    <th class="table-fixed" style="width: 160px;">物料号</th>
+                    <th class="table-fixed" style="width: 160px;">图号</th>
+                    <th class="table-fixed" style="width: 160px;">物料名称</th>
+                    <th style="width: 160px;">规格</th>
+                    <th style="width: 160px;">型号</th>
+                    <th style="width: 160px;">普通分类</th>
+                    <th style="width: 160px;">质检标记</th>
+                    <th style="width: 160px;">批次标记</th>
+                    <th style="width: 160px;">库存单位</th>
+                    <th style="width: 160px;">默认仓库编码</th>
+                    <th style="width: 160px;">虚拟件标记</th>
+                    <th style="width: 160px;">采购自制件标记</th>
+                    <th style="width: 160px;">外协标记</th>
+                    <th style="width: 160px;">责任公司</th>
+                    <th style="width: 160px;">责任部门</th>
+                    <th style="width: 160px;">关键件标记</th>
+                    <th style="width: 160px;">关键件大类</th>
+                    <th style="width: 160px;">采购分类</th>
+                    <th style="width: 160px;">固定提前期</th>
+                    <th style="width: 160px;">具体描述</th>
+                    <th style="width: 160px;">合批标记</th>
+                    <th style="width: 160px;">可采购标记</th>
+                    <th style="width: 160px;">可集采标记</th>
+                    <th style="width: 160px;">可自采标记</th>
+                    <th style="width: 160px;">计划员</th>
+                    <th style="width: 80px;">货源</th>
+                    <th style="width: 100px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(material, index) in materialList" v-cloak>
+                    <td class="table-fixed" style="width: 100px">{{material.structureNo}}</td>
+                    <td class="table-fixed" style="width: 160px;">{{material.code}}</td>
+                    <td class="table-fixed" style="width: 160px;">{{material.drawingNo}}</td>
+                    <td class="table-fixed" style="width: 160px;">{{material.name}}</td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.specification" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.model" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.generalSort">
+                            <option selected disabled>请选择</option>
+                            <option value="G01">G01 - 原料</option>
+                            <option value="G02">G02 - 毛胚件</option>
+                            <option value="G03">G03 - 加工大件</option>
+                            <option value="G04">G04 - 加工小件</option>
+                            <option value="G05">G05 - 焊接结构大件</option>
+                            <option value="G06">G06 - 焊接结构中小件</option>
+                            <option value="G07">G07 - 电器件</option>
+                            <option value="G08">G08 - 总成功能件</option>
+                            <option value="G09">G09 - 仪器仪表</option>
+                            <option value="G10">G10 - 管路/走台部件</option>
+                            <option value="G11">G11 - 阀类部件</option>
+                            <option value="G12">G12 - 标准件</option>
+                            <option value="G13">G13 - 工具工装件</option>
+                            <option value="G14">G14 - 消耗品</option>
+                            <option value="G15">G15 - 柴油机备品备件</option>
+                            <option value="G16">G16 - 系统润滑油</option>
+                            <option value="G17">G17 - 工装材料</option>
+                            <option value="G18">G18 - 自制半成品</option>
+                            <option value="G19">G19 - 设备备品备件</option>
+                            <option value="G21">G21 - 期初未分类</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.inspectMark">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.batchMark">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.inventoryUnit">
+                            <option selected disabled>请选择</option>
+                            <option value="020">020 - mm</option>
+                            <option value="021">021 - um</option>
+                            <option value="022">022 - bar</option>
+                            <option value="023">023 - Mpa</option>
+                            <option value="024">024 - Kpa</option>
+                            <option value="003">003 - 包</option>
+                            <option value="KG">KG - 千克</option>
+                            <option value="T">T - 吨</option>
+                            <option value="FT">FT - 英尺</option>
+                            <option value="G">G - 克</option>
+                            <option value="IN">IN - 英寸</option>
+                            <option value="KM">KM - 公里</option>
+                            <option value="L">L - 公升</option>
+                            <option value="LB">LB - 磅</option>
+                            <option value="M">M - 米</option>
+                            <option value="M2">M2 - 平方米</option>
+                            <option value="M3">M3 - 立方米</option>
+                            <option value="MG">MG - Milligramme</option>
+                            <option value="ML">ML - 毫升</option>
+                            <option value="025">025 - 个</option>
+                            <option value="OZ">OZ - 盎司</option>
+                            <option value="PIC">PIC - 张</option>
+                            <option value="QT">QT - Quintal</option>
+                            <option value="SEC">SEC - 秒</option>
+                            <option value="UN">UN - 根</option>
+                            <option value="001">001 - 付</option>
+                            <option value="002">002 - 件</option>
+                            <option value="004">004 - 卷</option>
+                            <option value="005">005 - 双</option>
+                            <option value="006">006 - 台</option>
+                            <option value="007">007 - 块</option>
+                            <option value="008">008 - 套</option>
+                            <option value="009">009 - 把</option>
+                            <option value="010">010 - 支</option>
+                            <option value="011">011 - 本</option>
+                            <option value="012">012 - 条</option>
+                            <option value="013">013 - 桶</option>
+                            <option value="014">014 - 片</option>
+                            <option value="015">015 - 瓶</option>
+                            <option value="016">016 - 盒</option>
+                            <option value="017">017 - 箱</option>
+                            <option value="018">018 - 节</option>
+                            <option value="019">019 - 袋</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.defRepository">
+                            <option selected disabled>请选择</option>
+                            <option value="01">01 - 成品库</option>
+                            <option value="10">10 - 原料</option>
+                            <option value="19">19 - 工装材料</option>
+                            <option value="20">20 - 毛坯件</option>
+                            <option value="30">30 - 零部件</option>
+                            <option value="301">301 - 零部件（焊接件）</option>
+                            <option value="302">302 - 零部件（机加工件）</option>
+                            <option value="303">303 - 零部件（大件）</option>
+                            <option value="304">304 - 零部件（中件）</option>
+                            <option value="305">305 - 零部件（加工小件）</option>
+                            <option value="306">306 - 零部件（喷漆件、垫片）</option>
+                            <option value="307">307 - 零部件（管系、走台）</option>
+                            <option value="308">308 - 零部件（二级经营）</option>
+                            <option value="310">310 - 零部件（标准件）</option>
+                            <option value="311">311 - 零部件（呆滞料）</option>
+                            <option value="312">312 - 零部件（船厂返回件）</option>
+                            <option value="313">313 - 零部件（委外）</option>
+                            <option value="314">314 - 零部件（设计更改）</option>
+                            <option value="315">315 - 零部件（电器件）</option>
+                            <option value="316">316 - 零部件（传感器、压力表）</option>
+                            <option value="39">39 - 零部件（进口件）</option>
+                            <option value="40">40 - 问题物料</option>
+                            <option value="50">50 - 消耗品</option>
+                            <option value="59">59 - 设备备品备件</option>
+                            <option value="60">60 - 主机备件</option>
+                            <option value="70">70 - 系统润滑油</option>
+                            <option value="80">80 - 自制半成品</option>
+                            <option value="801">801 - 钢构厂二级库</option>
+                            <option value="802">802 - 机加厂二级库</option>
+                            <option value="803">803 - 总装厂二级库</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.virtualPartMark">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.sourceMark">
+                            <option selected disabled>请选择</option>
+                            <option value="M">M</option>
+                            <option value="P">P</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.outSource">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.respCompany" @change="selectRespDepts(index)">
+                            <option selected disabled>请选择</option>
+                            <option value="01">01 - 中国船柴</option>
+                            <option value="02">02 - 宜昌基地</option>
+                            <option value="03">03 - 青岛基地</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.respDept">
+                            <option selected disabled>请选择</option>
+                            <option v-for="dept in material.respDepts" :value="dept.code">
+                                {{dept.code}} - {{dept.name}}
+                            </option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.keyPartMark" @change="selectKeyPartMark(index)">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.keyPartSort" @change="selectKeyPartSort(index)">
+                            <option selected disabled>请选择</option>
+                            <option value="Y1">Y1</option>
+                            <option value="Y2">Y2</option>
+                            <option value="Y3">Y3</option>
+                            <option value="Y4">Y4</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.purchaseSort">
+                            <option selected disabled>请选择</option>
+                            <option value="P01">P01 - 曲轴</option>
+                            <option value="P02">P02 - 增压器</option>
+                            <option value="P03">P03 - 锻件毛坯（缸盖、活塞头、活塞杆、连杆、十字头销）</option>
+                            <option value="P04">P04 - 钢板</option>
+                            <option value="P05">P05 - 型材</option>
+                            <option value="P06">P06 - 主启动阀</option>
+                            <option value="P07">P07 - 缸盖起动阀</option>
+                            <option value="P08">P08 - 高压油管</option>
+                            <option value="P09">P09 - 盘车机</option>
+                            <option value="P10">P10 - 辅助风机</option>
+                            <option value="P11">P11 - 应急操纵台</option>
+                            <option value="P12">P12 - 排气阀工作台</option>
+                            <option value="P13">P13 - 燃排驱动机构</option>
+                            <option value="P14">P14 - 机架门</option>
+                            <option value="P15">P15 - 焊接小件</option>
+                            <option value="P16">P16 - 齿轮</option>
+                            <option value="P17">P17 - 铸件</option>
+                            <option value="P18">P18 - 供油单元、共轨单元</option>
+                            <option value="P19">P19 - HCU HPS ECP</option>
+                            <option value="P20">P20 - 排气阀</option>
+                            <option value="P21">P21 - MAN机进口件</option>
+                            <option value="P22">P22 - WGD 进口件</option>
+                            <option value="P23">P23 - UEC 进口件</option>
+                            <option value="P24">P24 - 国产弹簧</option>
+                            <option value="P25">P25 - 阀杆</option>
+                            <option value="P26">P26 - 白合金件</option>
+                            <option value="P27">P27 - 链条</option>
+                            <option value="P28">P28 - 填料函</option>
+                            <option value="P29">P29 - 空冷器</option>
+                            <option value="P30">P30 - 水分离器</option>
+                            <option value="P31">P31 - 活塞安装件</option>
+                            <option value="P32">P32 - 十字头滑油件</option>
+                            <option value="P33">P33 - SCR</option>
+                            <option value="P34">P34 - 接线箱</option>
+                            <option value="P35">P35 - 压力表、温度表、传感器、液位开关</option>
+                            <option value="P36">P36 - 起动元件板、压力表板</option>
+                            <option value="P37">P37 - 球阀、蝶阀</option>
+                            <option value="P38">P38 - 注油枪</option>
+                            <option value="P39">P39 - 空气瓶</option>
+                            <option value="P40">P40 - 膨胀节</option>
+                            <option value="P41">P41 - 管路</option>
+                            <option value="P42">P42 - 走台</option>
+                            <option value="P43">P43 - 扫气箱</option>
+                            <option value="P44">P44 - 排烟管</option>
+                            <option value="P45">P45 - 空冷器</option>
+                            <option value="P46">P46 - 隔热包装</option>
+                            <option value="P47">P47 - 木箱包装</option>
+                            <option value="P48">P48 - 弹性螺栓</option>
+                            <option value="P49">P49 - 圆螺母</option>
+                            <option value="P50">P50 - 金属标准件</option>
+                            <option value="P51">P51 - 铭牌</option>
+                            <option value="P52">P52 - 接头</option>
+                            <option value="P53">P53 - 防爆阀</option>
+                            <option value="P54">P54 - 非金属垫片</option>
+                            <option value="P55">P55 - 特殊垫片</option>
+                            <option value="P56">P56 - 加热柜（国产）</option>
+                            <option value="P57">P57 - 液压顶撑</option>
+                            <option value="P58">P58 - 电脑及附件</option>
+                            <option value="P59">P59 - 随机工具</option>
+                            <option value="P60">P60 - 机加工小件</option>
+                            <option value="P61">P61 - 消耗品A</option>
+                            <option value="P62">P62 - 消耗品M</option>
+                            <option value="P63">P63 - 消耗品W</option>
+                            <option value="P64">P64 - 消耗品P</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.fixedAdvTime" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.description" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 160px;">
+                        <select class="form-input" v-model="material.qualifiedMark">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.purchaseMark">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.groupPurMark" @change="toggleGroupPurMark(index)">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px">
+                        <select class="form-input" v-model="material.ownPurMark" @change="toggleOwnPurMark(index)">
+                            <option selected disabled>请选择</option>
+                            <option value="Y">Y</option>
+                            <option value="N">N</option>
+                        </select>
+                    </td>
+                    <td style="width: 160px;">
+                        <input class="form-input" type="text" v-model="material.planner" placeholder="请填写"/>
+                    </td>
+                    <td style="width: 80px;">{{material.resourceMark}}</td>
+                    <td style="width: 100px;">
+                        <button class="btn-link" type="button" @click="saveMaterial(material)"
+                                :disabled="isSaveDisabled" style="margin-right: 16px">保存
+                        </button>
+                        <button v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE" class="btn-link" type="button"
+                                @click="confirmMaterial(material, index)"
+                                :disabled="isConfirmDisabled">确认
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="page-panel">
+            <ul class="pagination pull-left">
+                <li :class="{disabled: 1 == pageContext.index}">
+                    <span @click="queryAllByPreviousPage"><span class="icon icon-menu-left"></span></span></li>
+                <li><span>{{pageContext.index}}</span></li>
+                <li :class="{disabled: pageContext.pageTotal == pageContext.index || 0 == pageContext.pageTotal}">
+                    <span @click="queryAllByNextPage"><span class="icon icon-menu-right"></span></span>
+                </li>
+            </ul>
+            <div class="pull-right">
+                <div class="page-group">
+                    <input class="page-control" type="text" v-model="currentPage"/>
+                    <p class="page-query" @click="queryAllByPage">
+                        <span class="icon icon-search"></span>
+                    </p>
+                    <p class="page-total">共{{pageContext.pageTotal}}页</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="footer">
+    <span>&copy;2018 中国船舶重工集团柴油机有限公司</span>
+</footer>
+<div id="fileImportModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">导入物料数据</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <div class="form-group">
+                <label class="form-label">文件</label>
+                <input id="file" class="form-file" type="file"/>
+            </div>
+            <button class="btn btn-picker" type="button" @click="importFile" :disabled="isDisabled">{{action}}</button>
+        </div>
+    </div>
+</div>
+<div id="confirmPageModal" class="modal" v-if="isVisible" v-cloak>
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <span class="modal-title">确认该页数据</span>
+            <span class="modal-close"><span class="icon icon-remove" @click="invisible"></span></span>
+        </div>
+        <div class="modal-content">
+            <p>您确定要确认该页面内全部的数据吗？</p>
+        </div>
+        <div class="modal-footer" style="overflow: hidden;">
+            <button class="btn btn-picker" @click="confirmPage" :disabled="isConfirmDisabled">
+                <span v-if="!isConfirmDisabled">确认</span>
+                <span v-if="isConfirmDisabled">正在确认</span>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="popoverSpace" class="popover-space" v-if="prompts.length > 0">
+    <popover v-for="prompt in prompts" v-bind:key="prompt.id" v-bind:prompt="prompt"></popover>
+</div>
+<div id="loadModal" class="mask" v-if="loading">
+    <p class="mask-prompt">数据获取中...</p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script th:src="@{/js/axios.min.js}"></script>
+<script th:src="@{/js/naruto.js}"></script>
+<script th:src="@{/js/guarantee.js}"></script>
+</body>
+</html>

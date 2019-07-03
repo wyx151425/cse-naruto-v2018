@@ -25,9 +25,11 @@ public class Constant {
         public static final String PURCHASE_EMPLOYEE = "ROLE_PURCHASE_EMPLOYEE";
         public static final String ASSEMBLY_EMPLOYEE = "ROLE_ASSEMBLY_EMPLOYEE";
         public static final String PRODUCE_EMPLOYEE = "ROLE_PRODUCE_EMPLOYEE";
+        public static final String GUARANTEE_EMPLOYEE = "ROLE_GUARANTEE_EMPLOYEE";
     }
 
     public static final class Material {
+        public static final String STRUCTURE_NO = "structureNo";
         public static final String EXPORT_STATUS = "exportStatus";
         public static final String SOURCE_MARK = "sourceMark";
         public static final String TECHNOLOGY_STATUS = "technologyStatus";

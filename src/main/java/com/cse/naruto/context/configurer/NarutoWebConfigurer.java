@@ -33,6 +33,7 @@ public class NarutoWebConfigurer implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/admin").setViewName("admin");
+        registry.addViewController("/guarantee").setViewName("guarantee");
         registry.addViewController("/material").setViewName("material");
         registry.addViewController("/material/edit").setViewName("material-edit");
     }

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,6 +49,19 @@ public class MaterialController extends NarutoFacade {
             throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
         }
         return new Response<>(resultList);
+    }
+
+    @PostMapping(value = "materials/guaranteeImport")
+    public Response<Object> actionImportSCMaterialList(@RequestParam(value = "file") MultipartFile file) {
+        if (!Constant.DocType.XLSX.equals(file.getContentType())) {
+            throw new NarutoException(StatusCode.FILE_FORMAT_ERROR);
+        }
+        try {
+            materialService.importGuaranteeMaterialList(file, getCurrentUser());
+        } catch (InvalidFormatException | IOException e) {
+            throw new NarutoException(e, StatusCode.FILE_RESOLVE_ERROR);
+        }
+        return new Response<>();
     }
 
     @PostMapping(value = "materials/importpbom")
@@ -167,6 +181,20 @@ public class MaterialController extends NarutoFacade {
         return new Response<>();
     }
 
+    @PutMapping(value = "materials/confirmOne")
+    public Response<Material> actionConfirmGuaranteeMaterial(@RequestBody Material material) {
+        List<Material> materialList = new ArrayList<>();
+        materialList.add(material);
+        materialService.confirmGuaranteeMaterialList(materialList);
+        return new Response<>();
+    }
+
+    @PutMapping(value = "materials/confirmAll")
+    public Response<Material> actionConfirmGuaranteeAllMaterial(@RequestBody List<Material> materialList) {
+        materialService.confirmGuaranteeMaterialList(materialList);
+        return new Response<>();
+    }
+
     @GetMapping(value = "materials/{code}")
     public Response<Material> actionQueryMaterialByCode(@PathVariable(value = "code") String code) {
         Material material = materialService.findMaterialByCode(code);
@@ -181,6 +209,15 @@ public class MaterialController extends NarutoFacade {
             @RequestParam("perfectStatus") Integer perfectStatus
     ) {
         PageContext<Material> pageContext = materialService.findMaterialListByPagination(pageIndex, pageSize, exportStatus, perfectStatus, getCurrentUser());
+        return new Response<>(pageContext);
+    }
+
+    @GetMapping(value = "materials/guarantee")
+    public Response<PageContext<Material>> actionQueryGuaranteeMaterialListByPagination(
+            @RequestParam("pageIndex") Integer pageIndex,
+            @RequestParam("pageSize") Integer pageSize
+    ) {
+        PageContext<Material> pageContext = materialService.findGuaranteeMaterialListByPagination(pageIndex, pageSize, getCurrentUser());
         return new Response<>(pageContext);
     }
 

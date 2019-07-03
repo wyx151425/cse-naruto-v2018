@@ -34,10 +34,10 @@ public class NarutoApplicationTests {
 //        LocalDateTime dateTime1 = LocalDateTime.now();
 //        user.setCreateAt(dateTime1);
 //        user.setUpdateAt(dateTime1);
-//        user.setCode("QD1034");
+//        user.setCode("QD9950");
 //        user.setPassword("123456");
-//        user.setName("苏猛猛");
-//        user.setRole("ROLE_USER,ROLE_TECHNOLOGY_EMPLOYEE");
+//        user.setName("服务保障");
+//        user.setRole("ROLE_USER,ROLE_GUARANTEE_EMPLOYEE");
 //        userRepository.save(user);
 //    }
 
@@ -366,5 +366,39 @@ public class NarutoApplicationTests {
 //        buffer.flush();
 //        workbook.write(buffer);
 //        buffer.close();
+//    }
+
+//    public static void main(String[] args) {
+//        InputStream in = null;
+//        try {
+//            in = new FileInputStream(new File("excel.xlsx"));
+//            Workbook workbook = WorkbookFactory.create(in);
+//            Sheet sheet = workbook.getSheet("Candidates");
+//            int index = 0;
+//            for (Row row : sheet) {
+//                if (index < 1) {
+//                    index++;
+//                } else {
+//                    String uuid = Generator.getObjectId();
+//                    String code6 = uuid.substring(0, 6);
+//                    row.createCell(2).setCellValue(code6);
+//                }
+//            }
+//            OutputStream out = new FileOutputStream(new File("new.xlsx"));
+//            BufferedOutputStream buffer = new BufferedOutputStream(out);
+//            buffer.flush();
+//            workbook.write(buffer);
+//            buffer.close();
+//        } catch (InvalidFormatException | IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (in != null) {
+//                    in.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 //    }
 }
