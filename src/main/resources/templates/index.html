@@ -59,9 +59,9 @@
                     v-if="user.roles.ROLE_IMPORT_BOM">
                 导入新数据
             </button>
-            <a class="pull-right" th:href="@{/guarantee}" style="margin-left: 16px">
-                <button class="btn" type="button">售后数据</button>
-            </a>
+            <!--<a class="pull-right" th:href="@{/guarantee}" style="margin-left: 16px">-->
+                <!--<button class="btn" type="button">售后数据</button>-->
+            <!--</a>-->
             <div class="query-group pull-right" style="margin-left: 16px">
                 <input class="query-control" type="text" v-model="resourceMark" placeholder="货源查询"/>
                 <p class="query-btn" @click="queryAllByResourceMark" :disabled="isQueryDisabled">
@@ -80,7 +80,7 @@
         </div>
         <div id="table-space" class="table-wrap" style="width: 2300px">
             <table class="table table-bordered table-hover" v-if="user.roles.ROLE_TECHNOLOGY_EMPLOYEE"
-                   style="width: 2920px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
+                   style="width: 3080px; transform-style: preserve-3d; -webkit-transform-style: preserve-3d;" v-cloak>
                 <thead>
                 <tr>
                     <th class="table-fixed" style="width: 100px; background-color: #ff0000; color: #fff;">部套号</th>
@@ -101,6 +101,7 @@
                     <th style="width: 160px; background-color: #ff0000; color: #fff;">型号</th>
                     <th style="width: 160px; background-color: #ff0000; color: #fff;">责任公司</th>
                     <th style="width: 160px; background-color: #ff0000; color: #fff;">虚拟件标记</th>
+                    <th style="width: 160px; background-color: #ff0000; color: #fff;">下发部门</th>
                     <th style="width: 100px; background-color: #ff0000; color: #fff;">完善状态</th>
                     <th style="width: 120px; background-color: #92d050; color: #fff;">操作</th>
                 </tr>
@@ -202,6 +203,7 @@
                             <option value="G18">G18 - 自制半成品</option>
                             <option value="G19">G19 - 设备备品备件</option>
                             <option value="G21">G21 - 期初未分类</option>
+                            <option value="G23">G23 - 柴油机辅料</option>
                         </select>
                     </td>
                     <td style="width: 160px;">
@@ -247,6 +249,7 @@
                             <option value="N">N</option>
                         </select>
                     </td>
+                    <td style="width: 160px">{{material.deliveryDept}}</td>
                     <td style="width: 100px;"
                         :class="{error: 0 == material.technologyStatus, success: 1 == material.technologyStatus}">
                         <span v-if="0 == material.technologyStatus">未完善</span>

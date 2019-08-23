@@ -184,6 +184,11 @@ public class Material extends NarutoEntity {
      */
     private String token;
 
+    /**
+     * 下发部门
+     */
+    private String deliveryDept;
+
 
     public Material() {
     }
@@ -508,6 +513,14 @@ public class Material extends NarutoEntity {
         this.token = token;
     }
 
+    public String getDeliveryDept() {
+        return deliveryDept;
+    }
+
+    public void setDeliveryDept(String deliveryDept) {
+        this.deliveryDept = deliveryDept;
+    }
+
     public static Material newInstance() {
         Material material = new Material();
         material.setObjectId(Generator.getObjectId());
@@ -519,6 +532,7 @@ public class Material extends NarutoEntity {
         material.setVirtualPartMark("N");
         material.setOutSource("N");
         material.setPlanner("QD624");
+        material.setDeliveryDept("01,03");
         material.setTechnologyStatus(Constant.Material.PerfectStatus.IMPERFECT);
         material.setQualityStatus(Constant.Material.PerfectStatus.IMPERFECT);
         material.setPurchaseStatus(Constant.Material.PerfectStatus.IMPERFECT);

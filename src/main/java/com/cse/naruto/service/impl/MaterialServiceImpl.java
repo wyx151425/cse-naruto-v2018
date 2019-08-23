@@ -1364,13 +1364,15 @@ public class MaterialServiceImpl implements MaterialService {
         cell025.setCellValue("可自采标记");
         XSSFCell cell028 = row0.createCell(28);
         cell028.setCellValue("计划员");
-        XSSFCell cell033 = row0.createCell(29);
+        XSSFCell cell037 = row0.createCell(29);
+        cell037.setCellValue("下发部门");
+        XSSFCell cell033 = row0.createCell(30);
         cell033.setCellValue("货源");
-        XSSFCell cell034 = row0.createCell(30);
+        XSSFCell cell034 = row0.createCell(31);
         cell034.setCellValue("部套号");
-        XSSFCell cell035 = row0.createCell(31);
+        XSSFCell cell035 = row0.createCell(32);
         cell035.setCellValue("创建时间");
-        XSSFCell cell036 = row0.createCell(32);
+        XSSFCell cell036 = row0.createCell(33);
         cell036.setCellValue("完善时间");
 
         for (com.cse.naruto.model.Material material : materialList) {
@@ -1447,13 +1449,15 @@ public class MaterialServiceImpl implements MaterialService {
             if ("M".equals(material.getSourceMark())) {
                 cell28.setCellValue(material.getPlanner());
             }
-            XSSFCell cell33 = row.createCell(29);
+            XSSFCell cell37 = row.createCell(29);
+            cell37.setCellValue(material.getDeliveryDept());
+            XSSFCell cell33 = row.createCell(30);
             cell33.setCellValue(material.getResourceMark());
-            XSSFCell cell34 = row.createCell(30);
+            XSSFCell cell34 = row.createCell(31);
             cell34.setCellValue(material.getStructureNo());
-            XSSFCell cell35 = row.createCell(31);
+            XSSFCell cell35 = row.createCell(32);
             cell35.setCellValue(LocalDate.from(material.getCreateAt()).toString());
-            XSSFCell cell36 = row.createCell(32);
+            XSSFCell cell36 = row.createCell(33);
             cell36.setCellValue(LocalDate.from(material.getUpdateAt()).toString());
         }
 

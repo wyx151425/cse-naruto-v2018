@@ -223,6 +223,10 @@ const container = new Vue({
                     {
                         name: "集配中心",
                         code: "6208"
+                    },
+                    {
+                        name: "船厂服务部",
+                        code: "6209"
                     }
                 ]
             }
