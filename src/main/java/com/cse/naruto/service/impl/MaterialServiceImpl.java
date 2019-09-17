@@ -1123,18 +1123,22 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setSourceMark(material.getSourceMark());
         targetMater.setRespCompany(material.getRespCompany());
         targetMater.setRespDept(material.getRespDept());
-        if (!material.getCode().startsWith("CB.")) {
-            if ("6205".equals(material.getRespDept())) {
-                targetMater.setDefRepository("801");
-            } else if ("6206".equals(material.getRespDept())) {
-                targetMater.setDefRepository("802");
-            } else if ("6207".equals(material.getRespDept())) {
-                targetMater.setDefRepository("803");
-            } else if ("6209".equals(material.getRespDept())) {
-                targetMater.setDefRepository("80");
-            }
+
+        if ("6205".equals(targetMater.getRespDept())) {
+            targetMater.setDefRepository("801");
+        } else if ("6206".equals(targetMater.getRespDept())) {
+            targetMater.setDefRepository("802");
+        } else if ("6207".equals(targetMater.getRespDept())) {
+            targetMater.setDefRepository("803");
+        } else if ("6209".equals(targetMater.getRespDept())) {
+            targetMater.setDefRepository("80");
         }
 
+        if ((targetMater.getCode().startsWith("CB")
+                || targetMater.getCode().startsWith("CS")
+                || targetMater.getCode().startsWith("CM")) && targetMater.getCode().endsWith(".000.000")) {
+            targetMater.setDefRepository("01");
+        }
 
         targetMater.setKeyPartMark(material.getKeyPartMark());
         targetMater.setKeyPartSort(material.getKeyPartSort());

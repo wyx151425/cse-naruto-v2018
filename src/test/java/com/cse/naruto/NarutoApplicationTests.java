@@ -1,5 +1,6 @@
 package com.cse.naruto;
 
+import com.cse.naruto.model.Material;
 import com.cse.naruto.repository.MaterialRepository;
 import com.cse.naruto.repository.PermissionRepository;
 import com.cse.naruto.repository.UserRepository;
@@ -8,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,6 +29,18 @@ public class NarutoApplicationTests {
     @Test
     public void contextLoads() {
     }
+
+//    @Test
+//    public void test() {
+//        List<Material> materialList = materialRepository.findAllAndOrderById();
+//        for (Material targetMater : materialList) {
+//            if ((targetMater.getCode().startsWith("CB")
+//                    || targetMater.getCode().startsWith("CS")
+//                    || targetMater.getCode().startsWith("CM")) && targetMater.getCode().endsWith(".000.000")) {
+//                System.out.println(targetMater.getCode());
+//            }
+//        }
+//    }
 
 //    @Test
 //    public void addUser() {
