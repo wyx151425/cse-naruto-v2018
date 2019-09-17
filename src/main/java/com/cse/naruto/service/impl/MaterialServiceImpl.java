@@ -1123,6 +1123,19 @@ public class MaterialServiceImpl implements MaterialService {
         targetMater.setSourceMark(material.getSourceMark());
         targetMater.setRespCompany(material.getRespCompany());
         targetMater.setRespDept(material.getRespDept());
+        if (!material.getCode().startsWith("CB.")) {
+            if ("6205".equals(material.getRespDept())) {
+                targetMater.setDefRepository("801");
+            } else if ("6206".equals(material.getRespDept())) {
+                targetMater.setDefRepository("802");
+            } else if ("6207".equals(material.getRespDept())) {
+                targetMater.setDefRepository("803");
+            } else if ("6209".equals(material.getRespDept())) {
+                targetMater.setDefRepository("80");
+            }
+        }
+
+
         targetMater.setKeyPartMark(material.getKeyPartMark());
         targetMater.setKeyPartSort(material.getKeyPartSort());
         targetMater.setVirtualPartMark(material.getVirtualPartMark());

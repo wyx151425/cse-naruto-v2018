@@ -1,12 +1,9 @@
 package com.cse.naruto.model;
 
-import com.cse.naruto.util.Constant;
-import com.cse.naruto.util.StatusCode;
-
 import java.util.List;
 
 /**
- * 用户类
+ * 分页控制类
  *
  * @author 王振琦
  * createAt 2018/09/19
