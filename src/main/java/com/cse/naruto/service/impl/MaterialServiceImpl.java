@@ -135,11 +135,12 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(17)) {
                         material.setDescription(row.getCell(17).toString().trim());
                     }
-                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
-                        material.setBatchMark("N");
-                    } else {
-                        material.setBatchMark("Y");
-                    }
+//                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
+//                        material.setBatchMark("N");
+//                    } else {
+                    // 2019/12/10更新 物料全部改为批次管理
+                    material.setBatchMark("Y");
+//                    }
                     String source = "";
                     if (null != row.getCell(12)) {
                         source = row.getCell(12).toString().trim();
@@ -309,11 +310,12 @@ public class MaterialServiceImpl implements MaterialService {
                     if (null != row.getCell(17)) {
                         material.setDescription(row.getCell(17).toString().trim());
                     }
-                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
-                        material.setBatchMark("N");
-                    } else {
-                        material.setBatchMark("Y");
-                    }
+//                    if (code.startsWith("EN") || code.startsWith("01") || code.startsWith("02")) {
+//                        material.setBatchMark("N");
+//                    } else {
+                    // 2019/12/10更新 全部改为批次管理
+                    material.setBatchMark("Y");
+//                    }
                     String source = "";
                     if (null != row.getCell(12)) {
                         source = row.getCell(12).toString().trim();
